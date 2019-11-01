@@ -1,5 +1,5 @@
-#include "TimeConstraint.h"
-#include "ConstraintDiff.h"
+#include "timeConstraint.h"
+#include "constraintDiff.h"
 
 bool inBetween(int val, int begin, int end) {
     return val >= begin && val <= end; 

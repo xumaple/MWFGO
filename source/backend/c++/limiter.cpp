@@ -1,6 +1,6 @@
-#include "Limiter.h"
-#include "Individual.h"
-#include "ConstraintDiff.h"
+#include "limiter.h"
+#include "individual.h"
+#include "constraintDiff.h"
 
 bool Limiter::addIndividual(Individual &ind) {
     if (!canAddIndividual(ind)) return false;

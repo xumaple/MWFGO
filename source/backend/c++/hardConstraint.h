@@ -1,7 +1,7 @@
-#ifndef HardConstraint_h
-#define HardConstraint_h
+#ifndef hardConstraint_h
+#define hardConstraint_h
 
-#include "Constraint.h"
+#include "constraint.h"
 
 class HardConstraint : public Constraint {
 public:
@@ -13,4 +13,4 @@ protected:
 };
 
 
-#endif /* HardConstraint_h */
+#endif /* hardConstraint_h */

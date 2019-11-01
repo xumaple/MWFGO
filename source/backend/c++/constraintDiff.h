@@ -1,5 +1,5 @@
-#ifndef ConstraintDiff_h
-#define ConstraintDiff_h
+#ifndef constraintDiff_h
+#define constraintDiff_h
 
 class ConstraintDiff {
 public:
@@ -20,4 +20,4 @@ private:
 ConstraintDiff operator+ (ConstraintDiff one, ConstraintDiff two);
 
 
-#endif /* ConstraintDiff_h */
+#endif /* constraintDiff_h */

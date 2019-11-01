@@ -1,4 +1,4 @@
-#include "ConstraintDiff.h"
+#include "constraintDiff.h"
 
 ConstraintDiff ConstraintDiff::operator+= (ConstraintDiff other) {
     return *this + other;

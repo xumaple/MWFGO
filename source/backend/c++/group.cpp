@@ -1,6 +1,6 @@
-#include "Group.h"
-#include "Individual.h"
-#include "Limiter.h"
+#include "group.h"
+#include "individual.h"
+#include "limiter.h"
 
 bool Group::addIndividual(Individual &ind) {
     for (auto limit = limiters.begin(); limit != limiters.end(); ++limit) {

@@ -1,13 +1,14 @@
-#include "Individual.h"
-#include "ConstraintDiff.h"
-#include "Constraint.h"
-#include "ConstraintManager.h"
+#include "individual.h"
+#include "constraintDiff.h"
+#include "constraint.h"
+#include "constraintManager.h"
 
 void Individual::computeDiffs(Individual &ind1, Individual &ind2) {
     std::shared_ptr<ConstraintDiff> finalDiff(new ConstraintDiff);
+    ConstraintManager manager = ConstraintManager::getInstance();
     // TODOPTIMIZE
-    for (int i = 0; i < ConstraintManager::totalConstraints(); ++i) {
-        *finalDiff += ConstraintManager::allConstraints()[i]->getDiff(ind1.values[i], ind2.values[i]);
+    for (int i = 0; i < manager.totalConstraints(); ++i) {
+        *finalDiff += manager.allConstraints()[i]->getDiff(ind1.values[i], ind2.values[i]);
     }
     
     

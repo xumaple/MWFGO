@@ -1,9 +1,9 @@
-#ifndef Individual_h
-#define Individual_h
+#ifndef individual_h
+#define individual_h
 
 #include <vector>
 #include <unordered_map>
-#include "Constraint.h"
+#include "constraint.h"
 
 class ConstraintDiff;
 //class Constraint;
@@ -23,4 +23,4 @@ private:
 };
 
 
-#endif /* Individual_h */
+#endif /* individual_h */
