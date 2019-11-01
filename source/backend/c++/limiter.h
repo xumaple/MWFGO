@@ -11,7 +11,7 @@ public:
     virtual ~Limiter() {}
     
     bool addIndividual(Individual &ind);
-    void cancelAdd();
+    virtual void cancelAdd();
     void forceAdd(Individual &ind);
     double getCost() const { return currCost; }
     
@@ -20,11 +20,12 @@ protected:
     virtual void addHelper(Individual &ind);
     
     int numForceAdded() const { return forceAdded; }
+    std::vector<Individual *> &currIndividuals() { return individuals; }
 private:
     double currCost; // Current cost estimates
     int forceAdded; // Tally of number of individuals force added
                     // Used as a part of canAddIndividual
-    std::vector<Individual> individuals;
+    std::vector<Individual *> individuals;
     
 };
 

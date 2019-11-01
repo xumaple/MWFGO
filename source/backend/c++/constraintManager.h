@@ -18,6 +18,8 @@ public:
     }
     int totalConstraints() { return int(constraints.size()); }
     
+    ConstraintManager(const ConstraintManager &) = delete;
+    void operator= (const ConstraintManager &) = delete;
 private:
     ConstraintManager() {}
 

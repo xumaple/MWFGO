@@ -10,7 +10,7 @@ public:
     double getWeight() const { return weight; }
     double getCost() const { return cost; }
     
-    ConstraintDiff operator += (ConstraintDiff other); 
+    ConstraintDiff &operator += (ConstraintDiff other); 
 private:
 //TODO    friend ConstraintDiff operator+(ConstraintDiff &, ConstraintDiff&);
     double weight;

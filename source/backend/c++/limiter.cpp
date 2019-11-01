@@ -19,9 +19,9 @@ void Limiter::forceAdd(Individual &ind) {
 }
 
 void Limiter::addHelper(Individual &ind) {
-    for (Individual &i: individuals) {
-        currCost += ind.getDiff(&i)->getCost();
+    for (Individual *i: individuals) {
+        currCost += ind.getDiff(i)->getCost();
     }
-    individuals.push_back(ind);
+    individuals.push_back(&ind);
 }
 

@@ -5,7 +5,7 @@
 
 void Individual::computeDiffs(Individual &ind1, Individual &ind2) {
     std::shared_ptr<ConstraintDiff> finalDiff(new ConstraintDiff);
-    ConstraintManager manager = ConstraintManager::getInstance();
+    ConstraintManager &manager = ConstraintManager::getInstance();
     // TODOPTIMIZE
     for (int i = 0; i < manager.totalConstraints(); ++i) {
         *finalDiff += manager.allConstraints()[i]->getDiff(ind1.values[i], ind2.values[i]);

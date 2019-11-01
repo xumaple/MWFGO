@@ -1,6 +1,17 @@
 #include "group.h"
 #include "individual.h"
 #include "limiter.h"
+#include "utility.h"
+#include <stdexcept>
+
+Group::Group(std::vector<Limiter *> &limitersIn, Individual *leaderIn): leader(leaderIn) {
+    limiters = std::move(limitersIn);
+    for (Limiter *l: limiters) {
+        if (!l->addIndividual(*leader)) {
+            throw Error("Leader cannot be added to group.");
+        }
+    }
+}
 
 bool Group::addIndividual(Individual &ind) {
     for (auto limit = limiters.begin(); limit != limiters.end(); ++limit) {

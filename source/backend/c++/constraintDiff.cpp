@@ -1,7 +1,9 @@
 #include "constraintDiff.h"
 
-ConstraintDiff ConstraintDiff::operator+= (ConstraintDiff other) {
-    return *this + other;
+ConstraintDiff &ConstraintDiff::operator+= (ConstraintDiff other) {
+    weight += other.weight;
+    cost += other.cost;
+    return *this;
 }
 
 ConstraintDiff operator+ (ConstraintDiff one, ConstraintDiff two) {

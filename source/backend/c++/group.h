@@ -11,9 +11,7 @@ public:
     /*
      
      */
-    Group(std::vector<Limiter *> &limitersIn, Individual *leaderIn): leader(leaderIn) {
-        limiters = std::move(limitersIn);
-    }
+    Group(std::vector<Limiter *> &limitersIn, Individual *leaderIn);
     
     /*
      Checks if individual can be added, and if so adds the individual.
