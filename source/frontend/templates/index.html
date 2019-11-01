@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>frontpage</title>
+</head>
+<body>
+	<p>Who are you?</p>
+	<div className="roles">
+		<button type="button" onClick="organizer()">
+			<b>Organizer</b>
+		</button>
+		<button type="button" onClick="driver()">
+			<b>Driver</b>
+		</button>
+		<button type="button" onClick="member()">
+			<b>Member</b>
+		</button>	
+	</div>	
+	<script>
+		function organizer() {
+			location.assign('/organizer/');
+		}
+		function driver() {
+			location.assign('/driver/');
+		}
+		function member() {
+			location.assign('/member/');
+		}
+	</script>
+</body>
+</html>
+
+

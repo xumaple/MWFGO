@@ -1,0 +1,2 @@
+"""MWFGO package initializer"""
+
