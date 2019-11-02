@@ -1,7 +1,7 @@
-#ifndef TimeConstraint_h
-#define TimeConstraint_h
+#ifndef timeConstraint_h
+#define timeConstraint_h
 
-#include "HardConstraint.h"
+#include "hardConstraint.h"
 
 class TimeConstraint : public HardConstraint {
 protected:
@@ -10,4 +10,4 @@ protected:
 };
 
 
-#endif /* TimeConstraint_h */
+#endif /* timeConstraint_h */

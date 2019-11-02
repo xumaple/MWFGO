@@ -1,6 +1,6 @@
-#include "Limiter.h"
-#include "Individual.h"
-#include "ConstraintDiff.h"
+#include "limiter.h"
+#include "individual.h"
+#include "constraintDiff.h"
 
 bool Limiter::addIndividual(Individual &ind) {
     if (!canAddIndividual(ind)) return false;
@@ -19,9 +19,9 @@ void Limiter::forceAdd(Individual &ind) {
 }
 
 void Limiter::addHelper(Individual &ind) {
-    for (Individual &i: individuals) {
-        currCost += ind.getDiff(&i)->getCost();
+    for (Individual *i: individuals) {
+        currCost += ind.getDiff(i)->getCost();
     }
-    individuals.push_back(ind);
+    individuals.push_back(&ind);
 }
 

@@ -1,5 +1,5 @@
-#ifndef Group_h
-#define Group_h
+#ifndef group_h
+#define group_h
 
 #include <vector>
 
@@ -11,9 +11,7 @@ public:
     /*
      
      */
-    Group(std::vector<Limiter *> &limitersIn) {
-        limiters = std::move(limitersIn);
-    }
+    Group(std::vector<Limiter *> &limitersIn, Individual *leaderIn);
     
     /*
      Checks if individual can be added, and if so adds the individual.
@@ -28,9 +26,10 @@ public:
     double getCost() const;
     
 private:
+    Individual *leader;
     std::vector<Individual> members;
     std::vector<Limiter *> limiters;
 };
 
 
-#endif /* Group_h */
+#endif /* group_h */

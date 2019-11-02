@@ -1,5 +1,5 @@
-#ifndef Constraint_h
-#define Constraint_h
+#ifndef constraint_h
+#define constraint_h
 
 #include <string>
 
@@ -12,4 +12,4 @@ public:
     virtual ~Constraint() {}
 };
 
-#endif /* Constraint_h */
+#endif /* constraint_h */
