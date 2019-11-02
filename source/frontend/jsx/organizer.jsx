@@ -1,5 +1,5 @@
 import React from 'react';
-import Constraints from './constraints';
+import Traits from './traits';
 
 class Organizer extends React.Component {
     constructor(props) {
@@ -8,8 +8,8 @@ class Organizer extends React.Component {
 
     render(){
         return(
-            <div className='constraints-survey'>
-                <div><Constraints url={`/api/constraints/`} /></div>
+            <div className='traits-survey'>
+                <div><Traits url={`${this.props.url}traits/`} /></div>
             </div>
         );
     }
