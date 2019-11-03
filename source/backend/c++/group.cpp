@@ -3,6 +3,7 @@
 #include "limiter.h"
 #include "utility.h"
 #include <stdexcept>
+#include <algorithm>
 
 Group::Group(std::vector<Limiter *> &limitersIn, Individual *leaderIn): leader(leaderIn) {
     limiters = std::move(limitersIn);

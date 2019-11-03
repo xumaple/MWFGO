@@ -1,9 +1,7 @@
 #include "timeConstraint.h"
 #include "constraintDiff.h"
 
-bool inBetween(int val, int begin, int end) {
-    return val >= begin && val <= end; 
-}
+bool inBetween(int val, int begin, int end);
 
 bool TimeConstraint::isCompatible(double value1, double value2) {
     int begin1 = int(value1), begin2 = int(value2);
@@ -13,4 +11,8 @@ bool TimeConstraint::isCompatible(double value1, double value2) {
     return inBetween(begin2, begin1, end1) || 
         inBetween(end2, begin1, end1) || 
         inBetween(begin1, begin2, end2);
+}
+
+bool inBetween(int val, int begin, int end){
+    return val >= begin && val <= end; 
 }

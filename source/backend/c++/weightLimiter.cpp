@@ -11,7 +11,7 @@ void WeightLimiter::cancelAdd() {
 
 bool WeightLimiter::canAddIndividual(Individual &ind) {
     calculateLastWeight(ind);
-    return !currIndividuals().size() || (totalWeight + lastWeight) / currIndividuals().size() > WEIGHT_THRESHOLD;
+    return currIndividuals().empty() || (totalWeight + lastWeight) / currIndividuals().size() > WEIGHT_THRESHOLD;
 }
 
 void WeightLimiter::addHelper(Individual &ind) {
@@ -24,6 +24,7 @@ void WeightLimiter::addHelper(Individual &ind) {
 
 void WeightLimiter::calculateLastWeight(Individual &ind) {
     lastWeight = 0;
+    lastIndividual = &ind;
     for (Individual *i: currIndividuals()) {
         lastWeight += ind.getDiff(i)->getWeight();
     }
