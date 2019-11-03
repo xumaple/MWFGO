@@ -1,10 +1,10 @@
-FROM mapoxu/testbase:latest
+FROM mapoxu/mwfgobase:latest
+COPY . /baseimg
 
-RUN mkdir /backend
-WORKDIR /backend
-COPY . /backend
+EXPOSE 5000
 
-RUN make clean
-RUN make test
-RUN make
-RUN python3 hello.py
+#RUN make clean
+#RUN make test
+#RUN make
+
+CMD python3 api/index.py

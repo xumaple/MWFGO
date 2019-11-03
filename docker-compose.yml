@@ -1,0 +1,18 @@
+version: '2'
+services:
+
+  app:
+    build: source/backend/.
+    ports:
+      - "8000:8000"
+    links:
+      - db
+    depends_on:
+      - db
+
+  db:
+    build: source/backend/db/.
+    volumes:
+      - /var/lib/mysql
+    environment:
+       MYSQL_ROOT_PASSWORD: supersecure

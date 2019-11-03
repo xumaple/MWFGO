@@ -3,3 +3,4 @@
 *.d
 node_modules
 *algorithm
+*tests
