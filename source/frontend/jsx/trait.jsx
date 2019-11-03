@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Choices from './choices';
 
 class Trait extends React.Component {
 
@@ -192,7 +193,7 @@ class Trait extends React.Component {
                     </div>
                     
                 ) : (
-                    <div className='notShotTrait'>
+                    <div className='notShowTrait'>
                         {this.state.name}
                         <button className = 'details' onClick={this.handleDetails}>
                             Details
