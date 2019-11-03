@@ -8,9 +8,14 @@ class Organizer extends React.Component {
 
     render(){
         return(
-            <div className='traits-survey'>
+            <div className='survey'>
+                <p><b>Traits</b></p>
                 <div><Traits url={`${this.props.url}traits/`} /></div>
-            </div>
+                <p><b>Limiters</b></p>
+                <div><Limiters url={`${this.props.url}limiters/`} /></div>
+            </div>            
         );
     }
 }
+
+export default Organizer;
