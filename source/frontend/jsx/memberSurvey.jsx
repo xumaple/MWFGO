@@ -8,7 +8,6 @@ class MemberSurvey extends React.Component {
         super(props);
         state = {
             traits: [],
-
         };
 
         this.handleDelete = this.handleDelete.bind(this);      
@@ -46,6 +45,22 @@ class MemberSurvey extends React.Component {
         this.setState({
             traits: tmp,
         });
+    }
+
+    handleSubmit(event) {
+        event.preventDefault();
+        const request = {
+            headers: { 'Content-Type': 'application/json' },
+            method: 'PATCH',
+            body: JSON.stringify({ traits: this.state.traits }),
+            credentials: 'same-origin',
+        };
+        fetch(this.props.url, request)
+            .then((response) => {
+                if (!response.ok) throw Error(response.statusText);
+                return response.json();
+            })
+            .catch(error => console.log(error));
     }
     
     render() {
@@ -96,6 +111,9 @@ class MemberSurvey extends React.Component {
             <div className='member-survey'>
                 <p>Please answer the questions below.</p>
                 {traitsList}
+                <button className='member-submit' onSubmit={this.handleSubmit}>
+                    Submit
+                </button>
             </div>
             
         );
