@@ -9,7 +9,7 @@ class Limiters extends React.Component {
     
     constructor(props) {
         super(props);
-        state = {
+        this.state = {
             limiters: [],
             name: '',
             id: 0,

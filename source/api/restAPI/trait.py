@@ -1,7 +1,7 @@
 import flask
 import api
 
-@api.app.route('/restAPI/organizer/traits/<int:traitid_url_slug>/',
+@api.app.route('/api/v1/organizer/traits/<int:traitid_url_slug>/',
                     methods=['GET', 'POST', 'DELETE', 'PATCH'])
 def get_trait(traitid_url_slug):
     """Get Trait."""

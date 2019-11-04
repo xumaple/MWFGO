@@ -8,7 +8,7 @@ class Traits extends React.Component {
     
     constructor(props) {
         super(props);
-        state = {
+        this.state = {
             traits: [],
             value: '',
         };
