@@ -11,8 +11,8 @@ def get_memberSurvey():
                 "type": 2,
                 "name": "Timespan",
                 "timeFrame": {
-                    "min": 2,
-                    "max": 4
+                    "min": -1,
+                    "max": -1
                 }
             }
         ] 

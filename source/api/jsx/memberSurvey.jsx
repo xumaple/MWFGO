@@ -82,7 +82,7 @@ class MemberSurvey extends React.Component {
                     <form>
                         <input
                          type="text"
-                         value={trait.timeFrame['min']}
+                         value={trait.timeFrame['min'] < 0 ? '' : trait.timeFrame['min']}
                          onChange={(e) => this.handleChangeMin(index, e)}
                         />
                     </form>
@@ -90,7 +90,7 @@ class MemberSurvey extends React.Component {
                     <form>
                         <input
                          type="text"
-                         value={trait.timeFrame['max']}
+                         value={trait.timeFrame['max'] < 0 ? '' : trait.timeFrame['max']}
                          onChange={(e) => this.handleChangeMax(index, e)}
                         />
                     </form>
