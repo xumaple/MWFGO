@@ -5,7 +5,7 @@ import Choice from './choice';
 class Choices extends React.Component {
     constructor(props) {
         super(props);
-        state = {
+        this.state = {
             choices: [],
             value: '',
         };

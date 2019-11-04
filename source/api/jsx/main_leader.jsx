@@ -7,7 +7,7 @@ import Leader from './leader';
 ReactDOM.render(
   // Insert the likes component into the DOM
 
-  <Leader url="/api/leader/" />,
+  <Leader url="/api/v1/leader/" />,
   document.getElementById('reactEntry'),
 
 );

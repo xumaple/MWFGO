@@ -7,7 +7,7 @@ import Organizer from './organizer';
 ReactDOM.render(
   // Insert the likes component into the DOM
 
-  <Organizer url="/api/organizer/" />,
+  <Organizer url="/api/v1/organizer/" />,
   document.getElementById('reactEntry'),
 
 );
