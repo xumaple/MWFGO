@@ -1,11 +1,11 @@
 import flask
 import api
 
-@api.app.route('/api/organizer/traits/<int:traitid_url_slug>/',
+@api.app.route('/restAPI/organizer/traits/<int:traitid_url_slug>/',
                     methods=['GET', 'POST', 'DELETE', 'PATCH'])
 def get_trait(traitid_url_slug):
     """Get Trait."""
-
+    print("hello im here")
     # Get POST request.
     if flask.request.method == 'POST':
 

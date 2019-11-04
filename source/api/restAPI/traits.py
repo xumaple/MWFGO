@@ -1,7 +1,7 @@
 import flask
 import api
 
-@api.app.route('/api/organizer/traits/',
+@api.app.route('/restAPI/organizer/traits/',
                     methods=['GET'])
 def get_traits():
     """Get Traits."""
