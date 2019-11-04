@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { cachedDataVersionTag } from 'v8';
+import Limiter from './limiter';
+//import { cachedDataVersionTag } from 'v8';
 
 
 class Limiters extends React.Component {
