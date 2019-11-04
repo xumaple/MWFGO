@@ -10,5 +10,16 @@ RUN apt-get install -y python3-pip
 WORKDIR /baseimg
 COPY . /baseimg
 
+RUN apt-get install -y npm; \
+    curl -sL https://deb.nodesource.com/setup_13.x | bash - && apt-get install nodejs -y; \
+    npm install webpack -g; \
+    npm install .; \
+    npm install -D babel-loader @babel/core @babel/preset-env webpack; \
+    npm install --save-dev @babel/preset-react; \
+    npm install --save-dev @babel/preset-env; \
+    npm install --save react; \
+    npm install --save prop-types; \
+    npm install --save react-dom
+
 RUN apt-get install -y libmysqlclient-dev
 RUN pip3 install --upgrade pip && pip install mysql && pip install -r requirements.txt

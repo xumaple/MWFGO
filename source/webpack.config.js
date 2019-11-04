@@ -2,16 +2,16 @@ const path = require('path');
 
 module.exports = {
   entry: {
-    member: './jsx/main_member.jsx',
-    leader: './jsx/main_leader.jsx',
-    organizer: './jsx/main_organizer.jsx'
+    member: './api/jsx/main_member.jsx',
+    leader: './api/jsx/main_leader.jsx',
+    organizer: './api/jsx/main_organizer.jsx'
   },
   output: {
-    path: path.join(__dirname, '/js/'),
+    path: path.join(__dirname, '/api/static/js/'),
     filename: '[name]_bundle.js',
   },
   module: {
-    loaders: [
+    rules: [
       {
         // Test for js or jsx files
         test: /\.jsx?$/,

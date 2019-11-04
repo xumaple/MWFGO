@@ -1,4 +1,5 @@
 from api import app
+import flask
 
 @app.route("/")
 def show_index():
@@ -15,4 +16,17 @@ def show_index():
 
     # Return the page with the result.
     # context = {'greeting': 'hello world'}
-    return 'hello world'#render_template(**context)
+    # return 'hello world'#render_template(**context)
+    context = {'greeting': 'hello'}
+    return flask.render_template("index.html", **context)
+
+
+@app.route("/templates/member/")
+def show_member():
+    context = {'greeting': 'hello'}
+    return flask.render_template("member/index.html", **context)
+
+@app.route("/templates/driver/")
+def show_driver():
+    context = {'greeting': 'hello'}
+    return flask.render_template("driver/index.html", **context)

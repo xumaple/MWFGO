@@ -2,17 +2,33 @@ version: '2'
 services:
 
   app:
-    build: source/backend/.
+    build: source/.
     ports:
       - "8000:8000"
+    # volumes:
+    #   - jsroot:/jsroot
     links:
       - db
     depends_on:
       - db
 
   db:
-    build: source/backend/db/.
+    build: source/db/.
     volumes:
-      - ./var/lib/mysql
+      - /var/lib/mysql
     environment:
        MYSQL_ROOT_PASSWORD: supersecure
+
+#   webpack:
+#     build:
+#       context: source/api
+#     ports:
+#       - "35729:35729"
+#     volumes:
+#       - .:/basimg
+#       - /baseimg/node_modules
+#       - jsroot:/jsroot
+
+# volumes: 
+#   jsroot:
+#     driver: local
