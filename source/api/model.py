@@ -4,13 +4,15 @@ from api import app
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import text
 
-# Configure MySQL connection.
+# Configure MySQL connection to Flask app
 db = SQLAlchemy()
 db_uri = 'mysql://root:supersecure@db/information_schema'
 app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db.init_app(app)
 
+def hello_world():
+    return 'hello frank'
 
 def dict_factory(cursor, row):
     """Convert database row objects to a dictionary.
@@ -47,3 +49,20 @@ def close_db(error):
     if hasattr(flask.g, 'sqlite_db'):
         flask.g.sqlite_db.commit()
         flask.g.sqlite_db.close()
+
+
+# import sys
+# from sqlalchemy import create_engine, Column, ForeignKey, Integer, String
+# from sqlalchemy.ext.declarative import declarative_base
+# Base = declarative_base()
+# from sqlalchemy.orm import relationship
+
+# class traits()
+# class choices(Base):
+
+
+
+
+# engine = create_engine('sqlite:///books-collection.db')
+# from sqlalchemy import create_engine; Base.metadata.create_all(engine)
+

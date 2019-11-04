@@ -3,7 +3,7 @@ FROM mapoxu/mwfgobase:1.0.3
 COPY . /baseimg
 WORKDIR /baseimg
 
-RUN ls api
+#RUN ls api
 
 EXPOSE 8000
 
@@ -12,9 +12,9 @@ EXPOSE 8000
 #RUN make
 #RUN python3 hello.py
 
-RUN ls
+#RUN ls
 RUN npm run build
-RUN ls api/static/js
+#RUN ls api/static/js
 #RUN cat api/js/member_bundle.js
 
 CMD export LC_ALL=C.UTF-8; \
