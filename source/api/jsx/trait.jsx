@@ -60,8 +60,7 @@ class Trait extends React.Component {
             .catch(error => console.log(error));    
     }
 
-    handleSuperSave(event) {
-        event.preventDefault();
+    handleSuperSave() {
         if(this.state.formType === 0) {
             alert("Please select a Form Type.");
         }
@@ -80,6 +79,14 @@ class Trait extends React.Component {
                 .then((response) => {
                     if (!response.ok) throw Error(response.statusText);
                     return response.json();
+                })
+                .then(() => {
+                    this.setState({
+                        name: '',
+                        id: -1,
+                        isConstraint: false,
+                        formType: 0,
+                    });
                 })
                 .then(() => {
                     this.props.onSave();
@@ -169,6 +176,7 @@ class Trait extends React.Component {
     }
     
     render() {
+        console.log("here");
         return(
             <div className='trait'>
                 { this.state.show ? (
@@ -185,6 +193,7 @@ class Trait extends React.Component {
                         </div>
 
                         <div className='isConstraintCheckBox'>
+                            <p>This is a Constraint</p>
                             <input type='checkbox' defaultChecked={this.state.isConstraint} onChange={this.handleChangeCheckBox} />
                         </div>
 
@@ -192,23 +201,41 @@ class Trait extends React.Component {
                             <p>Please select the type of form that is appropriate for this trait.</p>
                             <form>
                                 { this.state.formType === 1 ? (
-                                    <input type='radio' name='formType' value='multipleChoice' onChange={this.handleMC} checked='checked'>Multiple Choice</input>
+                                    <div>
+                                        <input type='radio' name='formType' value='multipleChoice' onChange={this.handleMC} checked='checked'/>
+                                        Multiple Choice<br />
+                                    </div>
                                 ) : (
-                                    <input type='radio' name='formType' value='multipleChoice' onChange={this.handleMC}>Multiple Choice</input>
+                                    <div>
+                                        <input type='radio' name='formType' value='multipleChoice' onChange={this.handleMC}/>
+                                        Multiple Choice<br />
+                                    </div>
                                 )}
                                 { this.state.formType === 2 ? (
-                                    <input type='radio' name='formType' value='timeFrame' onChange={this.handleTF} checked='checked'>Time Frame</input>
+                                    <div>
+                                        <input type='radio' name='formType' value='timeFrame' onChange={this.handleTF} checked='checked'/>
+                                        Time Frame<br />
+                                    </div>
                                 ) : (
-                                    <input type='radio' name='formType' value='timeFrame' onChange={this.handleTF}>Time Frame</input>
+                                    <div>
+                                        <input type='radio' name='formType' value='timeFrame' onChange={this.handleTF}/>
+                                        Time Frame<br />
+                                    </div>
                                 )}
                                 
                                 { this.state.isConstraint ? (
                                     null
                                 ) : (                                
                                     this.state.formType === 3 ? (
-                                        <input type='radio' name='formType' value='textBox' onChange={this.handleTB} checked='checked'>Text Box</input>
+                                        <div>
+                                            <input type='radio' name='formType' value='textBox' onChange={this.handleTB} checked='checked'/>
+                                            Text Box<br />
+                                        </div>
                                     ) : (
-                                        <input type='radio' name='formType' value='textBox' onChange={this.handleTB}>Text Box</input>
+                                        <div>
+                                            <input type='radio' name='formType' value='textBox' onChange={this.handleTB}/>
+                                            Text Box<br />
+                                        </div>
                                     )                                  
                                 )}
                             </form>

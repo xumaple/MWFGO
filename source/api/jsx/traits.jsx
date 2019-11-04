@@ -42,8 +42,7 @@ class Traits extends React.Component {
         this.getTraits();
     }
 
-    handleSave(event) {
-        event.preventDefault();
+    handleSave() {
         this.getTraits();
     }
 
@@ -62,6 +61,7 @@ class Traits extends React.Component {
                      onSave={this.handleSave}
                     />
                 ))}
+                <p>Add a new Trait below</p>
                 <form id="new-trait-form">
                     <Trait
                      url={`${this.props.url}1000000000/`}
