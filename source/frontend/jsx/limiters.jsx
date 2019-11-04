@@ -20,6 +20,7 @@ class Limiters extends React.Component {
         this.handleDelete = this.handleDelete.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChange = this.handleChange.bind(this);
+        this.handleConstraint = this.handleConstraint.bind(this);
         this.getLimiters = this.getLimiters.bind(this);
         this.handleExpression = this.handleExpression.bind(this);
         this.handleNumber = this.handleNumber.bind(this);

@@ -14,7 +14,7 @@ class Traits extends React.Component {
         };
 
         this.handleDelete = this.handleDelete.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleSave = this.handleSave.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.getTraits = this.getTraits.bind(this);
     }
@@ -42,26 +42,9 @@ class Traits extends React.Component {
         this.getTraits();
     }
 
-    handleSubmit(event) {
+    handleSave(event) {
         event.preventDefault();
-        const request = {
-            headers: { 'Content-Type': 'application/json' },
-            method: 'POST',
-            body: JSON.stringify({ name: this.state.value }),
-            credentials: 'same-origin',
-        };
-        fetch(this.props.url, request)
-            .then((response) => {
-                if (!response.ok) throw Error(response.statusText);
-                return response.json();
-            })
-            .then(() => {
-                this.setState(prevState => ({
-                    traits: prevState.traits.concat({id: data.id}),
-                    value: '',
-                }));
-            })
-            .catch(error => console.log(error));
+        this.getTraits();
     }
 
     handleChange(event) {
@@ -76,17 +59,15 @@ class Traits extends React.Component {
                     <Trait
                      url={`${this.props.url}${trait.id}/`}
                      onDelete={this.handleDelete}
+                     onSave={this.handleSave}
                     />
                 ))}
-                <form id="new-trait-form" onSubmit={this.handleSubmit}>
-                    <input
-                     type="text"
-                     value={this.state.value}
-                     onChange={this.handleChange}
+                <form id="new-trait-form">
+                    <Trait
+                     url={`${this.props.url}1000000000/`}
+                     onDelete={this.handleDelete}
+                     onSave={this.handleSave}
                     />
-                    <button type="submit">
-                        Add
-                    </button>
                 </form>
             </div>
             
