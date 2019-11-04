@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { cachedDataVersionTag } from 'v8';
 
 
 class Limiters extends React.Component {
@@ -9,13 +10,20 @@ class Limiters extends React.Component {
         super(props);
         state = {
             limiters: [],
-            value: '',
+            name: '',
+            id: 0,
+            expression: false,
+            number: 0,
+            constraints: [],
         };
 
         this.handleDelete = this.handleDelete.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChange = this.handleChange.bind(this);
+        this.handleConstraint = this.handleConstraint.bind(this);
         this.getLimiters = this.getLimiters.bind(this);
+        this.handleExpression = this.handleExpression.bind(this);
+        this.handleNumber = this.handleNumber.bind(this);
     }
 
     getLimiters() {
@@ -27,6 +35,7 @@ class Limiters extends React.Component {
             .then((data) => {
                 this.setState({
                     limiters: data.limiters,
+                    constraints: data.constraints
                 });
             })
             .catch(error => console.log(error));
@@ -46,7 +55,12 @@ class Limiters extends React.Component {
         const request = {
             headers: { 'Content-Type': 'application/json' },
             method: 'POST',
-            body: JSON.stringify({ name: this.state.value }),
+            body: JSON.stringify({
+                name: this.state.name,
+                id: this.state.id,
+                expression: this.state.expression,
+                number: this.state.number               
+            }),
             credentials: 'same-origin',
         };
         fetch(this.props.url, request)
@@ -57,17 +71,49 @@ class Limiters extends React.Component {
             .then(() => {
                 this.setState(prevState => ({
                     limiters: prevState.limiters.concat({id: data.id}),
-                    value: '',
+                    name: '',
+                    id: 0,
+                    expression: false,
+                    number: 0,
                 }));
             })
             .catch(error => console.log(error));
     }
 
     handleChange(event) {
-        this.setState({ value: event.target.value });
+        this.setState({ name: event.target.value });
+    }
+
+    handleConstraint(event) {
+        this.setState({
+            name: event.target.value,
+            id: event.target.id,
+        });
+    }
+
+    handleExpression(event) {
+        if(event.target.value === "exactly"){
+            this.setState({
+                expression: false,
+            });
+        }
+        else {
+            this.setState({
+                expression: true,
+            });
+        }
+    }
+
+    handleNumber(event) {
+        this.setState({
+            number: Number(event.target.value)
+        });
     }
     
     render() {
+        const constraintsList = this.state.constraints.map(constraint => (
+            <input type='radio' id={constraint.id} value={constraint.name} onChange={this.handleConstraint}>{constraint.name}</input>   
+        ));
 
         return(
             <div className='limiters'>
@@ -78,13 +124,29 @@ class Limiters extends React.Component {
                     />
                 ))}
                 <form id="new-limiter-form" onSubmit={this.handleSubmit}>
-                    <input
-                     type="text"
-                     value={this.state.value}
-                     onChange={this.handleChange}
-                    />
+                    <div className='constraintName'>
+                        <p>Please select the constraint that you want to limit in each group.</p>
+                        <form>
+                            {constraintsList}
+                        </form>
+                    </div>
+
+                    <form>
+                        <input type='radio' value='exactly' onChange={this.handleExpression}>exactly</input>
+                        <input type='radio' value='noMoreThan' onChange={this.handleExpression}>no more than</input>
+                    </form>
+
+                    <form>
+                        <input
+                         type="text"
+                         pattern="[0-9]*"
+                         value={this.state.number}
+                         onChange={this.handleNumber}
+                        />
+                    </form>
+                    
                     <button type="submit">
-                        Add
+                        Add Limiter
                     </button>
                 </form>
             </div>

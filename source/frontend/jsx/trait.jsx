@@ -6,10 +6,12 @@ class Trait extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = { name: '', show: false, isConstraint: false, formType: 0 };
+        //for formType; Multiple Choice: 1, Time Frames: 2, Text Boxes: 3 
+        this.state = { name: '', id: -1, show: false, isConstraint: false, formType: 0 };
 
         this.handleDelete = this.handleDelete.bind(this);
-        this.handleSave = this.handleSubmit.bind(this);
+        this.handleSave = this.handleSave.bind(this);
+        this.handleSuperSave = this.handleSuperSave.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.handleDetails = this.handleDetails.bind(this);
         this.handleChangeCheckBox = this.handleChangeCheckBox.bind(this);
@@ -25,9 +27,14 @@ class Trait extends React.Component {
                 return response.json();
             })
             .then((data) => {
+                let tmp = false;
+                if(data.id === -1) {
+                    tmp = true;
+                }
                 this.setState({
                     name: data.name,
-                    show: false,
+                    id: data.id,
+                    show: tmp,
                     isConstraint: data.isConstraint,
                     formType: data.formType,
                 });
@@ -53,32 +60,67 @@ class Trait extends React.Component {
             .catch(error => console.log(error));    
     }
 
-    handleSave(event) {
+    handleSuperSave(event) {
         event.preventDefault();
         if(this.state.formType === 0) {
             alert("Please select a Form Type.");
         }
-        const request = {
-            headers: { 'Content-Type': 'application/json' },
-            method: 'PATCH',
-            body: JSON.stringify({
-                name: this.state.name,
-                isConstraint: this.state.isConstraint,
-                formType: this.state.formType
-            }),
-            credentials: 'same-origin',
-        };
-        fetch(this.props.url, request) //TODO: Change the url
-            .then((response) => {
-                if (!response.ok) throw Error(response.statusText);
-                return response.json();
-            })
-            .then(() => {
-                this.setState({
-                    show: false,
-                });
-            })
-            .catch(error => console.log(error));
+        else {
+            const request = {
+                headers: { 'Content-Type': 'application/json' },
+                method: 'POST',
+                body: JSON.stringify({
+                    name: this.state.name,
+                    isConstraint: this.state.isConstraint,
+                    formType: this.state.formType
+                }),
+                credentials: 'same-origin',
+            };
+            fetch(this.props.url, request) //TODO: Change the url
+                .then((response) => {
+                    if (!response.ok) throw Error(response.statusText);
+                    return response.json();
+                })
+                .then(() => {
+                    this.props.onSave();
+                })
+                .catch(error => console.log(error));
+        }
+    }
+
+    handleSave(event) {
+        event.preventDefault();
+        if(this.state.id === -1){
+            this.handleSuperSave();
+        }
+        else{
+            if(this.state.formType === 0) {
+                alert("Please select a Form Type.");
+            }
+            else {
+                const request = {
+                    headers: { 'Content-Type': 'application/json' },
+                    method: 'PATCH',
+                    body: JSON.stringify({
+                        name: this.state.name,
+                        isConstraint: this.state.isConstraint,
+                        formType: this.state.formType
+                    }),
+                    credentials: 'same-origin',
+                };
+                fetch(this.props.url, request) //TODO: Change the url
+                    .then((response) => {
+                        if (!response.ok) throw Error(response.statusText);
+                        return response.json();
+                    })
+                    .then(() => {
+                        this.setState({
+                            show: false,
+                        });
+                    })
+                    .catch(error => console.log(error));
+            }          
+        }       
     }
 
     handleChange(event) {
@@ -183,13 +225,18 @@ class Trait extends React.Component {
                                 null
                             )}                            
                         </div>                      
-                    
+                        
                         <button className='save' onClick={this.handleSave}>
                             Save Trait
                         </button>
-                        <button className='delete' onClick={this.handleDelete}>
-                            Delete Trait
-                        </button>
+                        {this.state.id === -1 ? (
+                            null
+                        ) : (
+                            <button className='delete' onClick={this.handleDelete}>
+                                Delete Trait
+                            </button>
+                        )}
+                        
                     </div>
                     
                 ) : (
