@@ -7,11 +7,11 @@ class Member extends React.Component {
     }
 
     render(){
-        console.log('Hello');
+        let next_url = this.props.url + 'memberSurvey/';
         return(
             <div className='memberSurvey'>
                 <p><b>Survey</b></p>
-                <div><MemberSurvey url={`${this.props.url}memberSurvey/`} /></div>
+                <div><MemberSurvey url={next_url} /></div>
             </div>            
         );
     }
