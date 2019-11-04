@@ -30,3 +30,8 @@ def show_member():
 def show_driver():
     context = {'greeting': 'hello'}
     return flask.render_template("driver/index.html", **context)
+
+@app.route("/templates/organizer/")
+def show_organizer():
+    context = {'greeting': 'hello'}
+    return flask.render_template("organizer/index.html", **context)
