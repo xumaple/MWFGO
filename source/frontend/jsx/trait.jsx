@@ -6,6 +6,7 @@ class Trait extends React.Component {
 
     constructor(props) {
         super(props);
+        //for formType; Multiple Choice: 1, Time Frames: 2, Text Boxes: 3 
         this.state = { name: '', show: false, isConstraint: false, formType: 0 };
 
         this.handleDelete = this.handleDelete.bind(this);

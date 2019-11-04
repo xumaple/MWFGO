@@ -5,11 +5,11 @@ class Limiter extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = { name: '', show: false, expression: false, number: 0, constraints: [] };
+        //for expression; exactly: 0, no more than: 1
+        this.state = { name: '', show: false, id: 0, expression: false, number: 0, constraints: [] };
 
         this.handleDelete = this.handleDelete.bind(this);
         this.handleSave = this.handleSubmit.bind(this);
-        this.handleChange = this.handleChange.bind(this);
         this.handleDetails = this.handleDetails.bind(this);
         this.handleConstraint = this.handleConstraint.bind(this);
         this.handleExpression = this.handleExpression.bind(this);
@@ -25,6 +25,7 @@ class Limiter extends React.Component {
             .then((data) => {
                 this.setState({
                     name: data.name,
+                    id: data.id,
                     show: false,
                     expression: data.expression,
                     number: data.number,
@@ -59,6 +60,7 @@ class Limiter extends React.Component {
             method: 'PATCH',
             body: JSON.stringify({
                 name: this.state.name,
+                id: this.state.id,
                 expression: this.state.expression,
                 number: this.state.number
             }),
@@ -77,13 +79,6 @@ class Limiter extends React.Component {
             .catch(error => console.log(error));
     }
 
-    handleChange(event) {
-        this.setState({
-            name: event.target.value,
-            saved: false,
-        });
-    }
-
     handleDetails() {
         this.setState({
             show: true,
@@ -93,18 +88,19 @@ class Limiter extends React.Component {
     handleConstraint(event) {
         this.setState({
             name: event.target.value,
+            id: event.target.id,
         });
     }
 
     handleExpression(event) {
         if(event.target.value === "exactly"){
             this.setState({
-                expression: 0,
+                expression: false,
             });
         }
         else {
             this.setState({
-                expression: 1,
+                expression: true,
             });
         }
     }
@@ -117,7 +113,7 @@ class Limiter extends React.Component {
     
     render() {
         const constraintsList = this.state.constraints.map(constraint => (
-            <input type='radio' value={constraint.name} onChange={this.handleConstraint}>{constraint.name}</input>   
+            <input type='radio' id={constraint.id} value={constraint.name} onChange={this.handleConstraint}>{constraint.name}</input>   
         ));
         return(
             <div className='limiter'>

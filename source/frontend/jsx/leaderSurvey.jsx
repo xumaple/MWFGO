@@ -11,7 +11,11 @@ class LeaderSurvey extends React.Component {
 
         };
 
-        this.handleDelete = this.handleDelete.bind(this);      
+        this.handleDelete = this.handleDelete.bind(this); 
+        this.handleChangeMin = this.handleChangeMin.bind(this);
+        this.handleChangeMax = this.handleChangeMax.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleChoice = this.handleChoice.bind(this);     
     }
 
     getTraits() {
@@ -52,7 +56,7 @@ class LeaderSurvey extends React.Component {
         event.preventDefault();
         const request = {
             headers: { 'Content-Type': 'application/json' },
-            method: 'PATCH',
+            method: 'POST',
             body: JSON.stringify({ traits: this.state.traits }),
             credentials: 'same-origin',
         };
@@ -61,7 +65,16 @@ class LeaderSurvey extends React.Component {
                 if (!response.ok) throw Error(response.statusText);
                 return response.json();
             })
+            .then(() => {
+                this.getTraits();
+            })
             .catch(error => console.log(error));
+    }
+
+    handleChoice(event) {
+        this.setState({
+            choiceId: event.target.id,
+        });
     }
     
     render() {
