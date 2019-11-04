@@ -66,6 +66,7 @@ class MemberSurvey extends React.Component {
                 this.getTraits();
             })
             .catch(error => console.log(error));
+        getTraits();
     }
 
     handleChoice(event) {
