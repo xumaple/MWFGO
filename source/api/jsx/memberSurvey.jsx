@@ -100,12 +100,13 @@ class MemberSurvey extends React.Component {
             );
             if(trait.type === 1) {
                 const optionsList = trait.choices.map(choice => (
+                    <div>
                     <input
                      type='radio'
                      id={choice.id}
-                     onChange={this.handleChoice}>
-                     {choice.name}
-                    </input>   
+                     onChange={this.handleChoice} />
+                        {choice.name} <br />
+                    </div>   
                 ));
                 question = (
                     <div className='MC-question'>

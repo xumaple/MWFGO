@@ -7,10 +7,10 @@ WORKDIR /baseimg
 
 EXPOSE 8000
 
-#RUN make clean
-#RUN make test
-#RUN make
-#RUN python3 hello.py
+RUN make clean
+RUN make test
+RUN make
+RUN python3 hello.py
 
 #RUN ls
 RUN npm run build
