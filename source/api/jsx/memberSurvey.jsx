@@ -10,7 +10,6 @@ class MemberSurvey extends React.Component {
             traits: [],
         };
 
-        this.handleDelete = this.handleDelete.bind(this);
         this.handleChangeMin = this.handleChangeMin.bind(this);
         this.handleChangeMax = this.handleChangeMax.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);

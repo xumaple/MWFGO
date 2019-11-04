@@ -4,3 +4,6 @@
 node_modules
 *algorithm
 *tests
+env
+source/api/static/js/*_bundle.js
+__pycache__
