@@ -113,7 +113,10 @@ class Limiter extends React.Component {
     
     render() {
         const constraintsList = this.state.constraints.map(constraint => (
-            <input type='radio' id={constraint.id} value={constraint.name} onChange={this.handleConstraint}>{constraint.name}</input>   
+            <div>
+                <input type='radio' id={constraint.id} value={constraint.name} onChange={this.handleConstraint}/>
+                {constraint.name}<br />
+            </div>  
         ));
         return(
             <div className='limiter'>
@@ -130,8 +133,14 @@ class Limiter extends React.Component {
                         <div className='expressionName'>
                             <p>Please select an expression.</p>
                             <form>
-                                <input type='radio' value='exactly' onChange={this.handleExpression}>exactly</input>
-                                <input type='radio' value='noMoreThan' onChange={this.handleExpression}>no more than</input>
+                                <div>
+                                    <input type='radio' value='exactly' onChange={this.handleExpression}/>
+                                    exactly
+                                </div>
+                                <div>
+                                    <input type='radio' value='noMoreThan' onChange={this.handleExpression}/>
+                                    no more than<br />
+                                </div>
                             </form>
                         </div>    
 

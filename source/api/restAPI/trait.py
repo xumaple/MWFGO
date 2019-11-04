@@ -37,8 +37,24 @@ def get_trait(traitid_url_slug):
 
     context = {
         "id": 1,
-        "name": "Maple Xu",
+        "name": "Time",
         "isConstraint": False,
         'formType': 2,
     }
+
+    if traitid_url_slug == 2:
+        context["name"] = "Location"
+        context["id"] = 2
+        context["formType"] = 2
+        
+    if traitid_url_slug == 3:
+        context["name"] = "Gender"
+        context["id"] = 3
+        context["formType"] = 1
+
+    if traitid_url_slug == 1000000000:
+        context["name"] = ""
+        context["id"] = -1
+        context["formType"] = 0
+
     return flask.jsonify(**context)
