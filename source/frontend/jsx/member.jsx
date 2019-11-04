@@ -7,6 +7,7 @@ class Member extends React.Component {
     }
 
     render(){
+        console.log('Hello');
         return(
             <div className='memberSurvey'>
                 <p><b>Survey</b></p>
