@@ -1,6 +1,6 @@
 """Error Handling."""
 from flask import jsonify
-import insta485
+import api
 
 
 class InvalidUsage(Exception):
@@ -24,7 +24,7 @@ class InvalidUsage(Exception):
         return r_v
 
 
-@insta485.app.errorhandler(InvalidUsage)
+@api.app.errorhandler(InvalidUsage)
 def handle_invalid_usage(error):
     """Error handler."""
     response = jsonify(error.to_dict())

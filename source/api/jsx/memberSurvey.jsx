@@ -75,13 +75,14 @@ class MemberSurvey extends React.Component {
     }
     
     render() {
-        const traitsList = this.state.traits.map((trait, index) => {
+        const traitsList = []
+        this.state.traits.map((trait, index) => {
             let question = (
                 <div className='time-frame-question'>
                     <form>
                         <input
                          type="text"
-                         value={trait.timeFrame.min}
+                         value={trait.timeFrame['min']}
                          onChange={(e) => this.handleChangeMin(index, e)}
                         />
                     </form>
@@ -89,13 +90,13 @@ class MemberSurvey extends React.Component {
                     <form>
                         <input
                          type="text"
-                         value={trait.timeFrame.max}
+                         value={trait.timeFrame['max']}
                          onChange={(e) => this.handleChangeMax(index, e)}
                         />
                     </form>
                 </div>
                 
-            )
+            );
             if(trait.type === 1) {
                 const optionsList = trait.choices.map(choice => (
                     <input
@@ -111,12 +112,14 @@ class MemberSurvey extends React.Component {
                             {optionsList}
                         </form>
                     </div>
-                )
-            }
-            return [
-                <p>trait.name</p>,
-                {question}
-            ]
+                );
+            };
+            traitsList.push(
+                <div>
+                    <p>{trait.name}</p>
+                    {question}
+                </div>
+            );
         });
         return(
             <div className='member-survey'>

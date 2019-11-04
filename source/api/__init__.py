@@ -19,3 +19,4 @@ app.config.from_envvar('APP_SETTINGS', silent=True)
  # noqa: E402 pylint: disable=wrong-import-position
 import api.views
 import api.model  # noqa: E402  pylint: disable=wrong-import-position
+import api.restAPI

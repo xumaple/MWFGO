@@ -7,7 +7,7 @@ import Member from './member';
 ReactDOM.render(
   // Insert the likes component into the DOM
 
-  <Member url="/api/member/" />,
+  <Member url="/restAPI/member/" />,
   document.getElementById('reactEntry'),
 
 );
