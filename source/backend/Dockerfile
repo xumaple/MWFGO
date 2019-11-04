@@ -1,7 +1,8 @@
-FROM mapoxu/mwfgobase:latest
+FROM mapoxu/mwfgobase:1.0.0
 COPY . /baseimg
+WORKDIR /baseimg
 
-EXPOSE 5000
+EXPOSE 8000
 
 #RUN make clean
 #RUN make test

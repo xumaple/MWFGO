@@ -13,6 +13,6 @@ services:
   db:
     build: source/backend/db/.
     volumes:
-      - /var/lib/mysql
+      - ./var/lib/mysql
     environment:
        MYSQL_ROOT_PASSWORD: supersecure

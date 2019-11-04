@@ -1,1 +1,3 @@
-TEMP README
+To run: 
+
+docker-compose up --build
