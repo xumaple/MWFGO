@@ -2,8 +2,8 @@ const path = require('path');
 
 module.exports = {
   entry: {
-    member: './api/jsx/main_member.jsx',
-    leader: './api/jsx/main_leader.jsx',
+    // member: './api/jsx/main_member.jsx',
+    // leader: './api/jsx/main_leader.jsx',
     organizer: './api/jsx/main_organizer.jsx'
   },
   output: {
@@ -21,6 +21,10 @@ module.exports = {
           presets: ["@babel/preset-react", '@babel/preset-env'],
           compact: false,
         },
+      },
+      {
+        test: /\.css$/i,
+        use: ['style-loader', 'css-loader'],
       },
     ],
   },
