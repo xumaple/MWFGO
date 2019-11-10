@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Choices from './choices';
+import Choices from './testfolder/choices';
 
 class Trait extends React.Component {
 

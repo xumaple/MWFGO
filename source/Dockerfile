@@ -1,9 +1,9 @@
 FROM mapoxu/mwfgobase:1.0.6
 
+#RUN ls api
+
 COPY . /baseimg
 WORKDIR /baseimg
-
-#RUN ls api
 
 EXPOSE 8000
 

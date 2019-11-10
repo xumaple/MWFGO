@@ -42,6 +42,11 @@ def get_trait(traitid_url_slug):
         'formType': 2,
     }
 
+    if traitid_url_slug == 0:
+        context["name"] = "Random question"
+        context["id"] = 0
+        context["formType"] = 3
+
     if traitid_url_slug == 2:
         context["name"] = "Location"
         context["id"] = 2

@@ -9,6 +9,6 @@ def get_traits():
     # GET request response.
 
     context = {
-        'traits': [{'id': 1}, {'id': 2}, {'id': 3}]
+        'traits': [{'id': 0}]
     }
     return flask.jsonify(**context)
