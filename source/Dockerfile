@@ -1,4 +1,4 @@
-FROM mapoxu/mwfgobase:1.0.6
+FROM mapoxu/mwfgobase:1.0.7
 
 #RUN ls api
 

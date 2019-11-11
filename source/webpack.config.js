@@ -2,7 +2,7 @@ const path = require('path');
 
 module.exports = {
   entry: {
-    // member: './api/jsx/main_member.jsx',
+    member: './api/jsx/main_member.jsx',
     // leader: './api/jsx/main_leader.jsx',
     organizer: './api/jsx/main_organizer.jsx'
   },
