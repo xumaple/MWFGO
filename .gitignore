@@ -7,3 +7,6 @@ node_modules
 env
 source/api/static/js/*_bundle.js
 __pycache__
+
+build
+boost
