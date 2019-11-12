@@ -3,8 +3,10 @@ const path = require('path');
 module.exports = {
   entry: {
     member: './api/jsx/main_member.jsx',
+    member_intro: './api/jsx/main_member_intro.jsx',
     // leader: './api/jsx/main_leader.jsx',
-    organizer: './api/jsx/main_organizer.jsx'
+    // leader_intro: './api/jsx/main_leader_intro.jsx',
+    organizer: './api/jsx/main_organizer.jsx',
   },
   output: {
     path: path.join(__dirname, '/api/static/js/'),

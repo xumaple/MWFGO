@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import TextBox from '../textBox';
+import TextBox from '../utility/textBox';
 
 class TextInfo extends React.Component {
     constructor(props) {
@@ -11,8 +11,12 @@ class TextInfo extends React.Component {
             getContext: props.props.getContext, // Calls getContext in componentDidMount
             answer: ''
         }
-        // super.getRole = super.getRole.bind(this);
+
         this.editAnswer = this.editAnswer.bind(this);
+
+        this.renderMember = this.renderMember.bind(this);
+        this.renderLeader = this.renderLeader.bind(this);
+        this.renderOrganizer = this.renderOrganizer.bind(this);
     }
 
     componentDidMount() {
@@ -24,10 +28,7 @@ class TextInfo extends React.Component {
         this.state.setContext(newAnswer);
     }
 
-    render() { // How to bind and use super functions? super.getRole()?
-        if (this.state.role === 'organizer') {
-            return (<div></div>);
-        }
+    renderMember() {
         if (this.state.role === 'member') {
             return (
                 <div>
@@ -40,7 +41,25 @@ class TextInfo extends React.Component {
                 </div>
             );
         }
-        return (<div></div>);
+        else return '';
+    }
+
+    renderLeader() {
+        return '';
+    }
+
+    renderOrganizer() {
+        return '';
+    }
+    
+    render() {
+        return (
+            <div>
+                {this.renderOrganizer()}
+                {this.renderMember()}
+                {this.renderLeader()}
+            </div>
+        );
     }
 }
 

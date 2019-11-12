@@ -30,8 +30,8 @@ export function FormType(props) {
 InfoFactory.propTypes = {
     formType: PropTypes.number.isRequired,
     role: PropTypes.string.isRequired,
-    getContext: PropTypes.string.isRequired,
-    setContext: PropTypes.string.isRequired,
+    getContext: PropTypes.func.isRequired,
+    setContext: PropTypes.func.isRequired,
 };
 
 FormType.propTypes = {

@@ -14,6 +14,8 @@ class Traits extends React.Component {
             traits: [],
             editing: -1, // nonnegative for trait index, negative for not editing
             showAlert: false,
+            traitCounter: 0,
+            answers: [], 
         };
 
         this.handleDelete = this.handleDelete.bind(this);
@@ -21,6 +23,9 @@ class Traits extends React.Component {
         this.edit = this.edit.bind(this);
         this.getTraits = this.getTraits.bind(this);
         this.toggleAlert = this.toggleAlert.bind(this);
+
+        this.getAnswer = this.getAnswer.bind(this);
+        this.setAnswer = this.setAnswer.bind(this);
     }
 
     getTraits() {
@@ -32,6 +37,7 @@ class Traits extends React.Component {
             .then((data) => {
                 this.setState({
                     traits: data.traits,
+                    answers: Array.apply(null, Array(data.traits.length)),
                 });
             })
             .catch(error => console.log(error));
@@ -42,8 +48,6 @@ class Traits extends React.Component {
     }
 
     handleDelete(num) {
-        // this.getTraits();
-
         // TODO fetch
         this.setState({
             editing: -1, 
@@ -53,6 +57,7 @@ class Traits extends React.Component {
 
     handleSave(num) {
         if (this.state.editing !== num) {
+            // Sanity check
             console.log('Saved from bad editing state!');
             return;
         }
@@ -75,46 +80,100 @@ class Traits extends React.Component {
             return;
         }
         if (num === -1) {
-            num = this.state.traits.length;
-            this.state.traits = this.state.traits.concat(<Trait
-                url={this.props.url.concat('1000000000/')}
-                id={num}
-                onDelete={this.handleDelete}
-                onSave={this.handleSave}
-                onEdit={this.edit}
-                editing={true}
-            />);
+            num = this.state.traitCounter;
+            fetch(this.props.url.concat(num, '/'), {
+                method: 'post',
+                credentials: 'same-origin',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({}),
+            })
+                .then((response) => {
+                    if (!response.ok) throw Error(response.statusText);
+                    return;
+                })
+                .catch(error => console.log(error));
+            this.setState({ traitCounter: this.state.traitCounter + 1 });
+            this.state.traits = this.state.traits.concat(num);
         }
         this.setState({editing: num, showAlert: false, });
     }
+
+    setAnswer(index, context) {
+        let newState = this.state.answers.slice(0);
+        newState[index] = context;
+        this.setState({ answers: newState });
+    }
+
+    getAnswer(index) {
+        return this.state.answers[index];
+    }
+
+    renderMember() {
+        if (this.props.role === 'member') {
+            return (
+                <div>
+                    {this.state.traits.map((id) => (
+                        <Trait
+                            url={this.props.url.concat(id, '/')}
+                            role={this.props.role}
+                            id={id}
+                            setAnswer={this.setAnswer}
+                            getAnswer={this.getAnswer}
+                            key={id}
+                        />
+                    ))}
+                </div>
+            );
+        }
+        else return '';
+    }
+
+    renderLeader() {
+        return '';
+    }
+
+    renderOrganizer() {
+        if (this.props.role === 'organizer') {
+            return(
+                <div className='traits'>
+                    <Alert color="primary" isOpen={this.state.showAlert} toggle={() => {this.setState({ showAlert: false, })}} >
+                        Please save or cancel your changes before continuing.
+                    </Alert>
+                    {this.state.traits.map((id) => (
+                        <Trait
+                            url={this.props.url.concat(id, '/')}
+                            role={this.props.role}
+                            id={id}
+                            onDelete={this.handleDelete}
+                            onSave={this.handleSave}
+                            onEdit={this.edit}
+                            editing={id - this.state.editing === 0}
+                            key={id}
+                        />
+                    ))}
+                    <Button className='new-trait' onClick={(event) => {this.edit(-1)}}>
+                        New Trait
+                    </Button>
+                </div>
+            );
+        }
+        else return '';
+    }
     
     render() {
-        return(
-            <div className='traits'>
-                <Alert color="primary" isOpen={this.state.showAlert} toggle={() => {this.setState({ showAlert: false, })}} >
-                    Please save your changes before continuing.
-                </Alert>
-                {this.state.traits.map((trait, index) => (
-                    <Trait
-                     url={this.props.url.concat(index, '/')}
-                     id={index}
-                     onDelete={this.handleDelete}
-                     onSave={this.handleSave}
-                     onEdit={this.edit}
-                     editing={index - this.state.editing === 0}
-                    />
-                ))}
-                <Button className='new-trait' onClick={(event) => {this.edit(-1)}}>
-                    New Trait
-                </Button>
+        return (
+            <div>
+                {this.renderOrganizer()}
+                {this.renderMember()}
+                {this.renderLeader()}
             </div>
-            
         );
     }
 }
 
 Traits.propTypes = {
     url: PropTypes.string.isRequired,
+    role: PropTypes.string.isRequired,
 };
 
 export default Traits;

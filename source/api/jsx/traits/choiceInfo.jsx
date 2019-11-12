@@ -18,11 +18,15 @@ class TextInfo extends React.Component {
         this.editChoice = this.editChoice.bind(this);
         this.setContextHelper = this.setContextHelper.bind(this);
         this.getContext = this.getContext.bind(this);
+
+        this.renderMember = this.renderMember.bind(this);
+        this.renderLeader = this.renderLeader.bind(this);
+        this.renderOrganizer = this.renderOrganizer.bind(this);
     }
 
     componentDidMount() {
         let choices = this.state.getContext();
-        if (choices !== undefined) {
+        if (choices !== undefined && choices !== null) {
             this.setState({ choices: choices, });
         }
     }
@@ -49,13 +53,29 @@ class TextInfo extends React.Component {
         return this.state.choices[index];
     }
 
-    render() { // How to bind and use super functions? super.getRole()?
+    renderMember() {
+        if (this.state.role === 'member') {
+            return (
+                <div>
+                    
+                </div>
+            );
+        }
+        else return '';
+    }
+
+    renderLeader() {
+        return '';
+    }
+
+    renderOrganizer() {
         if (this.state.role === 'organizer') {
             return (
                 <div>
                     Choices: 
                     {this.state.choices.map((choice, index) => (
                         <Choice
+                            key={index}
                             index={index}
                             name={choice}
                             onDelete={this.removeChoice}
@@ -72,14 +92,17 @@ class TextInfo extends React.Component {
                 </div>
             );
         }
-        if (this.state.role === 'member') {
-            return (
-                <div>
-                    
-                </div>
-            );
-        }
-        return (<div></div>);
+        else return '';
+    }
+    
+    render() {
+        return (
+            <div>
+                {this.renderOrganizer()}
+                {this.renderMember()}
+                {this.renderLeader()}
+            </div>
+        );
     }
 }
 
