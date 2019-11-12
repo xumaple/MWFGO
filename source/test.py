@@ -1,4 +1,4 @@
-from model import Organizers, db
+from api.model import Organizers, db
 
 # un = 'wow' # username
 # myobject = Organizers(username=un, password='wee', full_name='yipee')

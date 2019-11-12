@@ -1,32 +1,24 @@
 from api import app
 import flask
-from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.sql import text
-
-# Configure MySQL connection to Flask app
-# db = SQLAlchemy()
-# db_uri = 'mysql://root:supersecure@db/information_schema'
-# app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
-# app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-# db.init_app(app)
+# from api.model import hello_world
 
 @app.route("/")
 def show_index():
-#     mysql_result = False
-#     query_string = text("SELECT 1")
-#     # TODO REMOVE FOLLOWING LINE AFTER TESTING COMPLETE.
-#     db.session.query("1").from_statement(query_string).all()
-#     try:
-#         if db.session.query("1").from_statement(query_string).all():
-#             mysql_result = True
-#     except:
-#         pass
+    # mysql_result = False
+    # query_string = text("SELECT 1")
+    # # TODO REMOVE FOLLOWING LINE AFTER TESTING COMPLETE.
+    # db.session.query("1").from_statement(query_string).all()
+    # try:
+    #     if db.session.query("1").from_statement(query_string).all():
+    #         mysql_result = True
+    # except:
+    #     pass
 
 
-#     # Return the page with the result.
-#     context = {'greeting': 'hello world'}
-#     return 'hello world'#render_template(**context)
-    #frank = hello_world()
+    # Return the page with the result.
+    # context = {'greeting': 'hello world'}
+    # return 'hello world'#render_template(**context)
+    # frank = hello_world()
     context = {'greeting': 'hello'}
     return flask.render_template("index.html", **context)
 
