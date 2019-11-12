@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import TextBox from '../textBox';
+import TextBox from '../utility/textBox';
 import { Alert, Button } from 'reactstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -11,7 +11,7 @@ function Choice(props) {
     if (role === 'organizer') {
         return(
             <div className='choice'>
-                <form style={{display: 'inline-block'}} id='choice-form'>
+                <div style={{display: 'inline-block'}} id='choice-form'>
                     <TextBox
                         defaultValue=''
                         value={name}
@@ -19,7 +19,7 @@ function Choice(props) {
                         limit={CHOICE_QUESTION_SIZE_LIMIT}
                         updateValue={true}
                     />
-                </form>
+                </div>
                 <Button 
                     style={{display: 'inline-block'}} 
                     color="info" className='delete' 

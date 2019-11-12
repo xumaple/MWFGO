@@ -13,6 +13,7 @@ class TextBox extends React.Component {
         this.state = {value: value ? value : defaultValue, showAlert: false};
         
         this.handleChange = this.handleChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
         this.style = this.style.bind(this);
     }
 
@@ -21,6 +22,13 @@ class TextBox extends React.Component {
         const show = e.target.value.length * LIMIT_THRESHOLD > this.props.limit * (LIMIT_THRESHOLD - 1)
         this.setState({ value: newValue, showAlert: show });
         this.props.editValue(newValue);
+    }
+
+    handleSubmit(e) {
+        e.preventDefault();
+        if (this.props.onSubmit) {
+            this.props.onSubmit(this.state.value);
+        }
     }
 
     style() {
@@ -45,7 +53,7 @@ class TextBox extends React.Component {
                 <Alert color="primary" isOpen={this.state.showAlert}>
                     Warning: {this.limit} character limit. {this.props.limit - this.state.value.length} characters remaining.
                 </Alert>
-                <form style={this.style()}>
+                <form style={this.style()} onSubmit={this.handleSubmit}>
                     <input
                      type="text" 
                      style={this.style()}
@@ -54,7 +62,7 @@ class TextBox extends React.Component {
                     />
                 </form> 
             </div>
-        );  
+        );
     }
 }
 
@@ -65,6 +73,7 @@ TextBox.propTypes = {
     style: PropTypes.object,
     limit: PropTypes.number.isRequired,
     updateValue: PropTypes.bool,
+    onSubmit: PropTypes.func,
 };
 
 export default TextBox;

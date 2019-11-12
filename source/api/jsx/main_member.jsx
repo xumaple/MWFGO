@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Member from './member';
+import Member from './person/member';
 
 
 // This method is only called once
