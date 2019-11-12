@@ -1,68 +1,95 @@
+# from flask import Flask
+# from flask_sqlalchemy import SQLAlchemy
+
+# app = Flask(__name__)
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:supersecure@db/information_schema'
+# app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+# db = SQLAlchemy(app)
+# db.init_app(app)
+
+
+# class User(db.Model):
+#     id = db.Column(db.Integer, primary_key=True)
+#     username = db.Column(db.String(80), unique=True, nullable=False)
+#     email = db.Column(db.String(120), unique=True, nullable=False)
+
+#     def __init__(self, username, email):
+#         self.username = username
+#         self.email = email
+
+#     def __repr__(self):
+#         return '<User %r>' % self.username
+
+# db.create_all()
+
 """Database API."""
-import flask
-from api import app
+from flask import Flask
+#from api import app
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.sql import text
 
 # Configure MySQL connection to Flask app
-db = SQLAlchemy()
+app = Flask(__name__)
 db_uri = 'mysql://root:supersecure@db/information_schema'
 app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-db.init_app(app)
+db = SQLAlchemy(app)
+# meta = MetaData(engine)
+# db.init_app(app)
 
-def hello_world():
-    return 'hello frank'
+event_id = ''
 
-def dict_factory(cursor, row):
-    """Convert database row objects to a dictionary.
+class Organizers(db.Model):
+    __tablename__ = 'Organizers'
 
-    This is useful for
-    building dictionaries which are then used to render a template.  Note that
-    this would be inefficient for large queries.
-    """
-    output = {}
-    for idx, col in enumerate(cursor.description):
-        output[col[0]] = row[idx]
-    return output
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(256), unique=True, nullable=False)
+    password = db.Column(db.String(256), nullable=False)
+    full_name = db.Column(db.String(256))
+    events = db.relationship('Event', backref='organizer', lazy=True, cascade="delete")
 
+    def __repr__(self):
+        return '<Username %r>' % self.username
 
-def get_db():
-    """Open a new database connection."""
-    if not hasattr(flask.g, 'sqlite_db'):
-        flask.g.sqlite_db = sqlite3.connect(
-            app.config['DATABASE_FILENAME'])
-        flask.g.sqlite_db.row_factory = dict_factory
+class Event(db.Model):
+    __tablename__ = 'Events'
 
-        # Foreign keys have to be enabled per-connection.  This is an sqlite3
-        # backwards compatibility thing.
-        flask.g.sqlite_db.execute("PRAGMA foreign_keys = ON")
+    id = db.Column(db.Integer, primary_key=True, nullable=False)
+    name = db.Column(db.String(256), nullable=False)
+    organizer_id = db.Column(db.Integer, db.ForeignKey('organizers.id'), nullable=False) # TODO: foreign key here
 
-    return flask.g.sqlite_db
+    def __repr__(self):
+        return '<Name %r>' % self.name
 
+class Traits(db.Model):
+    __tablename__ = event_id + '_Traits'
 
-@app.teardown_appcontext
-def close_db(error):
-    """Close the database at the end of a request."""
-    # Assertion needed to avoid style error
-    assert error or not error
-    if hasattr(flask.g, 'sqlite_db'):
-        flask.g.sqlite_db.commit()
-        flask.g.sqlite_db.close()
+    id = db.Column(db.Integer, primary_key=True, nullable=False)
+    name = db.Column(db.String(256), nullable=False)
+    question = db.Column(db.String(256), nullable=False)
+    is_constraint = db.Column(db.Boolean, nullable=False)
+    form_type = db.Column(db.Integer, nullable=False)
+    num_choices = db.Column(db.Integer, nullable=False)
 
+class Choices(db.Model):
+    __tablename__ = event_id + '_Choices'
 
-# import sys
-# from sqlalchemy import create_engine, Column, ForeignKey, Integer, String
-# from sqlalchemy.ext.declarative import declarative_base
-# Base = declarative_base()
-# from sqlalchemy.orm import relationship
+    id = db.Column(db.Integer, primary_key=True, nullable=False)
+    trait_id = db.Column(db.Integer, nullable=False) # TODO: foreign key here
+    name = db.Column(db.String(256), nullable=False)
 
-# class traits()
-# class choices(Base):
+class Members(db.Model):
+    __tablename__ = event_id + '_Members'
 
+    id = db.Column(db.Integer, primary_key=True, nullable=False)
+    trait_id = db.Column(db.Float, nullable=False) # TODO: foreign key here; should be dynamic
+    name = db.Column(db.String(256), nullable=False)
 
+class Leaders(db.Model):
+    __tablename__ = event_id + '_Leaders'
 
+    id = db.Column(db.Integer, primary_key=True, nullable=False)
+    trait_id = db.Column(db.Float, nullable=False) # TODO: foreign key here; should be dynamic
+    name = db.Column(db.String(256), nullable=False)
 
-# engine = create_engine('sqlite:///books-collection.db')
-# from sqlalchemy import create_engine; Base.metadata.create_all(engine)
+db.create_all()
 
