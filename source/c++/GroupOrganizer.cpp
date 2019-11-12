@@ -41,7 +41,7 @@ void GroupOrganizer::addLeader(std::string name, py::list &traits)
 {
     //Create a leader
     double* arr = toArray(traits);
-    leaders.emplace_back(arr);
+    leaders.push_back(new Individual(arr));
 
     //Create a group with the leader
 }
@@ -50,7 +50,7 @@ void GroupOrganizer::addPerson(std::string name, py::list &traits)
 {
     //Create a person
     double* arr = toArray(traits);
-    people.emplace_back(arr);
+    people.push_back(new Individual(arr));
 }
 
 void GroupOrganizer::addTrait(std::string name, int formType, int numChoices)
@@ -92,6 +92,6 @@ double* toArray(const py::object &iterable)
     {
         arr[i] = t[i];
     }
-    return t;
+    return arr;
 }
 
