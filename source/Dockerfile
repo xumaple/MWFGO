@@ -1,4 +1,4 @@
-FROM mapoxu/mwfgobase:1.0.3
+FROM mapoxu/mwfgobase:1.0.10
 
 COPY . /baseimg
 WORKDIR /baseimg
@@ -7,15 +7,15 @@ WORKDIR /baseimg
 
 EXPOSE 8000
 
-RUN make clean
-RUN make test
-RUN make
-RUN python3 hello.py
+#RUN make clean
+#RUN make test
+#RUN make
+#RUN python3 hello.py
 
 #RUN ls
-RUN npm run build
+#RUN npm run build
 #RUN ls api/static/js
-#RUN cat api/js/member_bundle.js
+#RUN cat api/js/member_bundle.js 
 
 CMD export LC_ALL=C.UTF-8; \
     export LANG=C.UTF-8; \

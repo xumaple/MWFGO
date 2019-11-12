@@ -21,5 +21,5 @@ RUN apt-get install -y npm; \
     npm install --save prop-types; \
     npm install --save react-dom
 
-RUN apt-get install -y libmysqlclient-dev
+RUN apt-get install -y libmysqlclient-dev python3-psycopg2
 RUN pip3 install --upgrade pip && pip install mysql && pip install -r requirements.txt
