@@ -1,13 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Organizer from './person/organizer';
-
+import Intro from './person/intro';
 
 // This method is only called once
 ReactDOM.render(
   // Insert the likes component into the DOM
 
-  <Organizer url="/api/v1/organizer/" />,
+  <Intro url="/api/v1/member/" />,
   document.getElementById('reactEntry'),
 
 );

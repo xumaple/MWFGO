@@ -1,4 +1,7 @@
 """Insta485 REST API."""
-from api.restAPI.memberSurvey import *
+
+from api.restAPI.traits import *
+from api.restAPI.member import *
 from api.restAPI.leaderSurvey import *
-from api.restAPI.error import InvalidUsage, handle_invalid_usage
+from api.restAPI.choice import *
+from api.restAPI.choices import *

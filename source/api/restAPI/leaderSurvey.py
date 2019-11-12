@@ -1,7 +1,7 @@
 import flask
 import api
 
-@api.app.route('/restAPI/leader/leaderSurvey/', methods=['GET'])
+@api.app.route('/api/v1/leader/leaderSurvey/', methods=['GET'])
 def get_leaderSurvey():
     """Get leader Survey."""
 

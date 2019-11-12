@@ -1,5 +1,6 @@
 from api import app
 import flask
+from api.model import hello_world
 
 @app.route("/")
 def show_index():
@@ -17,21 +18,29 @@ def show_index():
     # Return the page with the result.
     # context = {'greeting': 'hello world'}
     # return 'hello world'#render_template(**context)
-    context = {'greeting': 'hello'}
+    frank = hello_world()
+    context = {'username': 'hello'}
     return flask.render_template("index.html", **context)
 
 
-@app.route("/templates/member/")
-def show_member():
-    context = {'greeting': 'hello'}
-    return flask.render_template("member/index.html", **context)
 
-@app.route("/templates/driver/")
+@app.route("/leader/")
 def show_driver():
     context = {'greeting': 'hello'}
-    return flask.render_template("driver/index.html", **context)
+    return flask.render_template("leader.html", **context)
 
-@app.route("/templates/organizer/")
+@app.route("/organizer/")
 def show_organizer():
     context = {'greeting': 'hello'}
-    return flask.render_template("organizer/index.html", **context)
+    return flask.render_template("organizer.html", **context)
+    
+@app.route("/member/")
+def show_member():
+    context = {'jsfile': 'member_intro_bundle.js'}
+    return flask.render_template("member.html", **context)
+
+@app.route("/member/<member_id>/")
+def show_member_survey(member_id):
+    context = {'jsfile': 'member_bundle.js'}
+    return flask.render_template("member.html", **context)
+
