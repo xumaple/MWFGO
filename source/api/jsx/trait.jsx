@@ -176,7 +176,6 @@ class Trait extends React.Component {
     }
     
     render() {
-        console.log("here");
         return(
             <div className='trait'>
                 { this.state.show ? (

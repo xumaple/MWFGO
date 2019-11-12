@@ -1,0 +1,13 @@
+npm i --save react
+npm install react-localizer --save
+sudo npm i react-widgets
+sudo apt-get install python3-sqlalchemy
+pip3 install SQLAlchemy
+
+Database stuff
+sudo apt-get install mysql-server
+sudo apt-get install mysql-client
+sudo apt-get install libmysqlclient-dev
+pip install configparser
+sudo cp /usr/lib/python3.6/configparser.py /usr/lib/python3.6/ConfigParser.py
+pip install mysqlclient

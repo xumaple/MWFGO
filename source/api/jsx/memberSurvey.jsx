@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+// import DateTimePicker from 'react-widgets/lib/DateTimePicker'
 
 class MemberSurvey extends React.Component {
     /*Display organizer's page*/
@@ -76,6 +77,13 @@ class MemberSurvey extends React.Component {
     }
     
     render() {
+        // let { DateTimePicker } = ReactWidgets
+        // let test = (
+        //     <DateTimePicker
+        //         //disabled
+        //         //defaultValue={new Date()}
+        //     />
+        // )
         const traitsList = []
         this.state.traits.map((trait, index) => {
             let question = (
@@ -95,6 +103,7 @@ class MemberSurvey extends React.Component {
                          onChange={(e) => this.handleChangeMax(index, e)}
                         />
                     </form>
+                    {test}
                 </div>
                 
             );
