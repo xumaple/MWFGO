@@ -1,12 +1,8 @@
 import flask
 import api
 
-@api.app.route('/api/organizer/traits/<int:trait_id>',
-                    methods=['GET'])
-def get_traits(trait_id):
-    """Get Traits."""
-    # GET request response.
-
+def get_traits_helper(trait_id):
+    """Helper to get traits."""
     # Make a query for Traits where id = trait_id
     query_result = {}
 
@@ -39,10 +35,19 @@ def get_traits(trait_id):
         'context': context
     }
     
+    return res
+
+@api.app.route('/api/v1/organizer/traits/<int:trait_id>',
+                    methods=['GET'])
+def get_traits(trait_id):
+    """Get Traits."""
+    # GET request response.
+    res = get_traits_helper(trait_id)
+
     return flask.jsonify(**res)
 
 
-@api.app.route('/api/organizer/traits/<int:trait_id>',
+@api.app.route('/api/v1/organizer/traits/<int:trait_id>',
                     methods=['DELETE'])
 def delete_traits():
     """Delete Traits."""
@@ -53,19 +58,22 @@ def delete_traits():
     return flask.make_response("", 204)
 
 
-@api.app.route('/api/organizer/traits/<int:trait_id>',
+@api.app.route('/api/v1/organizer/traits/<int:trait_id>',
                     methods=['PATCH'])
 def patch_traits():
     """Patch Traits."""
     # PATCH request response.
 
-    context = {
-        'traits': [{id: 1}, {id: 2}, {id: 3}]
-    }
-    return flask.jsonify(**context)
+    # Make a query to Traits to update the appropriate information
+
+    # If formType == 1, update Choices table
+
+    # If formType == 2, update MasterTimeRange table
+
+    return flask.make_request("", 200)
 
 
-@api.app.route('/api/organizer/traits/<int:trait_id>',
+@api.app.route('/api/v1/organizer/traits/<int:trait_id>',
                     methods=['POST'])
 def post_traits():
     """Post Traits."""
@@ -74,3 +82,32 @@ def post_traits():
     # Make a query to add a new entry to Traits (default values)
 
     return flask.make_response("", 201)
+
+
+@api.app.route('/api/v1/member/traits/<int:trait_id>',
+                    methods=['GET'])
+def member_get_traits(trait_id):
+    """Get Traits."""
+    res = get_traits_helper(trait_id)
+    del res['isConstraint']
+
+    return flask.jsonify(**res)
+
+
+@api.app.route('/api/v1/organizer/traits/', methods=['GET'])
+@api.app.route('/api/v1/member/traits/', methods=['GET'])
+@api.app.route('/api/v1/traits/', methods=['GET'])
+def get_trait_id():
+    """Get Trait ids."""
+    # Make a query to get all the traits
+    query_res = []
+    trait_ids = []
+    for trait in query_res:
+        trait_ids.append(trait['id'])
+
+    res = {
+        'traits': trait_ids
+    }
+
+    return flask.jsonify(**res) 
+
