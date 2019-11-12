@@ -1,7 +1,7 @@
 CC := g++
 FLAGS := -std=c++14 -pedantic -Wall -Wctor-dtor-privacy -Wmissing-declarations -Wmissing-include-dirs
 LFLAGS = $(FLAGS) -c -fPIC
-MAIN_SOURCES := main.cpp
+MAIN_SOURCES := pylib.cpp
 SOURCES := $(filter-out test_%.cpp $(MAIN_SOURCES), $(shell echo *.cpp))
 # PACKAGES := constraints
 OBJECTS = $(SOURCES:.cpp=.o)
