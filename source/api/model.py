@@ -20,14 +20,14 @@ class Organizers(db.Model):
     events = db.relationship('Event', backref='organizers', lazy=True, cascade="all, delete-orphan")
 
     def __repr__(self):
-        return f"Organizers('{self.id}', '{self.username}', '{self.password}', '{self.full_name}')"
+        return f"organizers('{self.id}', '{self.username}', '{self.password}', '{self.full_name}')"
 
 class Event(db.Model):
     __tablename__ = 'events'
 
     id = db.Column(db.Integer, primary_key=True, nullable=False)
     name = db.Column(db.String(256), nullable=False)
-    organizer_id = db.Column(db.Integer, db.ForeignKey('Organizers.id'), nullable=False) # TODO: foreign key here
+    organizer_id = db.Column(db.Integer, db.ForeignKey('organizers.id'), nullable=False) # TODO: foreign key here
 
     def __repr__(self):
         return f"Event('{self.id}', '{self.name}', '{self.organizer_id}')"
