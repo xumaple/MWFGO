@@ -14,7 +14,9 @@ services:
 
   db:
     build: source/db/.
+    restart:
+      always
+    ports: 
+      - 5432:5432
     volumes:
-      - /var/lib/mysql
-    environment:
-       MYSQL_ROOT_PASSWORD: supersecure
+      - /var/lib/postgresql

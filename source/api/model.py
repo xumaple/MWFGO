@@ -1,46 +1,17 @@
-# from flask import Flask
-# from flask_sqlalchemy import SQLAlchemy
 
-# app = Flask(__name__)
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:supersecure@db/information_schema'
-# app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-# db = SQLAlchemy(app)
-# db.init_app(app)
-
-
-# class User(db.Model):
-#     id = db.Column(db.Integer, primary_key=True)
-#     username = db.Column(db.String(80), unique=True, nullable=False)
-#     email = db.Column(db.String(120), unique=True, nullable=False)
-
-#     def __init__(self, username, email):
-#         self.username = username
-#         self.email = email
-
-#     def __repr__(self):
-#         return '<User %r>' % self.username
-
-# db.create_all()
 
 """Database API."""
-from flask import Flask
-#from api import app
-from flask_sqlalchemy import SQLAlchemy
 
+from api import app
+from flask_sqlalchemy import SQLAlchemy
 # Configure MySQL connection to Flask app
-app = Flask(__name__)
-db_uri = 'sqlite:////tmp/test.db'
-app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
-# meta = MetaData(engine)
-# db.init_app(app)
 
 event_id = ''
 trait_id = ''
 
 class Organizers(db.Model):
-    __tablename__ = 'Organizers'
+    __tablename__ = 'organizers'
 
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(256), unique=True, nullable=False)
@@ -52,7 +23,7 @@ class Organizers(db.Model):
         return f"Organizers('{self.id}', '{self.username}', '{self.password}', '{self.full_name}')"
 
 class Event(db.Model):
-    __tablename__ = 'Events'
+    __tablename__ = 'events'
 
     id = db.Column(db.Integer, primary_key=True, nullable=False)
     name = db.Column(db.String(256), nullable=False)
@@ -62,7 +33,7 @@ class Event(db.Model):
         return f"Event('{self.id}', '{self.name}', '{self.organizer_id}')"
 
 class Traits(db.Model):
-    __tablename__ = event_id + '_Traits'
+    __tablename__ = event_id + '_traits'
 
     id = db.Column(db.Integer, primary_key=True, nullable=False)
     name = db.Column(db.String(256), nullable=False)
@@ -75,7 +46,7 @@ class Traits(db.Model):
         return f"Traits('{self.id}', '{self.name}', '{self.question}', '{self.is_constraint}', '{self.form_type}', '{self.num_choices}')"
 
 class Choices(db.Model):
-    __tablename__ = trait_id + '_Choices'
+    __tablename__ = event_id + '_choices'
 
     id = db.Column(db.Integer, primary_key=True, nullable=False)
     name = db.Column(db.String(256), nullable=False)
@@ -84,7 +55,7 @@ class Choices(db.Model):
         return f"Choices('{self.id}', '{self.name}')"
 
 class Members(db.Model):
-    __tablename__ = event_id + '_Members'
+    __tablename__ = event_id + '_members'
 
     id = db.Column(db.Integer, primary_key=True, nullable=False)
     name = db.Column(db.String(256), nullable=False)
@@ -93,7 +64,7 @@ class Members(db.Model):
         return f"Members('{self.id}', '{self.name}')"
 
 class Leaders(db.Model):
-    __tablename__ = event_id + '_Leaders'
+    __tablename__ = event_id + '_leaders'
 
     id = db.Column(db.Integer, primary_key=True, nullable=False)
     name = db.Column(db.String(256), nullable=False)
@@ -102,4 +73,6 @@ class Leaders(db.Model):
         return f"Choices('{self.id}', '{self.name}')"
 
 db.create_all()
+db.session.commit()
+
 
