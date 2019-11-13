@@ -1,6 +1,7 @@
 import React from 'react';
-import Traits from './traits';
-import Limiters from './limiters';
+import Traits from '../traits/traits';
+import PropTypes from 'prop-types';
+// import Limiters from '../limiters/limiters';
 
 class Organizer extends React.Component {
     constructor(props) {
@@ -18,5 +19,9 @@ class Organizer extends React.Component {
         );
     }
 }
+
+Organizer.propTypes = {
+    url: PropTypes.string.isRequired,
+};
 
 export default Organizer;

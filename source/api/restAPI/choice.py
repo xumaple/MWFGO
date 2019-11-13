@@ -1,7 +1,7 @@
 import flask
 from api import app, model
 
-app.route('/api/organizer/traits/<traid_id>/choices/<choice_id>/',
+app.route('/api/organizer/traits/<int:traid_id>/choices/<int:choice_id>/',
                     methods=['GET'])
 def get_choice():
     """Get Choice."""
@@ -9,6 +9,6 @@ def get_choice():
     # GET request response.
 
     context = {
-        'traits': [{id: 1}, {id: 2}, {id: 3}]
+        'name': trait_id + trait_id
     }
     return flask.jsonify(**context)

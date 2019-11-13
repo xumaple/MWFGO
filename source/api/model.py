@@ -74,5 +74,3 @@ class Leaders(db.Model):
 
 db.create_all()
 db.session.commit()
-
-
