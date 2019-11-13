@@ -1,4 +1,4 @@
-from api.model import db, Organizers, Event, Traits, Choices, Members, Leaders
+from api.model import db, Organizers, Event, Traits, Choices, Members, Leaders, tables
 
 # un = 'wow' # username
 # myobject = Organizers(username=un, password='wee', full_name='yipee')
@@ -44,4 +44,8 @@ db.session.add(member)
 for row in db.session.query(Members.name):
     print(row._asdict())
 
-print(db.session.query(Members.name).filter_by(name="hi maple teehee XD").one())
+print(db.session.query(tables["Members"]).filter_by(name="hi maple teehee XD").one().__dict__)
+tmplist = []
+for row in db.session.query(tables["Members"]):
+    tmplist.append(row.__dict__)
+print(tmplist)

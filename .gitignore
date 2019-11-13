@@ -8,3 +8,5 @@ env
 source/api/static/js/*_bundle.js
 __pycache__
 source/api/__pycache__
+.vscode
+

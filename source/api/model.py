@@ -10,6 +10,8 @@ db = SQLAlchemy(app)
 event_id = ''
 trait_id = ''
 
+tables = {}
+
 class Organizers(db.Model):
     __tablename__ = 'organizers'
 
@@ -21,6 +23,7 @@ class Organizers(db.Model):
 
     def __repr__(self):
         return f"organizers('{self.id}', '{self.username}', '{self.password}', '{self.full_name}')"
+tables["Organizers"] = Organizers
 
 class Event(db.Model):
     __tablename__ = 'events'
@@ -31,9 +34,11 @@ class Event(db.Model):
 
     def __repr__(self):
         return f"Event('{self.id}', '{self.name}', '{self.organizer_id}')"
+tables["Event"] = Event
 
+#not actually gonna be here once restAPI is done
 class Traits(db.Model):
-    __tablename__ = event_id + '_traits'
+    __tablename__ = 'traits_' + event_id
 
     id = db.Column(db.Integer, primary_key=True, nullable=False)
     name = db.Column(db.String(256), nullable=False)
@@ -45,8 +50,9 @@ class Traits(db.Model):
     def __repr__(self):
         return f"Traits('{self.id}', '{self.name}', '{self.question}', '{self.is_constraint}', '{self.form_type}', '{self.num_choices}')"
 
+#not actually gonna be here once restAPI is done
 class Choices(db.Model):
-    __tablename__ = event_id + '_choices'
+    __tablename__ = 'choices_' + trait_id
 
     id = db.Column(db.Integer, primary_key=True, nullable=False)
     name = db.Column(db.String(256), nullable=False)
@@ -54,17 +60,20 @@ class Choices(db.Model):
     def __repr__(self):
         return f"Choices('{self.id}', '{self.name}')"
 
+#not actually gonna be here once restAPI is done
 class Members(db.Model):
-    __tablename__ = event_id + '_members'
+    __tablename__ = 'members_' + event_id
 
     id = db.Column(db.Integer, primary_key=True, nullable=False)
     name = db.Column(db.String(256), nullable=False)
 
     def __repr__(self):
         return f"Members('{self.id}', '{self.name}')"
+tables["Members"] = Members
 
+#not actually gonna be here once restAPI is done
 class Leaders(db.Model):
-    __tablename__ = event_id + '_leaders'
+    __tablename__ = 'leaders_' + event_id
 
     id = db.Column(db.Integer, primary_key=True, nullable=False)
     name = db.Column(db.String(256), nullable=False)
