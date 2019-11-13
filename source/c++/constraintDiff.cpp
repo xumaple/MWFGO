@@ -1,6 +1,6 @@
 #include "constraintDiff.h"
 
-ConstraintDiff &ConstraintDiff::operator+= (ConstraintDiff other) {
+ConstraintDiff &ConstraintDiff::operator+=(ConstraintDiff other) {
     weight += other.weight;
     cost += other.cost;
     return *this;

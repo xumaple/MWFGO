@@ -27,14 +27,30 @@ GroupOrganizer::GroupOrganizer()
 GroupOrganizer::~GroupOrganizer()
 {
     //Delete constraints
-    
+    for (auto c: cm->allConstraints())
+    {
+        delete c;
+    }
     //Delete leaders
-    
+    for (auto l: leaders)
+    {
+        delete l;
+    }
     //Delete people
-    
+    for (auto p: people)
+    {
+        delete p;
+    } 
     //Delete Groups
-    
+    for (auto g: groups)
+    {
+        delete g;
+    } 
     //Delete limiters
+    for (auto l: limiters)
+    {
+        delete l;
+    } 
 }
 
 void GroupOrganizer::addLeader(std::string name, py::list &traits)
@@ -82,6 +98,20 @@ void GroupOrganizer::addLimiter()
 void GroupOrganizer::runAlgorithm()
 {
     //Assuming all data has been read in, runs the algorithm
+    //Compute all the differences between people
+    for (auto it = people.begin(); it != people.end; ++it)
+    {
+        auto nextIt = it;
+        for (++nextIt; nextIt != people.end(); ++nextIt)
+        {
+            Individual::computeDiffs(*it, *nextIt);
+        } 
+    }
+
+    //Assign all the people to a group
+    
+
+    //Swap people between groups until the groups converge
 }
 
 double* toArray(const py::object &iterable)

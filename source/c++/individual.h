@@ -14,7 +14,8 @@ public:
     static void computeDiffs(Individual &ind1, Individual &ind2);
     
     Individual(double *valuesIn): values(valuesIn) {}
-    
+    ~Individual() { delete[] values; }
+ 
     std::shared_ptr<ConstraintDiff> getDiff(Individual *other) const;
     std::vector<double> getValues(const std::vector<int> indices) const;
     
