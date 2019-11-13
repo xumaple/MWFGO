@@ -17,7 +17,7 @@ RUN apt-get install -y npm; \
     npm install -D babel-loader @babel/core @babel/preset-env webpack; \
     npm install --save-dev @babel/preset-react; \
     npm install --save-dev @babel/preset-env; \
-    npm install --save react prop-types react-dom bootstrap reactstrap style-loader react-localizer react-widgets react-router; \
+    npm install --save react prop-types react-dom bootstrap reactstrap style-loader react-localizer react-widgets react-router-dom; \
     npm install --save-dev css-loader
 
 
