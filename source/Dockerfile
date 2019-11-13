@@ -1,4 +1,4 @@
-FROM mapoxu/mwfgobase:1.1.0
+FROM mapoxu/mwfgobase:1.0.12
 
 COPY . /baseimg
 WORKDIR /baseimg
@@ -10,7 +10,6 @@ EXPOSE 8000
 #RUN make
 #RUN python3 hello.py
 
-#RUN ls
 #RUN npm run build
 #RUN ls api/static/js
 #RUN cat api/js/member_bundle.js 
