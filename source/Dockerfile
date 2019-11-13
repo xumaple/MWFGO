@@ -1,4 +1,4 @@
-FROM mapoxu/mwfgobase:1.0.10
+FROM mapoxu/mwfgobase:1.0.7
 
 COPY . /baseimg
 WORKDIR /baseimg

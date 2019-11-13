@@ -43,3 +43,5 @@ member=Members(name="hi frank teehee XD")
 db.session.add(member)
 for row in db.session.query(Members.name):
     print(row._asdict())
+
+print(db.session.query(Members.name).filter_by(name="hi maple teehee XD").one())
