@@ -1,5 +1,4 @@
-# A MySQL container.
-FROM mysql:5.7
+FROM postgres:latest
 
-EXPOSE 3306
-CMD ["mysqld"]
+COPY ./clear.sh /
+RUN chmod +x /clear.sh

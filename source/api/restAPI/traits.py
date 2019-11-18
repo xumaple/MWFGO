@@ -1,5 +1,38 @@
 import flask
 import api
+import os, sys
+#sys.path.insert(0, "/api/model.py")
+#from model import db, Traits
+#from model import tables
+
+def get_traits_helper(trait_id):
+    """Helper to get traits."""
+    # Make a query for Traits where id = trait_id
+    query_result = {} # TODO: db.session.query(tables["Traits_" + event_id]).filter_by(id=trait_id).one().__dict__
+
+    # If Form is Text Box, we keep value of None
+    context = None
+
+    # Form is Multiple Choice
+    if query_result['formType'] == 1:
+        # Make a query for Choices with trait_id
+        form_query = []
+        context = []
+        # TODO:
+        # for choice in db.session.query(tables["Choices_" + trait_id].name):
+        #     context.append(choice['name'])
+        for choice in form_query:
+            context.append(choice['name'])
+    # Form is Time Range
+    elif query_result['formType'] == 2:
+        # Make a query for MasterTimeRange with trait_id
+        p, q = repr(query_result["context"]).split('.')
+        begin = int(p)
+        end = int(q)
+        context = {
+            'begin': begin,
+            'end': end
+        }
 
 def get_traits_helper(trait_id):
     """Helper to get traits."""

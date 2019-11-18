@@ -1,6 +1,6 @@
 from api import app
 import flask
-from api.model import hello_world
+# from api.model import hello_world
 
 @app.route("/")
 def show_index():
@@ -18,8 +18,8 @@ def show_index():
     # Return the page with the result.
     # context = {'greeting': 'hello world'}
     # return 'hello world'#render_template(**context)
-    frank = hello_world()
-    context = {'username': 'hello'}
+    # frank = hello_world()
+    context = {'greeting': 'hello'}
     return flask.render_template("index.html", **context)
 
 

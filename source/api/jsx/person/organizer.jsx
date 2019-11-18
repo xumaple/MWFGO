@@ -12,9 +12,9 @@ class Organizer extends React.Component {
         return(
             <div className='survey'>
                 <p><b>Traits</b></p>
-                <div><Traits role='organizer' url={this.props.url.concat('traits/')} /></div>
-                {/* <p><b>Limiters</b></p>
-                <div><Limiters url={`${this.props.url}limiters/`} /></div> */}
+                <div><Traits url={`${this.props.url}traits/`} role='organizer' /></div>
+                {/*<p><b>Limiters</b></p>
+                <div><Limiters url={`${this.props.url}limiters/`} /></div>*/}
             </div>            
         );
     }

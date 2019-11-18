@@ -17,9 +17,9 @@ RUN apt-get install -y npm; \
     npm install -D babel-loader @babel/core @babel/preset-env webpack; \
     npm install --save-dev @babel/preset-react; \
     npm install --save-dev @babel/preset-env; \
-    npm install --save react prop-types react-dom bootstrap reactstrap style-loader react-localizer react-widgets react-router; \
+    npm install --save react prop-types react-dom bootstrap reactstrap style-loader react-localizer react-widgets react-router-dom; \
     npm install --save-dev css-loader
 
 
-RUN apt-get install -y libmysqlclient-dev
+RUN apt-get install -y libmysqlclient-dev python3-psycopg2
 RUN pip3 install --upgrade pip && pip install mysql && pip install -r requirements.txt
