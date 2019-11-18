@@ -1,4 +1,5 @@
 #include "GroupOrganizer.h"
+#include <algorithm>
 #include <string>
 #include <vector>
 
@@ -109,7 +110,7 @@ void GroupOrganizer::runAlgorithm()
     }
 
     //Assign all the people to a group
-    
+    std::shuffle(people.begin(), people.end()); 
 
     //Swap people between groups until the groups converge
 }
