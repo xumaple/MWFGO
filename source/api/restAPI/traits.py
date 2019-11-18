@@ -34,30 +34,6 @@ def get_traits_helper(trait_id):
             'end': end
         }
 
-def get_traits_helper(trait_id):
-    """Helper to get traits."""
-    # Make a query for Traits where id = trait_id
-    query_result = {}
-
-    # If Form is Text Box, we keep value of None
-    context = None
-
-    # Form is Multiple Choice
-    if query_result['formType'] == 1:
-        # Make a query for Choices with trait_id
-        form_query = []
-        context = []
-        for choice in form_query:
-            context.append(choice['name'])
-    # Form is Time Range
-    elif query_result['formType'] == 2:
-        # Make a query for MasterTimeRange with trait_id
-        form_query = {}
-        context = {
-            'begin': form_query['begin'],
-            'end': form_query['end']
-        }
-
     # Set id, name, isConstraint, formType, and context object
     res = {
         'id': query_result['id'],
@@ -103,7 +79,7 @@ def patch_traits():
 
     # If formType == 2, update MasterTimeRange table
 
-    return flask.make_request("", 200)
+    return flask.make_response("", 200)
 
 
 @api.app.route('/api/v1/organizer/traits/<int:trait_id>',
