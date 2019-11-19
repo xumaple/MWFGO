@@ -21,12 +21,12 @@ def get_trait_helper(trait_id):
     form_type = query_result.get('formType')
     if form_type == 1:
         # Make a query for Choices with trait_id
-        form_query = []
+        # form_query = []
         context = []
-        for choice in db.session.query(tables['choices_{}'.format(trait_id)].name):
-            context.append(choice['name'])
-        for choice in form_query:
-            context.append(choice._asdict()['name'])
+        for choice in db.session.query(tables['choices_{}'.format(event_id)]).filter_by(trait_id=trait_id).all():
+            context.append(choice.name)
+        # for choice in form_query:
+        #     context.append(choice._asdict()['name'])
     # Form is Time Range TODO
     elif form_type == 2:
         # Make a query for MasterTimeRange with trait_id
@@ -111,14 +111,19 @@ def patch_trait(trait_id):
 
 @api.app.route('/api/v1/organizer/traits/<int:trait_id>/',
                     methods=['POST'])
-def post_trait(trait_id):
+def post_trait():
     """Post Traits."""
     # POST request response.
-    trait = tables['traits_{}'.format(event_id)](id=trait_id)
+    trait = tables['traits_{}'.format(event_id)]()
     db.session.add(trait)
+    db.session.flush()
     db.session.commit()
 
-    return flask.make_response("", 201)
+    res = {
+        'id': trait.id
+    }
+
+    return flask.make_response(**res)
 
 
 @api.app.route('/api/v1/member/traits/<int:trait_id>/',
