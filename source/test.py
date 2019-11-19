@@ -8,7 +8,7 @@ from api.model import db, Organizers, Event, Traits, Choices, Members, Leaders, 
 # e = db.session.query(Organizers).filter_by(username=un).one()
 # print(e)
 
-event_id = '5'
+event_id = '0'
 
 # class Members_5(db.Model):
 #     __tablename__ = event_id + '_members'
@@ -28,25 +28,28 @@ event_id = '5'
 
 
 
-temp = {
-    "id": db.Column(db.Integer, primary_key=True, nullable=False), \
-    "name": db.Column(db.String(256), nullable=False), \
-    "__repr__": lambda self: self.id + self.name
-}
-tmp = type("Members_" + event_id, 
-              (db.Model,), # db.Model
-              temp)
+# temp = {
+#     "id": db.Column(db.Integer, primary_key=True, nullable=False), \
+#     "name": db.Column(db.String(256), nullable=False), \
+#     "__repr__": lambda self: self.id + self.name
+# }
+# tmp = type("Members_" + event_id, 
+#               (db.Model,), # db.Model
+#               temp)
 
-member=Members(name="hi maple teehee XD")
+member=Members(name="hi maple teehee XD", trait_=1.1)
 db.session.add(member)
-member=Members(name="hi frank teehee XD")
+member=Members(name="hi frank teehee XD", trait_=2.2)
 db.session.add(member)
 for row in db.session.query(Members.name):
     print(row._asdict())
     print(row)
 
-print(db.session.query(tables["Members"]).filter_by(name="hi maple teehee XD").one().__dict__)
+for row in db.session.query(Members):
+    print(row.name)
+
+print(db.session.query(tables["members_" + event_id]).filter_by(name="hi maple teehee XD").one().__dict__)
 tmplist = []
-for row in db.session.query(tables["Members"]):
+for row in db.session.query(tables["members_" + event_id]):
     tmplist.append(row.__dict__)
 print(tmplist)
