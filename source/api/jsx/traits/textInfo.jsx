@@ -20,7 +20,9 @@ class TextInfo extends React.Component {
     }
 
     componentDidMount() {
-        this.setState({answer: this.state.getAnswer()});
+        if (this.state.role === 'member' || this.state.role === 'leader') {
+            this.setState({answer: this.state.getAnswer()});
+        }
     }
 
     editAnswer(newAnswer) {

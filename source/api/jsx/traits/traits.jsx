@@ -13,9 +13,9 @@ class Traits extends React.Component {
         this.state = {
             traits: [],
             editing: -1, // nonnegative for trait index, negative for not editing
-            showAlert: false,
+            saveAlert: false,
             traitCounter: 0,
-            answers: [], 
+            errorAlert: false, 
         };
 
         this.handleDelete = this.handleDelete.bind(this);
@@ -31,9 +31,11 @@ class Traits extends React.Component {
                 return response.json();
             })
             .then((data) => {
+                const newCounter = data.traits.length > 0 ? data.traits[data.traits.length - 1] + 1 : 0;
+                console.log(newCounter);
                 this.setState({
                     traits: data.traits,
-                    traitCounter: data.traits.length > 0 ? data.traits[data.traits.length - 1] : 0
+                    traitCounter: newCounter
                 });
             })
             .catch(error => console.log(error));
@@ -42,7 +44,7 @@ class Traits extends React.Component {
     handleDelete(num) {
         this.setState({
             editing: -1, 
-            showAlert: false,
+            saveAlert: false,
         });
     }
 
@@ -53,19 +55,19 @@ class Traits extends React.Component {
             return;
         }
 
-        this.setState({editing: -1, showAlert: false, });
+        this.setState({editing: -1, saveAlert: false, });
     }
 
     toggleAlert() {
         this.setState({
-            showAlert: !this.state.showAlert,
+            saveAlert: !this.state.saveAlert,
         });
     }
 
     edit(num) { // -1 for new trait, nonnegative for already existing trait
         let { editing } = this.state;
         if (editing >= 0 && editing !== num) {
-            this.setState({ showAlert: true, });
+            this.setState({ saveAlert: true, });
             return;
         }
         if (num === -1) {
@@ -81,11 +83,19 @@ class Traits extends React.Component {
                     if (!response.ok) throw Error(response.statusText);
                     return;
                 })
-                .catch(error => console.log(error));
-            this.setState({ traitCounter: this.state.traitCounter + 1 });
-            this.state.traits = this.state.traits.concat(num);
+                .then(() => {
+                    this.setState({ 
+                        traitCounter: this.state.traitCounter + 1, 
+                        errorAlert: false, 
+                        traits: this.state.traits.concat(num),
+                    });
+                })
+                .catch((error) => {
+                    console.log(error);
+                    this.setState({ errorAlert: true })
+                });
         }
-        this.setState({editing: num, showAlert: false, });
+        this.setState({editing: num, saveAlert: false, });
     }
 
     renderMember() {
@@ -116,7 +126,7 @@ class Traits extends React.Component {
         if (this.props.role === 'organizer') {
             return(
                 <div className='traits'>
-                    <Alert color="primary" isOpen={this.state.showAlert} toggle={() => {this.setState({ showAlert: false, })}} >
+                    <Alert color="primary" isOpen={this.state.saveAlert} toggle={() => {this.setState({ saveAlert: false, })}} >
                         Please save or cancel your changes before continuing.
                     </Alert>
                     {this.state.traits.map((id) => (
@@ -131,6 +141,9 @@ class Traits extends React.Component {
                             key={id}
                         />
                     ))}
+                    <Alert color="primary" isOpen={this.state.errorAlert} toggle={() => {this.setState({ errorAlert: false, })}} >
+                        Error. Could not reach server.
+                    </Alert>
                     <Button className='new-trait' onClick={(event) => {this.edit(-1)}}>
                         New Trait
                     </Button>

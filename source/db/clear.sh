@@ -1,8 +1,8 @@
-TABLES="organizers events _traits _choices _members _leaders"
+TABLES="organizers events traits_ choices_ members_ leaders_ nonconstraints_"
 
 clearTable() {
     echo "Clearing table $1"
-    psql -U postgres -c "DROP TABLE IF EXISTS \"$1\" CASCADE;"
+    psql -U postgres -c "DELETE FROM \"$1\";"
     echo ""
 }
 

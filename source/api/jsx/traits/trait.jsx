@@ -13,10 +13,20 @@ class Trait extends React.Component {
     constructor(props) {
         super(props);
         //for formType; Multiple Choice: 1, Time Frames: 2, Text Boxes: 3
-        this.state = { name: TRAIT_DEFAULT_NAME, id: props.id, isConstraint: false, formType: 0, showConstraintAlert: false, showSaveErrorAlert: false, context: null, unsavedChanges: false, deleted: false, prevState: null };
+        this.state = {
+            name: TRAIT_DEFAULT_NAME,
+            question: '',
+            id: props.id,
+            isConstraint: false,
+            formType: 0,
+            showConstraintAlert: false,
+            showSaveErrorAlert: 0,
+            context: null,
+            unsavedChanges: false,
+            deleted: false,
+            prevState: null
+        };
 
-        this.editValue = this.editValue.bind(this);
-        this.handleType = this.handleType.bind(this);
         this.handleIsConstraint = this.handleIsConstraint.bind(this);
         this.getContext = this.getContext.bind(this);
         this.setContext = this.setContext.bind(this);
@@ -30,6 +40,8 @@ class Trait extends React.Component {
 
         this.savePrevState = this.savePrevState.bind(this);
         this.retrievePrevState = this.retrievePrevState.bind(this);
+
+        this.updateState = this.updateState.bind(this);
     }
 
     componentDidMount() {
@@ -47,34 +59,34 @@ class Trait extends React.Component {
                     return response.json();
                 })
                 .then((data) => {
-                    console.log(data)
                     this.setState({
                         name: data.name,
+                        question: data.question,
                         isConstraint: !!+data.isConstraint,
                         formType: Number(data.formType),
                         context: data.context,
                         unsavedChanges: false,
+                    }, () => {
+                        this.setState({ prevState : this.savePrevState() })
                     });
                 })
                 .catch(error => console.log(error));
         }
     }
 
-    editValue(newName) {
-        this.setState({ name: newName, unsavedChanges: true, prevState: this.savePrevState() });
+    updateState(newState) {
+        newState.unsavedChanges = true;
+        newState.prevState = this.savePrevState();
+        this.setState(newState);
     }
 
     handleIsConstraint(event) {
-        let newState = {isConstraint: !!+event.target.value, showConstraintAlert: false, unsavedChanges: true, prevState: this.savePrevState() };
+        let newState = {isConstraint: !!+event.target.value, showConstraintAlert: false };
         if (event.target.value && this.state.formType - 3 === 0) {
             newState.formType = 0;
             newState['showConstraintAlert'] = true;
         }
-        this.setState(newState);
-    }
-
-    handleType(event) {
-        this.setState({formType: +event.target.value, showConstraintAlert: false, unsavedChanges: true, prevState: this.savePrevState() });
+        this.updateState(newState);
     }
 
     getContext() {
@@ -82,23 +94,21 @@ class Trait extends React.Component {
     }
 
     setContext(context) {
-        this.setState({context: context, unsavedChanges: true, prevState: this.savePrevState() });
+        this.updateState({ context: context });
     }
 
     save() {
-        const { name, isConstraint, formType, context, showSaveErrorAlert } = this.state;
-        if (showSaveErrorAlert) {
-            return;
-        }
+        const { name, question, isConstraint, formType, context, showSaveErrorAlert } = this.state;
         fetch(this.props.url, {
             method: 'patch',
             credentials: 'same-origin',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                name: name,
-                isConstraint: isConstraint, 
-                formType: formType,
-                context: context,
+                'name': name,
+                'question': question, 
+                'isConstraint': isConstraint, 
+                'formType': formType,
+                'context': context,
             }),
         })
             .then((response) => {
@@ -108,7 +118,7 @@ class Trait extends React.Component {
                 this.setState({ unsavedChanges: false, prevState: this.savePrevState() });
                 this.props.onSave(this.state.id);
             })
-            .catch(() => { this.setState({ showSaveErrorAlert: true, unsavedChanges: true }); });
+            .catch(() => { this.setState({ showSaveErrorAlert: this.state.showSaveErrorAlert + 1, unsavedChanges: true }); });
     }
 
     deleteSelf() {
@@ -146,7 +156,7 @@ class Trait extends React.Component {
     retrievePrevState() {
         if (this.state.prevState === null) {
             console.log('No previous state saved');
-            this.setState({showSaveErrorAlert: false, unsavedChanges: false});
+            this.setState({showSaveErrorAlert: 0, unsavedChanges: false});
             return;
         }
         const { name, isConstraint, formType, showConstraintAlert, showSaveErrorAlert, context } = this.state.prevState;
@@ -164,9 +174,13 @@ class Trait extends React.Component {
 
     renderMember() {
         if (this.props.role === 'member') {
+            console.log(this.state.context)
+            if (this.state.formType === 0) {
+                return '';
+            }
             return (
                 <div>
-                    {this.state.name}
+                    {this.state.question}
                     <InfoFactory
                         formType={this.state.formType}
                         role={this.props.role}
@@ -204,44 +218,52 @@ class Trait extends React.Component {
                     </div>
                 );
             }
+            const { name, question, formType, isConstraint, showConstraintAlert, showSaveErrorAlert } = this.state;
             return (
                 <div>
-                    <Alert color="danger" isOpen={this.state.showSaveErrorAlert} toggle={() => {this.setState({ showSaveErrorAlert: false, })}} >
-                        Error: Could not save constraint
+                    <Alert color="danger" isOpen={showSaveErrorAlert > 0} toggle={() => {this.setState({ showSaveErrorAlert: 0, })}} >
+                        Error: Could not save constraint {showSaveErrorAlert > 1 ? 'x'.concat(showSaveErrorAlert) : ''}
                     </Alert>
                     <TextBox 
                         defaultValue={TRAIT_DEFAULT_NAME}
-                        value={this.state.name}
-                        editValue={this.editValue}
+                        value={name}
+                        editValue={(newName) => { this.updateState({ name: newName }); }}
                         style={{fontSize:'30px', width:'100%'}}
                         limit={50}
+                    />
+                    <TextBox
+                        defaultValue=''
+                        value={question}
+                        editValue={(newQuestion) => { this.updateState({ question: newQuestion }); }}
+                        style={{width: '100%'}}
+                        limit={100}
                     />
 
                     <div className='isConstraintCheckBox'>
                         <form className='form-group'>
                             This is a constraint
                             <span>
-                                <select className='form-control' value={this.state.isConstraint ? 1 : 0} defaultChecked={this.state.isConstraint} onChange={this.handleIsConstraint}>
+                                <select className='form-control' value={isConstraint ? 1 : 0} defaultChecked={this.state.isConstraint} onChange={this.handleIsConstraint}>
                                     <option value={0}>No</option>
                                     <option value={1}>Yes</option>
                                 </select>
                             </span>
                         </form>
                     </div>
-                    <Alert color="primary" isOpen={this.state.showConstraintAlert} toggle={() => {this.setState({ showConstraintAlert: false, })}} >
+                    <Alert color="primary" isOpen={showConstraintAlert} toggle={() => {this.setState({ showConstraintAlert: false, })}} >
                         Constraints cannot be of type Text Box. Please select another option.
                     </Alert>
                     <div className='traitType'>
                         <FormType
                             type={this.state.formType}
-                            handleType={this.handleType}
-                            showOption={!this.state.isConstraint}
+                            handleType={(event) => { this.updateState({ formType: +event.target.value, showConstraintAlert: false }); }}
+                            showOption={!isConstraint}
                         />
                     </div>
 
                     <div>
                         <InfoFactory
-                            formType={this.state.formType} 
+                            formType={formType} 
                             role={this.props.role} 
                             getContext={this.getContext}
                             setContext={this.setContext}

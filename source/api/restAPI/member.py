@@ -26,7 +26,7 @@ def get_member_answers():
     """Get Member Survey."""
     form = flask.request.get_json()
     if flask.request.method == 'GET':
-        context = { 'answers': ['asdf', 'asdf', 1] }
+        context = { 'answers': [None, None, None, None] }
         return flask.jsonify(**context)
     if flask.request.method == 'POST':
         name = form['name']

@@ -34,6 +34,9 @@ class TextInfo extends React.Component {
         if (choices !== undefined && choices !== null) {
             this.setState({ choices: choices, });
         }
+        else {
+            this.setContextHelper(this.state.choices);
+        }
     }
 
     removeChoice(index) {
@@ -61,6 +64,7 @@ class TextInfo extends React.Component {
 
     renderMember() {
         if (this.state.role === 'member') {
+            console.log(this.state.choices)
             return (
                 <div>
                     <form className='form-group'>
