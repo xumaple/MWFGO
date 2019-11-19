@@ -1,0 +1,22 @@
+.background {
+    background-color:#ccbbee;
+    width: 80%;
+    margin:auto;
+}
+
+.trait {
+    margin:auto;
+    width:75%;
+    border:1px solid black;
+    border-radius:15px;
+    margin-bottom:15px;
+    background-color: #e5d5ff;
+}
+
+.trait-in {
+    padding:35px;
+}
+
+.trait-summary {
+    font-size:20px;
+}

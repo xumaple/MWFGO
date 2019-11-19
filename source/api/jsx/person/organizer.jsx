@@ -10,7 +10,7 @@ class Organizer extends React.Component {
 
     render(){
         return(
-            <div className='survey'>
+            <div>
                 <p><b>Traits</b></p>
                 <div><Traits url={`${this.props.url}traits/`} role='organizer' /></div>
                 {/*<p><b>Limiters</b></p>

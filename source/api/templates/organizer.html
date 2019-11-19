@@ -1,11 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <title>organizer</title>
-    </head>
-    <body>
-        <div id="reactEntry">
-            <script type="text/javascript" src="{{ url_for('static', filename='js/organizer_bundle.js') }}"></script>
-        </div>
-    </body>
-</html>
+{% extends "base.html" %}
+
+{% block title %} Organizer {% endblock %}
+
+{% block content %}
+    <div id="reactEntry">
+        <script type="text/javascript" src="{{ url_for('static', filename='js/organizer_bundle.js') }}"></script>
+    </div>
+{% endblock %}

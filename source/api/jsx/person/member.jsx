@@ -40,7 +40,7 @@ class Member extends React.Component {
     render() {
         console.log(this.state.answers);
         return(
-            <div className='memberSurvey'>
+            <div>
                 <p><b>Survey</b></p>
                 <Traits 
                     role='member'

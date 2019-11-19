@@ -117,7 +117,7 @@ class Limiters extends React.Component {
         ));
 
         return(
-            <div className='limiters'>
+            <div>
                 {this.state.limiters.map(limiter => (
                     <Limiter
                      url={`${this.props.url}${limiter.id}/`}
@@ -125,7 +125,7 @@ class Limiters extends React.Component {
                     />
                 ))}
                 <form id="new-limiter-form" onSubmit={this.handleSubmit}>
-                    <div className='constraintName'>
+                    <div>
                         <p>Please select the constraint that you want to limit in each group.</p>
                         <form>
                             {constraintsList}
