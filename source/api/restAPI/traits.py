@@ -6,13 +6,13 @@ from api.model import db, tables, Organizers, Event
 #from model import db, Traits
 #from model import tables
 
-event_id = ''
-organizer_id = ''
+event_id = '0'
+organizer_id = '0'
 
 def get_trait_helper(trait_id):
     """Helper to get traits."""
     # Make a query for Traits where id = trait_id
-    query_result = db.session.query(tables["traits" + str(event_id)]).filter_by(id=trait_id).one().__dict__
+    query_result = db.session.query(tables['traits_{}'.format(event_id)]).filter_by(id=trait_id).one().__dict__
 
     # If Form is Text Box, we keep value of None
     context = None
@@ -23,7 +23,7 @@ def get_trait_helper(trait_id):
         # Make a query for Choices with trait_id
         form_query = []
         context = []
-        for choice in db.session.query(tables["choices" + trait_id].name):
+        for choice in db.session.query(tables['choices_{}'.format(trait_id)].name):
             context.append(choice['name'])
         for choice in form_query:
             context.append(choice._asdict()['name'])
@@ -64,7 +64,8 @@ def get_trait(trait_id):
 def delete_trait(trait_id):
     """Delete Traits."""
     # DELETE request response.
-    trait = db.session.query(tables["traits" + event_id]).filter(tables["traits" + event_id].id==trait_id).first()
+    tb = tables['traits_{}'.format(event_id)]
+    trait = db.session.query(tb).filter(tb.id==trait_id).first()
     db.session.delete(trait)
     db.session.commit()
 
@@ -76,7 +77,7 @@ def delete_trait(trait_id):
 def patch_trait(trait_id):
     """Patch Traits."""
     # PATCH request response.
-    trait = tables["traits" + event_id].query.filter_by(id=trait_id).first()
+    trait = tables['traits_{}'.format(event_id)].query.filter_by(id=trait_id).first()
     # Make a query to Traits to update the appropriate information
     form = flask.request.get_json()
     trait.name = form["name"]
@@ -85,14 +86,14 @@ def patch_trait(trait_id):
     trait.form_type = form["formType"]
     # If formType == 1, update Choices table
     if form["formType"] == 1:
-        choices = db.session.query(tables["choices" + event_id]).filter(tables["choices" + event_id].trait_id==trait_id).all()
+        choices = db.session.query(tables['choices_{}'.format(event_id)]).filter(tables['choices_{}'.format(event_id)].trait_id==trait_id).all()
         
         # react choices more than or equal to database choices
         if len(form["context"]) >= len(choices):
             for i in range(0, len(choices)):
                 choices[i].name = form["context"][i]
             for i in range(len(choices), len(form["context"])):
-                choice = tables["choices" + event_id](name=form["context"][i], trait_id=trait_id)
+                choice = tables['choices_{}'.format(event_id)](name=form["context"][i], trait_id=trait_id)
                 db.session.add(choice)
 
         # react choices less than database choices
@@ -113,7 +114,7 @@ def patch_trait(trait_id):
 def post_trait(trait_id):
     """Post Traits."""
     # POST request response.
-    trait = tables["traits" + event_id](id=trait_id)
+    trait = tables['traits_{}'.format(event_id)](id=trait_id)
     db.session.add(trait)
     db.session.commit()
 
@@ -136,7 +137,7 @@ def member_get_trait(trait_id):
 def get_trait_id():
     """Get Trait ids."""
     # Make a query to get all the traits
-    query_res = db.session.query(tables["traits" + str(event_id)].id).all()
+    query_res = db.session.query(tables['traits_{}'.format(event_id)].id).all()
     trait_ids = []
     for trait in query_res:
         trait_ids.append(trait[0])
