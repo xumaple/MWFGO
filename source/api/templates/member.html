@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>member</title>
+        <title>Survey</title>
+        <div id="hash" style="display:none;">{{ hash }}</div>
     </head>
     <body>
-        <div id="reactEntry">
-            <script type="text/javascript" src="{{ url_for('static', filename='js/') }}{{ jsfile }}"></script>
-        </div>
+        <div id="reactEntry"></div>
+        <script type="text/javascript" src="{{ url_for('static', filename='js/') }}{{ jsfile }}"></script>
     </body>
 </html>

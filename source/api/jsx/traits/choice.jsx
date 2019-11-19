@@ -30,14 +30,19 @@ function Choice(props) {
             </div>
         );
     }
+    if (role === 'member') {
+        return (
+            <option value={index}>{name}</option>
+        );
+    }
     return (<div>hiimbad</div>);
 }
 
 Choice.propTypes = {
     index: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired,
-    onDelete: PropTypes.func.isRequired,
-    onEdit: PropTypes.func.isRequired,
+    onDelete: PropTypes.func,
+    onEdit: PropTypes.func,
     role: PropTypes.string.isRequired,
 };
 

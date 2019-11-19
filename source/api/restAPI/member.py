@@ -21,14 +21,15 @@ def get_memberSurvey():
 
     return flask.jsonify(**context)
 
-@api.app.route('/api/v1/member/', methods=['POST'])
-def get_member_url():
+@api.app.route('/api/v1/member/', methods=['GET', 'POST', 'PATCH'])
+def get_member_answers():
     """Get Member Survey."""
     form = flask.request.get_json()
-    name = form['name']
-    
-    print(form)
-
-
-    return flask.redirect('/member/{}/'.format(name))
+    if flask.request.method == 'GET':
+        context = { 'answers': ['asdf', 'asdf', 1] }
+        return flask.jsonify(**context)
+    if flask.request.method == 'POST':
+        name = form['name']
+        print(form)
+        return flask.redirect('/member/{}/'.format(name))
 

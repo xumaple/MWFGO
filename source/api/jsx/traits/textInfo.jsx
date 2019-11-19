@@ -7,8 +7,8 @@ class TextInfo extends React.Component {
         super(props);
         this.state = {
             role: props.props.role,
-            setContext: props.props.setContext, // Calls setContext everytime context is updated
-            getContext: props.props.getContext, // Calls getContext in componentDidMount
+            setAnswer: props.props.setAnswer, // Calls setContext everytime context is updated
+            getAnswer: props.props.getAnswer, // Calls getContext in componentDidMount
             answer: ''
         }
 
@@ -20,12 +20,12 @@ class TextInfo extends React.Component {
     }
 
     componentDidMount() {
-        this.setState({answer: this.state.getContext()});
+        this.setState({answer: this.state.getAnswer()});
     }
 
     editAnswer(newAnswer) {
         this.setState({ answer: newAnswer });
-        this.state.setContext(newAnswer);
+        this.state.setAnswer(newAnswer);
     }
 
     renderMember() {
@@ -34,9 +34,10 @@ class TextInfo extends React.Component {
                 <div>
                     <TextBox
                         defaultValue=''
-                        value={this.state.name}
+                        value={this.state.answer}
                         editValue={this.editAnswer}
                         limit={50}
+                        updateValue={true}
                     />
                 </div>
             );
@@ -66,8 +67,8 @@ class TextInfo extends React.Component {
 TextInfo.propTypes = {
     props: PropTypes.shape({
         role: PropTypes.string.isRequired,
-        setContext: PropTypes.func.isRequired,
-        getContext: PropTypes.func.isRequired,
+        getAnswer: PropTypes.func,
+        setAnswer: PropTypes.func,
     }).isRequired,
 };
 

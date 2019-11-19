@@ -12,12 +12,14 @@ class TextInfo extends React.Component {
             setContext: props.props.setContext, // Calls setContext everytime context is updated
             getContext: props.props.getContext, // Calls getContext in componentDidMount
             choices: [],
+            answer: -1,
         }
         // super.getRole = super.getRole.bind(this);
         this.removeChoice = this.removeChoice.bind(this);
         this.editChoice = this.editChoice.bind(this);
         this.setContextHelper = this.setContextHelper.bind(this);
-        this.getContext = this.getContext.bind(this);
+
+        this.setAnswer = this.setAnswer.bind(this);
 
         this.renderMember = this.renderMember.bind(this);
         this.renderLeader = this.renderLeader.bind(this);
@@ -26,6 +28,9 @@ class TextInfo extends React.Component {
 
     componentDidMount() {
         let choices = this.state.getContext();
+        if (this.props.props.getAnswer) {
+            this.setState({ answer: this.props.props.getAnswer() });
+        }
         if (choices !== undefined && choices !== null) {
             this.setState({ choices: choices, });
         }
@@ -49,15 +54,28 @@ class TextInfo extends React.Component {
         this.state.setContext(newChoices);
     }
 
-    getContext(index) {
-        return this.state.choices[index];
+    setAnswer(event) {
+        this.setState({ answer: event.target.value });
+        this.props.props.setAnswer(event.target.value);
     }
 
     renderMember() {
         if (this.state.role === 'member') {
             return (
                 <div>
-                    
+                    <form className='form-group'>
+                        <select className='form-control' value={this.state.answer} defaultChecked={-1} onChange={this.setAnswer}>
+                            <option value={-1}>Select an option</option>
+                            {this.state.choices.map((choice, index) => (
+                                <Choice
+                                    key={index}
+                                    index={index}
+                                    name={choice}
+                                    role={this.state.role}
+                                />
+                            ))}
+                        </select>
+                    </form>
                 </div>
             );
         }
@@ -80,7 +98,6 @@ class TextInfo extends React.Component {
                             name={choice}
                             onDelete={this.removeChoice}
                             onEdit={this.editChoice}
-                            getContext={this.getContext}
                             role={this.state.role}
                         />
                     ))}
@@ -111,6 +128,8 @@ TextInfo.propTypes = {
         role: PropTypes.string.isRequired,
         setContext: PropTypes.func.isRequired,
         getContext: PropTypes.func.isRequired,
+        setAnswer: PropTypes.func,
+        getAnswer: PropTypes.func,
     }).isRequired,
 };
 

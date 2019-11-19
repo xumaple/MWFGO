@@ -41,6 +41,6 @@ def show_member():
 
 @app.route("/member/<member_id>/")
 def show_member_survey(member_id):
-    context = {'jsfile': 'member_bundle.js'}
+    context = {'jsfile': 'member_bundle.js', 'hash': member_id}
     return flask.render_template("member.html", **context)
 

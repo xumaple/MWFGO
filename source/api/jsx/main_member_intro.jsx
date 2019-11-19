@@ -6,7 +6,7 @@ import Intro from './person/intro';
 ReactDOM.render(
   // Insert the likes component into the DOM
 
-  <Intro url="/api/v1/member/" />,
+  <Intro url="/api/v1/member/"/>,
   document.getElementById('reactEntry'),
 
 );

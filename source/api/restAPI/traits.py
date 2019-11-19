@@ -55,7 +55,6 @@ def get_traits(trait_id):
 
     return flask.jsonify(**res)
 
-
 @api.app.route('/api/v1/organizer/traits/<int:trait_id>',
                     methods=['DELETE'])
 def delete_traits():
@@ -119,4 +118,3 @@ def get_trait_id():
     }
 
     return flask.jsonify(**res) 
-

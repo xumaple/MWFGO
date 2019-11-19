@@ -7,7 +7,8 @@ import Member from './person/member';
 ReactDOM.render(
   // Insert the likes component into the DOM
 
-  <Member url="/api/v1/member/" />,
+  <Member url='/api/v1/member/' hash={document.getElementById('hash').textContent} />,
   document.getElementById('reactEntry'),
 
 );
+//.concat(document.getElementById('hash').textContent, '/')
