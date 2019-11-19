@@ -32,6 +32,8 @@ InfoFactory.propTypes = {
     role: PropTypes.string.isRequired,
     getContext: PropTypes.func.isRequired,
     setContext: PropTypes.func.isRequired,
+    getAnswer: PropTypes.func,
+    setAnswer: PropTypes.func,
 };
 
 FormType.propTypes = {

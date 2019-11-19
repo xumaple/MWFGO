@@ -15,7 +15,7 @@ class Organizer extends React.Component {
                 <div><Traits url={`${this.props.url}traits/`} role='organizer' /></div>
                 {/*<p><b>Limiters</b></p>
                 <div><Limiters url={`${this.props.url}limiters/`} /></div>*/}
-            </div>            
+            </div>
         );
     }
 }

@@ -21,14 +21,10 @@ class Traits extends React.Component {
         this.handleDelete = this.handleDelete.bind(this);
         this.handleSave = this.handleSave.bind(this);
         this.edit = this.edit.bind(this);
-        this.getTraits = this.getTraits.bind(this);
         this.toggleAlert = this.toggleAlert.bind(this);
-
-        this.getAnswer = this.getAnswer.bind(this);
-        this.setAnswer = this.setAnswer.bind(this);
     }
 
-    getTraits() {
+    componentDidMount() {
         fetch(this.props.url, { credentials: 'same-origin' })
             .then((response) => {
                 if (!response.ok) throw Error(response.statusText);
@@ -37,18 +33,13 @@ class Traits extends React.Component {
             .then((data) => {
                 this.setState({
                     traits: data.traits,
-                    answers: Array.apply(null, Array(data.traits.length)),
+                    traitCounter: data.traits.length > 0 ? data.traits[data.traits.length - 1] : 0
                 });
             })
             .catch(error => console.log(error));
     }
 
-    componentDidMount() {
-        this.getTraits();
-    }
-
     handleDelete(num) {
-        // TODO fetch
         this.setState({
             editing: -1, 
             showAlert: false,
@@ -61,9 +52,7 @@ class Traits extends React.Component {
             console.log('Saved from bad editing state!');
             return;
         }
-        // this.getTraits();
 
-        // TODO fetch post request
         this.setState({editing: -1, showAlert: false, });
     }
 
@@ -80,6 +69,7 @@ class Traits extends React.Component {
             return;
         }
         if (num === -1) {
+            // Create new trait
             num = this.state.traitCounter;
             fetch(this.props.url.concat(num, '/'), {
                 method: 'post',
@@ -98,16 +88,6 @@ class Traits extends React.Component {
         this.setState({editing: num, showAlert: false, });
     }
 
-    setAnswer(index, context) {
-        let newState = this.state.answers.slice(0);
-        newState[index] = context;
-        this.setState({ answers: newState });
-    }
-
-    getAnswer(index) {
-        return this.state.answers[index];
-    }
-
     renderMember() {
         if (this.props.role === 'member') {
             return (
@@ -117,8 +97,8 @@ class Traits extends React.Component {
                             url={this.props.url.concat(id, '/')}
                             role={this.props.role}
                             id={id}
-                            setAnswer={this.setAnswer}
-                            getAnswer={this.getAnswer}
+                            setAnswer={(id, answer) => { this.props.setAnswer(this.state.traits.indexOf(id), answer); }}
+                            getAnswer={(id) => { return this.props.getAnswer(this.state.traits.indexOf(id)); }}
                             key={id}
                         />
                     ))}
@@ -174,6 +154,8 @@ class Traits extends React.Component {
 Traits.propTypes = {
     url: PropTypes.string.isRequired,
     role: PropTypes.string.isRequired,
+    getAnswer: PropTypes.func,
+    setAnswer: PropTypes.func,
 };
 
 export default Traits;

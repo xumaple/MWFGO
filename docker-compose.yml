@@ -10,7 +10,7 @@ services:
     depends_on:
       - db
     volumes:
-      - ./source/:/baseimg/
+      - ./source/api/:/baseimg/api/
 
   db:
     build: source/db/.

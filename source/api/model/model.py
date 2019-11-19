@@ -39,11 +39,11 @@ class Traits(db.Model):
     __tablename__ = 'traits_' + event_id
 
     id = db.Column(db.Integer, primary_key=True, nullable=False)
-    name = db.Column(db.String(256), nullable=False)
-    question = db.Column(db.String(256), nullable=False)
-    is_constraint = db.Column(db.Boolean, nullable=False)
-    form_type = db.Column(db.Integer, nullable=False)
-    context = db.Column(db.Float, nullable=False)
+    name = db.Column(db.String(256))
+    question = db.Column(db.String(256))
+    is_constraint = db.Column(db.Boolean)
+    form_type = db.Column(db.Integer)
+    context = db.Column(db.Float)
     choices = db.relationship('Choice_' + str(event_id), backref='traits', lazy=True, cascade="all, delete-orphan")
     nonConstraints = db.relationship('NonConstraints_' + str(event_id), backref='traits', lazy=True, cascade="all, delete-orphan")
 
@@ -61,7 +61,7 @@ class Choices(db.Model):
     def __repr__(self):
         return f"Choices('{self.id}', '{self.name}', '{self.trait_id}')"
 
-class NonConstraints(db.Model):
+class Nonconstraints(db.Model):
     __tablename__ = 'nonConstraints_' + event_id
 
     answer = db.Column(db.String(256), nullable=False)
@@ -79,7 +79,7 @@ class Members(db.Model):
     id = db.Column(db.Integer, primary_key=True, nullable=False)
     name = db.Column(db.String(256), nullable=False)
     trait_ = db.Column(db.Float, nullable=False) # multiple of these; variable is actually called "trait_<Traits_<Events.id>.id>"
-    nonConstraints = db.relationship('NonConstraints_' + str(event_id), backref='members', lazy=True, cascade="all, delete-orphan")
+    non_constraints = db.relationship('Nonconstraints_' + str(event_id), backref='members', lazy=True, cascade="all, delete-orphan")
 
     def __repr__(self):
         return f"Members('{self.id}', '{self.name}', '{self.trait_}')"
@@ -92,7 +92,7 @@ class Leaders(db.Model):
     id = db.Column(db.Integer, primary_key=True, nullable=False)
     name = db.Column(db.String(256), nullable=False)
     trait_ = db.Column(db.Float, nullable=False) # multiple of these; variable is actually called "trait_<Traits_<Events.id>.id>"
-    nonConstraints = db.relationship('NonConstraints_' + str(event_id), backref='leaders', lazy=True, cascade="all, delete-orphan")
+    non_constraints = db.relationship('Nonconstraints_' + str(event_id), backref='leaders', lazy=True, cascade="all, delete-orphan")
 
     def __repr__(self):
         return f"Choices('{self.id}', '{self.name}', '{self.trait_}')"

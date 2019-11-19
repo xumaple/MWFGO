@@ -47,6 +47,7 @@ class Trait extends React.Component {
                     return response.json();
                 })
                 .then((data) => {
+                    console.log(data)
                     this.setState({
                         name: data.name,
                         isConstraint: !!+data.isConstraint,
@@ -77,18 +78,11 @@ class Trait extends React.Component {
     }
 
     getContext() {
-        if (this.props.getAnswer) {
-            return this.props.getAnswer(this.state.id);
-        }
         return this.state.context;
     }
 
     setContext(context) {
         this.setState({context: context, unsavedChanges: true, prevState: this.savePrevState() });
-        if (this.props.role === 'organizer') {
-            return;
-        }
-        this.props.setAnswer(this.state.id, context);
     }
 
     save() {
@@ -176,8 +170,10 @@ class Trait extends React.Component {
                     <InfoFactory
                         formType={this.state.formType}
                         role={this.props.role}
-                        getContext={this.getContext}
-                        setContext={this.setContext}
+                        getAnswer={() => {return this.props.getAnswer(this.state.id);}}
+                        setAnswer={(answer) => {this.props.setAnswer(this.state.id, answer);}}
+                        getContext={this.getContext} 
+                        setContext={this.setContext} 
                     />
                 </div>
             )
@@ -247,8 +243,8 @@ class Trait extends React.Component {
                         <InfoFactory
                             formType={this.state.formType} 
                             role={this.props.role} 
-                            getContext={this.getContext} 
-                            setContext={this.setContext} 
+                            getContext={this.getContext}
+                            setContext={this.setContext}
                         />
                     </div>
 
