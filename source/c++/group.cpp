@@ -12,11 +12,24 @@ Group::Group(std::vector<Limiter *> &limitersIn, Individual *leaderIn): leader(l
             throw Error("Leader cannot be added to group.");
         }
     }
+
+    //For now size limit is 5. Change so leader information can change this
+    sizeLimit = 5;
 }
 
-bool Group::addIndividual(Individual &ind) {
+bool Group::addIndividual(Individual &ind, bool force) {
+    // Group cannot fit any more members
+    if (members.size() >= sizeLimit) {
+        return false;
+    }
+
     for (auto limit = limiters.begin(); limit != limiters.end(); ++limit) {
-        if (!(*limit)->addIndividual(ind)) {
+        //If we want to force add individual to group
+        if (force) {
+            (*limit)->forceAdd(ind);
+        }
+        //Otherwise if individual fails any limiter we return
+        else if (!(*limit)->addIndividual(ind)) {
             std::for_each(limiters.begin(), limit, [](Limiter *l) { l->cancelAdd(); });
             return false;
         }
