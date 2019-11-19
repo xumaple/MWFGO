@@ -2,6 +2,8 @@
 #include <algorithm>
 #include <string>
 #include <vector>
+#include <cassert>
+#include <ctime>
 
 namespace py = boost::python;
 
@@ -18,6 +20,9 @@ void GroupOrganizer::createGroups()
 
 GroupOrganizer::GroupOrganizer()
 {
+    //Initialize random seed
+    srand(time(NULL));
+
     //Creates a constraint manager
     cm = &ConstraintManager::getInstance();
 
@@ -98,6 +103,8 @@ void GroupOrganizer::addLimiter()
 
 void GroupOrganizer::runAlgorithm()
 {
+    assert(groups.empty())
+    createGroups();
     //Assuming all data has been read in, runs the algorithm
     //Compute all the differences between people
     for (auto it = people.begin(); it != people.end; ++it)
@@ -111,8 +118,30 @@ void GroupOrganizer::runAlgorithm()
 
     //Assign all the people to a group
     std::shuffle(people.begin(), people.end()); 
+    for (auto it = people.begin(); it != people.end(); ++it)
+    {
+        bool found = false;
+        //Find a group that works
+        for (auto it2 = groups.begin(); it2 != groups.end(); ++it2)
+        {
+            if ((*it2)->addIndividual(*it, false)) {
+                found = true;
+                break;
+            }
+        }
+        
+        //We need to force add the individual
+        if (!found)
+        {
+            //Choose a random group and force add
+            while (!found) {
+                found = groups[rand() % groups.size()]->addIndividual(*it, true);
+            }
+        }
+    }
 
     //Swap people between groups until the groups converge
+    
 }
 
 double* toArray(const py::object &iterable)

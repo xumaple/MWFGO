@@ -125,26 +125,28 @@ class Traits extends React.Component {
     renderOrganizer() {
         if (this.props.role === 'organizer') {
             return(
-                <div className='traits'>
+                <div>
                     <Alert color="primary" isOpen={this.state.saveAlert} toggle={() => {this.setState({ saveAlert: false, })}} >
                         Please save or cancel your changes before continuing.
                     </Alert>
                     {this.state.traits.map((id) => (
-                        <Trait
-                            url={this.props.url.concat(id, '/')}
-                            role={this.props.role}
-                            id={id}
-                            onDelete={this.handleDelete}
-                            onSave={this.handleSave}
-                            onEdit={this.edit}
-                            editing={id - this.state.editing === 0}
-                            key={id}
-                        />
+                        <div className="trait" >
+                            <Trait
+                                url={this.props.url.concat(id, '/')}
+                                role={this.props.role}
+                                id={id}
+                                onDelete={this.handleDelete}
+                                onSave={this.handleSave}
+                                onEdit={this.edit}
+                                editing={id - this.state.editing === 0}
+                                key={id}
+                            />
+                        </div>
                     ))}
                     <Alert color="primary" isOpen={this.state.errorAlert} toggle={() => {this.setState({ errorAlert: false, })}} >
                         Error. Could not reach server.
                     </Alert>
-                    <Button className='new-trait' onClick={(event) => {this.edit(-1)}}>
+                    <Button onClick={(event) => {this.edit(-1)}}>
                         New Trait
                     </Button>
                 </div>

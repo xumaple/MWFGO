@@ -16,7 +16,7 @@ public:
     /*
      Checks if individual can be added, and if so adds the individual.
      */
-    bool addIndividual(Individual &ind);
+    bool addIndividual(Individual &ind, bool forceAdd);
     
     // swap something function?
     
@@ -29,6 +29,7 @@ private:
     Individual *leader;
     std::vector<Individual> members;
     std::vector<Limiter *> limiters;
+    size_t sizeLimit; //TODO: set sizelimit for group (Should I make this a limiter?)
 };
 
 

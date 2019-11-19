@@ -209,8 +209,8 @@ class Trait extends React.Component {
                     this.update();
                 }
                 return (
-                    <div className='notShowTrait'>
-                        {this.state.name} <b>{this.state.isConstraint ? 'Constraint' : ''}</b> <Button className='details' style={{float: 'right'}} onClick={(event) => {
+                    <div className='trait-summary'>
+                        {this.state.name} <b>{this.state.isConstraint ? 'Constraint' : ''}</b> <Button style={{float: 'right'}} onClick={(event) => {
                             this.props.onEdit(this.state.id); 
                         }}>
                             Edit details
@@ -239,7 +239,7 @@ class Trait extends React.Component {
                         limit={100}
                     />
 
-                    <div className='isConstraintCheckBox'>
+                    <div>
                         <form className='form-group'>
                             This is a constraint
                             <span>
@@ -253,7 +253,7 @@ class Trait extends React.Component {
                     <Alert color="primary" isOpen={showConstraintAlert} toggle={() => {this.setState({ showConstraintAlert: false, })}} >
                         Constraints cannot be of type Text Box. Please select another option.
                     </Alert>
-                    <div className='traitType'>
+                    <div>
                         <FormType
                             type={this.state.formType}
                             handleType={(event) => { this.updateState({ formType: +event.target.value, showConstraintAlert: false }); }}
@@ -270,16 +270,16 @@ class Trait extends React.Component {
                         />
                     </div>
 
-                    <Button className='details' onClick={(event) => { this.save(); }}>
+                    <Button onClick={(event) => { this.save(); }}>
                         Save
                     </Button>
-                    <Button className='details' onClick={(event) => { 
+                    <Button onClick={(event) => { 
                         this.retrievePrevState();
                         this.props.onSave(this.state.id);
                     }}>
                         Cancel
                     </Button>
-                    <Button className='details' onClick={(event) => { this.deleteSelf(); }}>
+                    <Button onClick={(event) => { this.deleteSelf(); }}>
                         Delete
                     </Button>
                 </div>
@@ -290,7 +290,7 @@ class Trait extends React.Component {
     
     render() {
         return (
-            <div className="traitClass">
+            <div className="trait-in">
                 {this.renderOrganizer()}
                 {this.renderMember()}
                 {this.renderLeader()}

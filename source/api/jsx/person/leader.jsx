@@ -4,7 +4,7 @@ import Traits from '../traits/traits';
 
 function Leader(props) {
     return(
-        <div className='leaderSurvey'>
+        <div>
             <p><b>Survey</b></p>
             <Traits 
                 role='leader'

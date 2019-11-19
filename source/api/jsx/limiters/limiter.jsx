@@ -119,18 +119,18 @@ class Limiter extends React.Component {
             </div>  
         ));
         return(
-            <div className='limiter'>
+            <div>
                 { this.state.show ? (
-                    <div className='showLimiter'>
+                    <div>
 
-                        <div className='constraintName'>
+                        <div>
                             <p>Please select the constraint that you want to limit in each group.</p>
                             <form>
                                 {constraintsList}
                             </form>
                         </div>
 
-                        <div className='expressionName'>
+                        <div>
                             <p>Please select an expression.</p>
                             <form>
                                 <div>
@@ -144,7 +144,7 @@ class Limiter extends React.Component {
                             </form>
                         </div>    
 
-                        <div className='numberRestriction'>
+                        <div>
                             <form>
                                 <input
                                  type="text"
@@ -155,18 +155,18 @@ class Limiter extends React.Component {
                             </form>
                         </div>            
                     
-                        <button className='save' onClick={this.handleSave}>
+                        <button onClick={this.handleSave}>
                             Save Limiter
                         </button>
                         
-                        <button className='delete' onClick={this.handleDelete}>
+                        <button onClick={this.handleDelete}>
                             Delete Limiter
                         </button>
                     </div>                   
                 ) : (
-                    <div className='notShowLimiter'>
+                    <div>
                         {this.state.name}
-                        <button className = 'details' onClick={this.handleDetails}>
+                        <button onClick={this.handleDetails}>
                             Details
                         </button>
                     </div>

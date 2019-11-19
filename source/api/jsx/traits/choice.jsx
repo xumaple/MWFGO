@@ -10,7 +10,7 @@ function Choice(props) {
     const { index, name, onDelete, onEdit, role } = props;
     if (role === 'organizer') {
         return(
-            <div className='choice'>
+            <div>
                 <div style={{display: 'inline-block'}} id='choice-form'>
                     <TextBox
                         defaultValue=''
@@ -22,7 +22,7 @@ function Choice(props) {
                 </div>
                 <Button 
                     style={{display: 'inline-block'}} 
-                    color="info" className='delete' 
+                    color="info"
                     onClick={(event) => {onDelete(index)}}
                 >
                     Delete Choice

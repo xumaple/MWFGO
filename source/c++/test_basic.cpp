@@ -28,9 +28,9 @@ TEST_CASE( "Basic functionality testcase", "[basic]" ) {
     
     Group g(v, &peoples[0]);
     
-    bool one = g.addIndividual(peoples[1]);
-    bool two = g.addIndividual(peoples[2]);
-    bool three = g.addIndividual(peoples[3]);
+    bool one = g.addIndividual(peoples[1], false);
+    bool two = g.addIndividual(peoples[2], false);
+    bool three = g.addIndividual(peoples[3], false);
     
     REQUIRE( !one );
     REQUIRE( two );
