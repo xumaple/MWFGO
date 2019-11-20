@@ -20,7 +20,8 @@ class Member extends React.Component {
     }
 
     componentDidMount() {
-        fetch(this.props.url, { credentials: 'same-origin' })
+        fetch(this.props.url.concat('?hash=', this.props.hash, '/'), {
+        })
             .then((response) => {
                 if (!response.ok) throw Error(response.statusText);
                 return response.json();
@@ -70,7 +71,7 @@ class Member extends React.Component {
                 <div className='title'>
                     <div>Hello {this.state.name}</div>
                     <div>Please fill out this survey</div>
-                    <hr style={{size: 80}}/>
+                    <hr/>
                 </div>
                 <Traits 
                     role='member'

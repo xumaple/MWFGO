@@ -137,7 +137,7 @@ class Traits extends React.Component {
                         Please save or cancel your changes before continuing.
                     </Alert>
                     {this.state.traits.map((id) => (
-                        <div className="trait" >
+                        <div className="trait">
                             <Trait
                                 url={this.props.url.concat(id, '/')}
                                 role={this.props.role}
@@ -153,9 +153,11 @@ class Traits extends React.Component {
                     <Alert color="primary" isOpen={this.state.errorAlert} toggle={() => {this.setState({ errorAlert: false, })}} >
                         Error. Could not reach server.
                     </Alert>
-                    <Button onClick={(event) => {this.edit(-1)}}>
-                        New Trait
-                    </Button>
+                    <div className="trait">
+                        <div className ="trait-in"><Button onClick={(event) => {this.edit(-1)}}>
+                            New Trait
+                        </Button></div>
+                    </div>
                 </div>
             );
         }

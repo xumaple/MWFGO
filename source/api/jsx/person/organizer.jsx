@@ -34,13 +34,16 @@ class Organizer extends React.Component {
     render(){
         return(
             <div>
-                <p><b>Traits</b></p>
-                <div><Traits url={`${this.props.url}traits/`} role='organizer' /></div>
+                <div className='title'>
+                    <div>Traits</div>
+                    <hr/>
+                </div>
+                <div><Traits url={this.props.url.concat('traits/')} role='organizer' /></div>
                 {/*<p><b>Limiters</b></p>
                 <div><Limiters url={`${this.props.url}limiters/`} /></div>*/}
                 <div className='submit-button'>
-                    <Button onClick={() => { this.setState({ showModal: true })}}>
-                        Generate Groups!
+                    <Button color='primary' onClick={() => { this.setState({ showModal: true })}}>
+                        Open up forms!
                     </Button>
                 </div>
                 <SubmitModal
