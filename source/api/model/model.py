@@ -60,28 +60,28 @@ class Nonconstraints(db.Model):
 tables["nonconstraints_0"] = Nonconstraints
 
 #not actually gonna be here once restAPI is done
-class Members(db.Model):
-    __tablename__ = 'members_' + event_id
+# class Members(db.Model):
+#     __tablename__ = 'members_' + event_id
 
-    id = db.Column(db.String(16), primary_key=True, nullable=False)
-    name = db.Column(db.String(256), nullable=False)
-    non_constraints = db.relationship(Nonconstraints, backref='members', lazy=True, cascade="all, delete-orphan")
+#     id = db.Column(db.String(16), primary_key=True, nullable=False)
+#     name = db.Column(db.String(256), nullable=False)
+#     non_constraints = db.relationship(Nonconstraints, backref='members', lazy=True, cascade="all, delete-orphan")
 
-    def __repr__(self):
-        return f"members('{self.id}', '{self.name}', '{self.trait_}')"
-tables["members_" + event_id] = Members
+#     def __repr__(self):
+#         return f"members('{self.id}', '{self.name}', '{self.trait_}')"
+# tables["members_" + event_id] = Members
 
-#not actually gonna be here once restAPI is done
-class Leaders(db.Model):
-    __tablename__ = 'leaders_' + event_id
+# #not actually gonna be here once restAPI is done
+# class Leaders(db.Model):
+#     __tablename__ = 'leaders_' + event_id
 
-    id = db.Column(db.Integer, primary_key=True, nullable=False)
-    name = db.Column(db.String(256), nullable=False)
-    non_constraints = db.relationship(Nonconstraints, backref='leaders', lazy=True, cascade="all, delete-orphan")
+#     id = db.Column(db.Integer, primary_key=True, nullable=False)
+#     name = db.Column(db.String(256), nullable=False)
+#     non_constraints = db.relationship(Nonconstraints, backref='leaders', lazy=True, cascade="all, delete-orphan")
 
-    def __repr__(self):
-        return f"choices('{self.id}', '{self.name}', '{self.trait_}')"
-tables["leaders_" + event_id] = Leaders
+#     def __repr__(self):
+#         return f"choices('{self.id}', '{self.name}', '{self.trait_}')"
+# tables["leaders_" + event_id] = Leaders
 
 #not actually gonna be here once restAPI is done
 class Traits(db.Model):

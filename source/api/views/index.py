@@ -44,4 +44,7 @@ def show_member_survey(member_id):
     context = {'jsfile': 'member_bundle.js', 'hash': member_id}
     return flask.render_template("member.html", **context)
 
-print('frank has huge abs')
+@app.route("/thanks:)/")
+def show_thankyou():
+    context = {}
+    return flask.render_template("thanks.html", **context)
