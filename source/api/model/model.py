@@ -52,7 +52,7 @@ class Nonconstraints(db.Model):
     id = db.Column(db.Integer, primary_key=True, nullable=False)
     answer = db.Column(db.String(256), nullable=False)
     trait_id = db.Column(db.Integer, db.ForeignKey('traits_{}.id'.format(event_id)), primary_key=True, nullable=False) # traits.id should be Traits_<Events.id>.id
-    member_id = db.Column(db.Integer, db.ForeignKey('members_{}.id'.format(event_id))) # members.id should be Members.id_<Events.id>.id
+    member_id = db.Column(db.String(256), db.ForeignKey('members_{}.id'.format(event_id))) # members.id should be Members.id_<Events.id>.id
     leader_id = db.Column(db.Integer, db.ForeignKey('leaders_{}.id'.format(event_id))) # leaders.id should be Leaders.id_<Events.id>.id
 
     def __repr__(self):
@@ -63,9 +63,8 @@ tables["nonconstraints_0"] = Nonconstraints
 class Members(db.Model):
     __tablename__ = 'members_' + event_id
 
-    id = db.Column(db.Integer, primary_key=True, nullable=False)
+    id = db.Column(db.String(16), primary_key=True, nullable=False)
     name = db.Column(db.String(256), nullable=False)
-    trait_ = db.Column(db.Float, nullable=False) # multiple of these; variable is actually called "trait_<Traits_<Events.id>.id>"
     non_constraints = db.relationship(Nonconstraints, backref='members', lazy=True, cascade="all, delete-orphan")
 
     def __repr__(self):
@@ -78,7 +77,6 @@ class Leaders(db.Model):
 
     id = db.Column(db.Integer, primary_key=True, nullable=False)
     name = db.Column(db.String(256), nullable=False)
-    trait_ = db.Column(db.Float, nullable=False) # multiple of these; variable is actually called "trait_<Traits_<Events.id>.id>"
     non_constraints = db.relationship(Nonconstraints, backref='leaders', lazy=True, cascade="all, delete-orphan")
 
     def __repr__(self):
