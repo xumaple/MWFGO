@@ -44,4 +44,6 @@ def patch_member_form():
     update_row(member, col_names, req_data['answers'])
     db.session.commit()
 
+    flask.redirect('/thanks:)/')
+
     return flask.make_response("", 201)
