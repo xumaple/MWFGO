@@ -16,17 +16,13 @@ def get_trait_helper(trait_id):
 
     # If Form is Text Box, we keep value of None
     context = None
-
+    print("WOWOWOWOOOWO")
     # Form is Multiple Choice
-    form_type = query_result.get('formType')
+    form_type = query_result['form_type']
     if form_type == 1:
-        # Make a query for Choices with trait_id
-        # form_query = []
         context = []
         for choice in db.session.query(tables['choices_{}'.format(event_id)]).filter_by(trait_id=trait_id).all():
             context.append(choice.name)
-        # for choice in form_query:
-        #     context.append(choice._asdict()['name'])
     # Form is Time Range TODO
     elif form_type == 2:
         # Make a query for MasterTimeRange with trait_id
@@ -38,6 +34,8 @@ def get_trait_helper(trait_id):
             'end': end
         }
 
+    print("LOOOOOOOOOOOOOOOOOOK")
+    print(context)
     # Set id, name, isConstraint, formType, and context object
     res = {
         'id': query_result['id'],
@@ -55,6 +53,7 @@ def get_trait_helper(trait_id):
 def get_trait(trait_id):
     """Get Traits."""
     # GET request response.
+    print("AHHHHHHHHHHH")
     res = get_trait_helper(trait_id)
 
     return flask.jsonify(**res)
@@ -116,7 +115,6 @@ def post_trait():
     # POST request response.
     trait = tables['traits_{}'.format(event_id)]()
     db.session.add(trait)
-    db.session.flush()
     db.session.commit()
 
     res = {
@@ -147,7 +145,6 @@ def get_trait_id():
     for trait in query_res:
         trait_ids.append(trait[0])
     trait_ids.sort()
-    print(trait_ids)
 
     res = {
         'traits': trait_ids
