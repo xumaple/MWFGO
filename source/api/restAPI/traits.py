@@ -69,7 +69,7 @@ def delete_trait(trait_id):
     db.session.delete(trait)
     db.session.commit()
 
-    return flask.make_response("", 204)
+    return flask.jsonify("", 204)
 
 
 @api.app.route('/api/v1/organizer/traits/<int:trait_id>/',
@@ -106,10 +106,10 @@ def patch_trait(trait_id):
     db.session.commit()
     # If formType == 2, update MasterTimeRange table
 
-    return flask.make_response("", 200)
+    return flask.jsonify("", 200)
 
 
-@api.app.route('/api/v1/organizer/traits/<int:trait_id>/',
+@api.app.route('/api/v1/organizer/traits/',
                     methods=['POST'])
 def post_trait():
     """Post Traits."""
@@ -123,7 +123,7 @@ def post_trait():
         'id': trait.id
     }
 
-    return flask.make_response(**res)
+    return flask.jsonify(**res)
 
 
 @api.app.route('/api/v1/member/traits/<int:trait_id>/',

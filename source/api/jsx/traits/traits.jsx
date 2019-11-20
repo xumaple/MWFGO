@@ -14,7 +14,6 @@ class Traits extends React.Component {
             traits: [],
             editing: -1, // nonnegative for trait index, negative for not editing
             saveAlert: false,
-            traitCounter: 0,
             errorAlert: false, 
         };
 
@@ -31,18 +30,23 @@ class Traits extends React.Component {
                 return response.json();
             })
             .then((data) => {
-                const newCounter = data.traits.length > 0 ? data.traits[data.traits.length - 1] + 1 : 0;
-                console.log(newCounter);
+                console.log(data);
                 this.setState({
                     traits: data.traits,
-                    traitCounter: newCounter
                 });
             })
             .catch(error => console.log(error));
     }
 
     handleDelete(num) {
+        const index = this.state.traits.indexOf(num);
+        if (index < 0) {
+            return;
+        }
+        let newTraits = this.state.traits.slice(0);
+        newTraits.splice(index, 1);
         this.setState({
+            traits: newTraits,
             editing: -1, 
             saveAlert: false,
         });
@@ -72,8 +76,7 @@ class Traits extends React.Component {
         }
         if (num === -1) {
             // Create new trait
-            num = this.state.traitCounter;
-            fetch(this.props.url.concat(num, '/'), {
+            fetch(this.props.url, {
                 method: 'post',
                 credentials: 'same-origin',
                 headers: { 'Content-Type': 'application/json' },
@@ -81,13 +84,14 @@ class Traits extends React.Component {
             })
                 .then((response) => {
                     if (!response.ok) throw Error(response.statusText);
-                    return;
+                    return response.json()
                 })
-                .then(() => {
-                    this.setState({ 
-                        traitCounter: this.state.traitCounter + 1, 
+                .then((data) => {
+                    this.setState({  
                         errorAlert: false, 
-                        traits: this.state.traits.concat(num),
+                        saveAlert: false,
+                        editing: data.id,
+                        traits: this.state.traits.concat(data.id),
                     });
                 })
                 .catch((error) => {
@@ -95,7 +99,9 @@ class Traits extends React.Component {
                     this.setState({ errorAlert: true })
                 });
         }
-        this.setState({editing: num, saveAlert: false, });
+        else {
+            this.setState({editing: num, saveAlert: false, });
+        }
     }
 
     renderMember() {
