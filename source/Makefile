@@ -1,7 +1,8 @@
 EXE := algorithm
-FOLDER := c++
+FOLDER := cplusplus
+NEW_FOLDER := restAPI
 FOLDER_EXE := $(FOLDER)/$(EXE)
-EXESO = $(EXE).so
+EXESO = $(NEW_FOLDER)/$(EXE).so
 
 all: $(EXE)
 	echo 'Yay compilation successful!'
