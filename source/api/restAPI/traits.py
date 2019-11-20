@@ -16,7 +16,6 @@ def get_trait_helper(trait_id):
 
     # If Form is Text Box, we keep value of None
     context = None
-    print("WOWOWOWOOOWO")
     # Form is Multiple Choice
     form_type = query_result['form_type']
     if form_type == 1:
@@ -34,8 +33,6 @@ def get_trait_helper(trait_id):
             'end': end
         }
 
-    print("LOOOOOOOOOOOOOOOOOOK")
-    print(context)
     # Set id, name, isConstraint, formType, and context object
     res = {
         'id': query_result['id'],
@@ -53,7 +50,6 @@ def get_trait_helper(trait_id):
 def get_trait(trait_id):
     """Get Traits."""
     # GET request response.
-    print("AHHHHHHHHHHH")
     res = get_trait_helper(trait_id)
 
     return flask.jsonify(**res)

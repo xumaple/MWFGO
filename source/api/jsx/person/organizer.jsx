@@ -1,6 +1,9 @@
 import React from 'react';
 import Traits from '../traits/traits';
 import PropTypes from 'prop-types';
+import { Button } from 'reactstrap';
+import SubmitModal from '../utility/submitModal'
+
 // import Limiters from '../limiters/limiters';
 
 class Organizer extends React.Component {
@@ -9,6 +12,7 @@ class Organizer extends React.Component {
 
         this.state = {
             data: {}, 
+            showModal: false
         };
         this.getGroups = this.getGroups.bind(this);
     }
@@ -34,9 +38,17 @@ class Organizer extends React.Component {
                 <div><Traits url={`${this.props.url}traits/`} role='organizer' /></div>
                 {/*<p><b>Limiters</b></p>
                 <div><Limiters url={`${this.props.url}limiters/`} /></div>*/}
-                <Button onClick={this.getGroups}>
-                    Generate Groups!
-                </Button>
+                <div className='submit-button'>
+                    <Button onClick={() => { this.setState({ showModal: true })}}>
+                        Generate Groups!
+                    </Button>
+                </div>
+                <SubmitModal
+                    show={this.state.showModal}
+                    cancel={() => { this.setState({ showModal: false })}}
+                    submit={this.getGroups}
+                    link={'localhost:8000/organizer/'}
+                />
             </div>
         );
     }

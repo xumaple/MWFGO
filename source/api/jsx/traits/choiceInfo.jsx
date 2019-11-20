@@ -64,7 +64,6 @@ class TextInfo extends React.Component {
 
     renderMember() {
         if (this.state.role === 'member') {
-            console.log(this.state.choices)
             return (
                 <div>
                     <form className='form-group'>

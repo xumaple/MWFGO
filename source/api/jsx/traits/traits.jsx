@@ -30,7 +30,6 @@ class Traits extends React.Component {
                 return response.json();
             })
             .then((data) => {
-                console.log(data);
                 this.setState({
                     traits: data.traits,
                 });
@@ -109,14 +108,16 @@ class Traits extends React.Component {
             return (
                 <div>
                     {this.state.traits.map((id) => (
-                        <Trait
-                            url={this.props.url.concat(id, '/')}
-                            role={this.props.role}
-                            id={id}
-                            setAnswer={(id, answer) => { this.props.setAnswer(this.state.traits.indexOf(id), answer); }}
-                            getAnswer={(id) => { return this.props.getAnswer(this.state.traits.indexOf(id)); }}
-                            key={id}
-                        />
+                        <div className = "trait">
+                            <Trait
+                                url={this.props.url.concat(id, '/')}
+                                role={this.props.role}
+                                id={id}
+                                setAnswer={(id, answer) => { this.props.setAnswer(this.state.traits.indexOf(id), answer); }}
+                                getAnswer={(id) => { return this.props.getAnswer(this.state.traits.indexOf(id)); }}
+                                key={id}
+                            />
+                        </div>
                     ))}
                 </div>
             );

@@ -59,10 +59,11 @@ class TextBox extends React.Component {
                 </Alert>
                 <form onSubmit={this.handleSubmit}>
                     <input
-                     type="text"
-                     onChange={this.handleChange}
-                     style={this.style(currValue)}
-                     value={currValue}
+                        type="text"
+                        className="text-box" 
+                        onChange={this.handleChange}
+                        style={this.style(currValue)}
+                        value={currValue}
                     />
                 </form> 
             </div>

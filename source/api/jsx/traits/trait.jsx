@@ -174,7 +174,6 @@ class Trait extends React.Component {
 
     renderMember() {
         if (this.props.role === 'member') {
-            console.log(this.state.context)
             if (this.state.formType === 0) {
                 return '';
             }
