@@ -9,10 +9,26 @@ class Intro extends React.Component {
     constructor(props) {
         super(props);
 
-        this.state = { name: '', redirecting: false };
+        this.state = { name: '', formOpen: false };
 
         this.editName = this.editName.bind(this);
         this.submitName = this.submitName.bind(this);
+    }
+
+    componentDidMount() {
+        fetch(this.props.url, { credentials: 'same-origin' })
+            .then((response) => {
+                if (!response.ok) throw Error(response.statusText);
+                return response.json()
+            })
+            .then((data) => {
+                console.log('found', data.open);
+                this.setState({ formOpen: data.open });
+            })
+            .catch((error) => {
+                console.log(error);
+                this.setState({ formOpen: false });
+            });
     }
 
     editName(newName) {
@@ -31,16 +47,18 @@ class Intro extends React.Component {
         })
             .then((response) => {
                 if (!response.ok) throw Error(response.statusText);
-                if (response.redirected) {
-                    window.location.href = response.url;
+                if (!response.redirected) {
+                    throw Error("Did not redirect on submission");
                 }
+                window.location.href = response.url;
             })
             .catch(error => console.log(error));
     }
 
     render(){
-        if (this.state.redirecting) {
-            return (<div> Redirecting... </div>);
+        console.log(this.state.formOpen);
+        if (!this.state.formOpen) {
+            return (<div> Sorry! This form is not yet available. </div>);
         }
         return(
             <Container>

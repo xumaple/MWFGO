@@ -23,7 +23,6 @@ class Trait extends React.Component {
             showSaveErrorAlert: 0,
             context: null,
             unsavedChanges: false,
-            deleted: false,
             prevState: null
         };
 
@@ -60,7 +59,7 @@ class Trait extends React.Component {
                 })
                 .then((data) => {
                     this.setState({
-                        name: data.name,
+                        name: data.name  !== null ? data.name : '',
                         question: data.question,
                         isConstraint: !!+data.isConstraint,
                         formType: Number(data.formType),
@@ -134,7 +133,6 @@ class Trait extends React.Component {
             })
             .catch(error => console.log(error));
 
-        this.setState({deleted: true});
         this.props.onDelete(this.state.id); 
     }
 
@@ -200,16 +198,14 @@ class Trait extends React.Component {
 
     renderOrganizer() {
         if (this.props.role === 'organizer') {
-            if (this.state.deleted) {
-                return (<div></div>);
-            }
             if (!this.props.editing) {
                 if (this.state.unsavedChanges) {
                     this.update();
                 }
+                console.log(this.state.name);
                 return (
                     <div className='trait-summary'>
-                        {this.state.name} <b>{this.state.isConstraint ? 'Constraint' : ''}</b> <Button style={{float: 'right'}} onClick={(event) => {
+                        {this.state.name === '' ? <i>no name</i> : this.state.name} <b>{this.state.isConstraint ? 'Constraint' : ''}</b> <Button style={{float: 'right'}} onClick={(event) => {
                             this.props.onEdit(this.state.id); 
                         }}>
                             Edit details

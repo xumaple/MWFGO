@@ -1,14 +1,24 @@
 """Database API."""
 
-from api import app
+from api import app, db_uri
 from flask_sqlalchemy import SQLAlchemy
 # Configure MySQL connection to Flask app
 db = SQLAlchemy(app)
+# engine = SQLAlchemy.create_engine(db_uri)
 
 event_id = "0"
 trait_id = "0"
 
 tables = {}
+
+# class Table(db.Model):
+#     def __init__(self):
+#         self.deleted = False
+
+#     def drop_table(self):
+#         if not self.deleted:
+#             self.__table__.drop(db.get_engine())
+#             self.deleted = True
 
 class Event(db.Model):
     __tablename__ = 'events'
@@ -100,5 +110,6 @@ class Traits(db.Model):
         return f"traits('{self.id}', '{self.name}', '{self.question}', '{self.is_constraint}', '{self.form_type}', '{self.context}')"
 tables["traits_" + event_id] = Traits
 
+db.metadata.bind = db.get_engine()
 db.create_all()
 db.session.commit()

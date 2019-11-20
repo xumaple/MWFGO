@@ -1,7 +1,7 @@
 import flask
 import api
 import os, sys
-from api.model.model import db, tables, Organizers, Event, Members
+from api.model.model import db, tables, Organizers, Event
 from api.model.utils import update_row
 
 
