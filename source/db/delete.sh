@@ -1,4 +1,4 @@
-# TABLES="organizers events traits_ choices_ members_ leaders_ nonconstraints_"
+TABLES="organizers events traits_0 choices_0 members_0 leaders_0 nonconstraints_0"
 
 deleteTable() {
     echo "Deleting table $1"
@@ -6,10 +6,10 @@ deleteTable() {
     echo ""
 }
 
-# for i in ${TABLES}
-# do
-#     deleteTable ${i}
-# done
+for i in ${TABLES}
+do
+    deleteTable ${i}
+done
 
 for i in "$*"
 do

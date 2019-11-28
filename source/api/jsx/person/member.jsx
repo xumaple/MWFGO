@@ -20,7 +20,7 @@ class Member extends React.Component {
     }
 
     componentDidMount() {
-        fetch(this.props.url.concat('?hash=', this.props.hash, '/'), {
+        fetch(this.props.url.concat('?hash=', this.props.hash), {
         })
             .then((response) => {
                 if (!response.ok) throw Error(response.statusText);
@@ -42,7 +42,7 @@ class Member extends React.Component {
     }
 
     getAnswer(index) {
-        return this.state.answers[index];
+        return this.state.answers[index]; 
     }
 
     submit() {
@@ -57,11 +57,18 @@ class Member extends React.Component {
                 return response.json();
             })
             .then((data) => {
-                this.setState({
-                    showModal: true
-                });
+                window.location.href = data.url;
             })
             .catch(error => console.log(error));
+            // .then((response) => {
+            //     if (!response.ok) throw Error(response.statusText);
+            //     if (!response.redirected) {
+            //         throw Error("Did not redirect on submission");
+            //     }
+            //     console.log(response);
+            //     window.location.href = response.url;
+            // })
+            // .catch(error => console.log(error));
     }
 
     render() {

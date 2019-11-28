@@ -6,7 +6,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import TextBox from '../utility/textBox';
 import InfoFactory, { FormType } from './infoFactory';
 
-const TRAIT_DEFAULT_NAME = 'Name';
+const TRAIT_DESCRIPTOR = 'Description';
 
 class Trait extends React.Component {
 
@@ -14,7 +14,7 @@ class Trait extends React.Component {
         super(props);
         //for formType; Multiple Choice: 1, Time Frames: 2, Text Boxes: 3
         this.state = {
-            name: TRAIT_DEFAULT_NAME,
+            name: '',
             question: '',
             id: props.id,
             isConstraint: false,
@@ -220,14 +220,14 @@ class Trait extends React.Component {
                         Error: Could not save constraint {showSaveErrorAlert > 1 ? 'x'.concat(showSaveErrorAlert) : ''}
                     </Alert>
                     <TextBox 
-                        defaultValue={TRAIT_DEFAULT_NAME}
+                        defaultValue={TRAIT_DESCRIPTOR}
                         value={name}
                         editValue={(newName) => { this.updateState({ name: newName }); }}
                         style={{fontSize:'30px', width:'100%'}}
                         limit={50}
                     />
                     <TextBox
-                        defaultValue=''
+                        defaultValue='Question'
                         value={question}
                         editValue={(newQuestion) => { this.updateState({ question: newQuestion }); }}
                         style={{width: '100%'}}

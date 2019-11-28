@@ -1,5 +1,5 @@
 """Utility functions."""
 
 def update_row(row, col_names, answers):
-    for i in range(len(answers)):
-        row[col_names[i+2]] = answers[i]
+    for i, answer in enumerate(answers):
+        setattr(row, col_names[i+2], answer)

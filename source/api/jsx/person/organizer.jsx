@@ -10,23 +10,22 @@ class Organizer extends React.Component {
     constructor(props) {
         super(props);
 
-        this.state = {
-            data: {}, 
+        this.state = { 
             showModal: false
         };
         this.getGroups = this.getGroups.bind(this);
     }
 
-    getGroups() {
+    getGroups() {        
+        console.log('submitting', this.props.url);
         fetch(this.props.url, { credentials: 'same-origin' })
             .then((response) => {
                 if (!response.ok) throw Error(response.statusText);
-                return response.json();
-            })
-            .then((data) => {
-                this.setState({
-                    data: data,
-                });
+                if (!response.redirected) {
+                    throw Error("Did not redirect on submission");
+                }
+                console.log(response);
+                // window.location.href = response.url;
             })
             .catch(error => console.log(error));
     }
