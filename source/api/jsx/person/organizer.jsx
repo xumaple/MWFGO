@@ -25,7 +25,7 @@ class Organizer extends React.Component {
                     throw Error("Did not redirect on submission");
                 }
                 console.log(response);
-                // window.location.href = response.url;
+                window.location.href = response.url;
             })
             .catch(error => console.log(error));
     }
