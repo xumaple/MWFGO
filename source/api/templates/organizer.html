@@ -2,8 +2,6 @@
 
 {% block title %} Organizer {% endblock %}
 
-{% block content %}
-    <div id="reactEntry">
-        <script type="text/javascript" src="{{ url_for('static', filename='js/organizer_bundle.js') }}"></script>
-    </div>
+{% block script %}
+    {{ url_for('static', filename='js/organizer_bundle.js') }}
 {% endblock %}

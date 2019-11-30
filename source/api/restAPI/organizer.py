@@ -1,17 +1,13 @@
 import flask
 from api import app
-from api.model import db, tables, drop_table_if_exists
+from api.model import db, tables
+from api.model.utils import drop_table_if_exists
 
 
 # Connect c++ modules to python
 # from algorithm import GroupOrganizer
 
 event_id = '0'
-
-def delete_table(tb_name):
-    tables = db.metadata.tables.copy()
-    tables.pop(tb_name)
-    db.metadata.tables = tables
 
 @app.route('/api/v1/organizer/', methods = ['GET'])
 def create_member_table():
