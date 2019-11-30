@@ -1,8 +1,10 @@
 import flask
 import api
 import os, sys
-from api.model.model import db, tables, Organizers, Event
-from api.model.utils import update_row
+from api.model import db, tables
+from api.model.utils import update_row, generate_salted_hash
+
+HASH_LENGTH = 16
 
 event_id = '0'
 
@@ -33,10 +35,11 @@ def post_member_form():
     # Create an entry in the members table for this member with all the data
     req_data = flask.request.get_json()
 
+    members_tb = tables['members_{}'.format(event_id)]
     # Add a new member 
-    hashed_name = req_data['name'] # As of right now does not hash name
-    
-    new_mem = tables["members_{}".format(event_id)](id=hashed_name, name=req_data['name'])
+    name = req_data['name']
+    hashed_name = generate_salted_hash(name, include_salt=False)[0:HASHLENGTH]
+    new_mem = members_tb(id=hashed_name, name=name)
     db.session.add(new_mem)
     db.session.commit()
     # Redirect to new member's url

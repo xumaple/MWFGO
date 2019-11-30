@@ -6,7 +6,17 @@
     </head>
     <body class="background">
         {% include "heading.html" %}
+
+        {% block variables %}{% endblock %}
+
+        <div id="reactEntry"></div>
+        <script 
+            type="text/javascript"
+            src="{% block script %}{{ url_for('static', filename='js/') }}{{ jsfile }}{% endblock %}">
+        </script>
+
         {% block content %}{% endblock %}
+        
         <div class="footer"></div>
     </body>
 </html>
