@@ -8,7 +8,7 @@
 Group::Group(std::vector<Limiter *> &limitersIn, Individual *leaderIn): leader(leaderIn) {
     limiters = std::move(limitersIn);
     for (Limiter *l: limiters) {
-        if (!l->addIndividual(*leader)) {
+        if (!l->addIndividual(leader)) {
             throw Error("Leader cannot be added to group.");
         }
     }
@@ -17,7 +17,7 @@ Group::Group(std::vector<Limiter *> &limitersIn, Individual *leaderIn): leader(l
     sizeLimit = 5;
 }
 
-bool Group::addIndividual(Individual &ind, bool force) {
+bool Group::addIndividual(Individual *ind, bool force) {
     // Group cannot fit any more members
     if (members.size() >= sizeLimit) {
         return false;
@@ -42,4 +42,14 @@ double Group::getCost() const {
     int totalCost = 0;
     for (const Limiter *l: limiters) totalCost += l->getCost();
     return totalCost;
+}
+
+std::vector<Individual*>& Group::getMembers()
+{
+    return members;
+}
+
+Individual* Group::getLeader()
+{
+    return leader;
 }

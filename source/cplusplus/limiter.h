@@ -10,14 +10,14 @@ public:
     Limiter(): currCost(0), forceAdded(0) {}
     virtual ~Limiter() {}
     
-    bool addIndividual(Individual &ind);
+    bool addIndividual(Individual *ind);
     virtual void cancelAdd();
-    void forceAdd(Individual &ind);
+    void forceAdd(Individual *ind);
     double getCost() const { return currCost; }
     
 protected:
-    virtual bool canAddIndividual(Individual &ind) = 0;
-    virtual void addHelper(Individual &ind);
+    virtual bool canAddIndividual(Individual *ind) = 0;
+    virtual void addHelper(Individual *ind);
     
     int numForceAdded() const { return forceAdded; }
     std::vector<Individual *> &currIndividuals() { return individuals; }
