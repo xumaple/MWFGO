@@ -43,7 +43,7 @@ member=Members(name="hi frank teehee XD", trait_=2.2)
 db.session.add(member)
 
 # Adding Events
-event=Events(name="maple", organizer_id=1)
+event=Events(name="maple's party", organizer_username="xumapo@umich.edu")
 db.session.add(event)
 db.session.commit()
 
@@ -59,3 +59,5 @@ tmplist = []
 for row in db.session.query(tables["members_" + event_id]):
     tmplist.append(row.__dict__)
 print(tmplist)
+
+db.session.query(tables["events"]).filter_by(organizer_name="xumapo@umich.edu").all()
