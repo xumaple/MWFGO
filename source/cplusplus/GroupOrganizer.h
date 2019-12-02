@@ -37,6 +37,9 @@ private:
     //Create groups
     void createGroups();
 
+    //Clear groups
+    void clearGroups();
+
 public:
     //Constructor
     GroupOrganizer();
@@ -63,6 +66,7 @@ public:
     void partA();
     void partB();
     void partC();
+    void genPerms();
 
     //Runs algorithm
     void runAlgorithm();

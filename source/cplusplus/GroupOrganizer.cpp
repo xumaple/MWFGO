@@ -20,6 +20,14 @@ void GroupOrganizer::createGroups()
     }
 }
 
+void GroupOrganizer::clearGroups()
+{
+    for (auto g: groups)
+    {
+        g->clearMembers();
+    }
+}
+
 GroupOrganizer::GroupOrganizer()
 {
     //Initialize random seed
@@ -166,13 +174,59 @@ void GroupOrganizer::partC()
     //Swap people between groups until the groups converge
 }
 
+void GroupOrganizer::genPerms()
+{
+    bool single_perms = people.size() % groups.size() == 0;
+    std::sort(people.begin(), people.end());
+    do
+    {
+        // Calculate permutations of groups
+        /*if (!single_perms)
+        {
+            std::sort(groups.begin(), groups.end());
+            do
+            {
+                // Check if this permutation satisfies the grouping
+                size_t i = 0
+                for (; i < people.size(); ++i)
+                {
+                    if (!groups[i % groups.size()]->addIndividual(people[i]))
+                    {
+                        clearGroups();
+                        break;
+                    }
+                }
+            } while (std::next_permutation(groups.begin(), groups.end()));
+        }*/
+
+        // Check if this permutation satisfies the grouping
+        size_t i = 0
+        for (; i < people.size(); ++i)
+        {
+            if (!groups[i % groups.size()]->addIndividual(people[i]))
+            {
+                clearGroups();
+                break;
+            }
+        }
+
+        //Check if permutation worked
+        if (i == people.size())
+        {
+            break;
+        }
+    } while (std::next_permutation(people.begin(), people.end()));
+    
+}
+
 void GroupOrganizer::runAlgorithm()
 {
     assert(groups.empty());
     createGroups();
     partA();
-    partB();
-    partC();
+    genPerms();
+    //partB();
+    //partC();
 }
 
 double* toArray(const py::list &list)

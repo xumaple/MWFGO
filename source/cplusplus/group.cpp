@@ -44,6 +44,11 @@ double Group::getCost() const {
     return totalCost;
 }
 
+void Group::clearMembers()
+{
+    members.clear();
+}
+
 std::vector<Individual*>& Group::getMembers()
 {
     return members;
@@ -52,4 +57,9 @@ std::vector<Individual*>& Group::getMembers()
 Individual* Group::getLeader()
 {
     return leader;
+}
+
+size_t Group::getSize()
+{
+    return sizeLimit;
 }

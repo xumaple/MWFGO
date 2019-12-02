@@ -25,6 +25,12 @@ public:
      */
     double getCost() const;
 
+
+    /*
+     Clear the list of members
+     */
+    void clearMembers();
+
     /*
      Returns the list of individuals
      */
@@ -34,6 +40,11 @@ public:
      Returns the leader
      */
     Individual* getLeader(); 
+
+    /*
+     Returns the max capacity
+     */
+    size_t getSize();
     
 private:
     Individual *leader;
