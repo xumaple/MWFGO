@@ -25,7 +25,7 @@ class Event(db.Model):
 
     id = db.Column(db.Integer, primary_key=True, nullable=False)
     name = db.Column(db.String(256), nullable=False)
-    organizer_id = db.Column(db.Integer, db.ForeignKey('organizers.id'), nullable=False) # TODO: foreign key here
+    organizer_username = db.Column(db.String(256), db.ForeignKey('organizers.username'), nullable=False) # TODO: foreign key here
 
     def __repr__(self):
         return f"event('{self.id}', '{self.name}', '{self.organizer_id}')"

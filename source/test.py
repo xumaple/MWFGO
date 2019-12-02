@@ -41,6 +41,12 @@ member=Members(name="hi maple teehee XD", trait_=1.1)
 db.session.add(member)
 member=Members(name="hi frank teehee XD", trait_=2.2)
 db.session.add(member)
+
+# Adding Events
+event=Events(name="maple", organizer_id=1)
+db.session.add(event)
+db.session.commit()
+
 for row in db.session.query(Members.name):
     print(row._asdict())
     print(row)
