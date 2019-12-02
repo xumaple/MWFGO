@@ -9,25 +9,25 @@ void WeightLimiter::cancelAdd() {
     lastIndividual = nullptr;
 }
 
-bool WeightLimiter::canAddIndividual(Individual &ind) {
+bool WeightLimiter::canAddIndividual(Individual *ind) {
     calculateLastWeight(ind);
     return currIndividuals().empty() 
         || (totalWeight + lastWeight) / (currIndividuals().size() + 1) > WEIGHT_THRESHOLD;
 }
 
-void WeightLimiter::addHelper(Individual &ind) {
-    if (&ind != lastIndividual) {
+void WeightLimiter::addHelper(Individual *ind) {
+    if (ind != lastIndividual) {
         calculateLastWeight(ind);
     }
     Limiter::addHelper(ind);
     totalWeight += lastWeight;
 }
 
-void WeightLimiter::calculateLastWeight(Individual &ind) {
+void WeightLimiter::calculateLastWeight(Individual *ind) {
     lastWeight = 0;
-    lastIndividual = &ind;
+    lastIndividual = ind;
     for (Individual *i: currIndividuals()) {
-        lastWeight += ind.getDiff(i)->getWeight();
+        lastWeight += ind->getDiff(i)->getWeight();
     }
     // Do we need to normalize weights?
     lastWeight /= currIndividuals().size();

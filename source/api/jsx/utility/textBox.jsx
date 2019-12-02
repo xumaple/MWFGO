@@ -10,19 +10,15 @@ class TextBox extends React.Component {
     constructor(props) {
         super(props);
         let { value, defaultValue, limit } = props;
-        this.state = {value: value ? value : defaultValue, showAlert: false};
+        this.state = {value: value ? value : '', showAlert: false};
         
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.style = this.style.bind(this);
     }
 
     handleChange(e) {
         e.preventDefault()
-        let newValue = this.props.limit - e.target.value.length >= 0 ? e.target.value : this.state.value;
-        if (newValue === this.state.value.slice(0, -1) && this.state.value === this.props.defaultValue) {
-            newValue = ''
-        }
+        const newValue = this.props.limit - e.target.value.length >= 0 ? e.target.value : this.state.value;
         const show = e.target.value.length * LIMIT_THRESHOLD > this.props.limit * (LIMIT_THRESHOLD - 1)
         this.setState({ value: newValue, showAlert: show });
         this.props.editValue(newValue);
@@ -34,23 +30,11 @@ class TextBox extends React.Component {
             this.props.onSubmit(this.state.value);
         }
     }
-
-    style(currValue) {
-        let retStyle = {}
-        if (this.props.style) {
-            retStyle = this.props.style;
-        }
-        if (this.props.defaultValue === currValue) {
-            retStyle.color = '#D3D3D3';
-        }
-        return retStyle;
-    }
     
     render() {
         let currValue = this.state.value;
         if (this.props.updateValue) {
-            let { value } = this.props;
-            currValue = value ? value : this.props.defaultValue;
+            currValue = this.props.value;
         }
         return (
             <div>
@@ -60,9 +44,10 @@ class TextBox extends React.Component {
                 <form onSubmit={this.handleSubmit}>
                     <input
                         type="text"
+                        placeHolder={this.props.defaultValue}
                         className="text-box" 
                         onChange={this.handleChange}
-                        style={this.style(currValue)}
+                        style={this.props.style}
                         value={currValue}
                     />
                 </form> 

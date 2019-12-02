@@ -1,4 +1,4 @@
-TABLES="organizers events traits_ choices_ members_ leaders_ nonconstraints_"
+TABLES="organizers events traits_0 choices_0 members_0 leaders_0 nonconstraints_0"
 
 clearTable() {
     echo "Clearing table $1"

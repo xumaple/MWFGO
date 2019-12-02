@@ -2,8 +2,14 @@
 
 from api import app, db_uri
 from flask_sqlalchemy import SQLAlchemy
+from flask_sqlalchemy.model import BindMetaMixin, Model
+from sqlalchemy.ext.declarative import DeclarativeMeta, declarative_base
+
+class NoNameMeta(BindMetaMixin, DeclarativeMeta):
+    pass
 # Configure MySQL connection to Flask app
-db = SQLAlchemy(app)
+db = SQLAlchemy(app, model_class=declarative_base(
+    cls=Model, metaclass=NoNameMeta, name='Model'))
 # engine = SQLAlchemy.create_engine(db_uri)
 
 event_id = "0"
@@ -56,18 +62,18 @@ class Choices(db.Model):
         return f"choices('{self.id}', '{self.name}', '{self.trait_id}')"
 tables["choices_" + event_id] = Choices
 
-class Nonconstraints(db.Model):
-    __tablename__ = 'nonconstraints_' + event_id
+# class Nonconstraints(db.Model):
+#     __tablename__ = 'nonconstraints_' + event_id
 
-    id = db.Column(db.Integer, primary_key=True, nullable=False)
-    answer = db.Column(db.String(256), nullable=False)
-    trait_id = db.Column(db.Integer, db.ForeignKey('traits_{}.id'.format(event_id)), primary_key=True, nullable=False) # traits.id should be Traits_<Events.id>.id
-    member_id = db.Column(db.String(256), db.ForeignKey('members_{}.id'.format(event_id))) # members.id should be Members.id_<Events.id>.id
-    leader_id = db.Column(db.Integer, db.ForeignKey('leaders_{}.id'.format(event_id))) # leaders.id should be Leaders.id_<Events.id>.id
+#     id = db.Column(db.Integer, primary_key=True, nullable=False)
+#     answer = db.Column(db.String(256), nullable=False)
+#     trait_id = db.Column(db.Integer, db.ForeignKey('traits_{}.id'.format(event_id)), primary_key=True, nullable=False) # traits.id should be Traits_<Events.id>.id
+#     member_id = db.Column(db.String(256), db.ForeignKey('members_{}.id'.format(event_id))) # members.id should be Members.id_<Events.id>.id
+#     leader_id = db.Column(db.Integer, db.ForeignKey('leaders_{}.id'.format(event_id))) # leaders.id should be Leaders.id_<Events.id>.id
 
-    def __repr__(self):
-        return f"nonconstraints('{self.name}', '{self.trait_id}', '{self.member_id}', '{self.leader_id}')"
-tables["nonconstraints_0"] = Nonconstraints
+#     def __repr__(self):
+#         return f"nonconstraints('{self.name}', '{self.trait_id}', '{self.member_id}', '{self.leader_id}')"
+# tables["nonconstraints_0"] = Nonconstraints
 
 #not actually gonna be here once restAPI is done
 # class Members(db.Model):
@@ -104,12 +110,12 @@ class Traits(db.Model):
     form_type = db.Column(db.Integer)
     context = db.Column(db.Float)
     choices = db.relationship(Choices, backref='traits_{}.id'.format(event_id), lazy=True, cascade="all, delete-orphan")
-    nonConstraints = db.relationship(Nonconstraints, backref='traits_{}.id'.format(event_id), lazy=True, cascade="all, delete-orphan")
+    # nonConstraints = db.relationship(Nonconstraints, backref='traits_{}.id'.format(event_id), lazy=True, cascade="all, delete-orphan")
 
     def __repr__(self):
         return f"traits('{self.id}', '{self.name}', '{self.question}', '{self.is_constraint}', '{self.form_type}', '{self.context}')"
 tables["traits_" + event_id] = Traits
 
-db.metadata.bind = db.get_engine()
 db.create_all()
 db.session.commit()
+db.metadata.bind = db.get_engine()

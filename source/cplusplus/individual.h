@@ -11,16 +11,18 @@ class ConstraintDiff;
 
 class Individual {
 public:
-    static void computeDiffs(Individual &ind1, Individual &ind2);
+    static void computeDiffs(Individual *ind1, Individual *ind2);
     
-    Individual(double *valuesIn): values(valuesIn) {}
+    Individual(double *valuesIn, std::string nameIn): values(valuesIn), name(nameIn) {}
     ~Individual() { delete[] values; }
  
+    std::string getName() { return name; }
     std::shared_ptr<ConstraintDiff> getDiff(Individual *other) const;
     std::vector<double> getValues(const std::vector<int> indices) const;
     
 private:
     double *values;
+    std::string name;
     std::unordered_map<Individual *, std::shared_ptr<ConstraintDiff>> differences;
 };
 

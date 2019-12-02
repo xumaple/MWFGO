@@ -1,5 +1,7 @@
 #include "GroupOrganizer.h"
+#include <iostream>
 #include <algorithm>
+#include <random>
 #include <string>
 #include <vector>
 #include <cassert>
@@ -7,14 +9,14 @@
 
 namespace py = boost::python;
 
-double* toArray(const py::object &iterable);
+double* toArray(const py::list &list);
 
 
 void GroupOrganizer::createGroups()
 {
     for (auto l: leaders)
     {
-        groups.push_back(new Group(limiters,l));
+        groups.push_back(new Group(limiters, l));
     }
 }
 
@@ -63,7 +65,7 @@ void GroupOrganizer::addLeader(std::string name, py::list &traits)
 {
     //Create a leader
     double* arr = toArray(traits);
-    leaders.push_back(new Individual(arr));
+    leaders.push_back(new Individual(arr, name));
 
     //Create a group with the leader
 }
@@ -72,7 +74,7 @@ void GroupOrganizer::addPerson(std::string name, py::list &traits)
 {
     //Create a person
     double* arr = toArray(traits);
-    people.push_back(new Individual(arr));
+    people.push_back(new Individual(arr, name));
 }
 
 void GroupOrganizer::addTrait(std::string name, int formType, int numChoices)
@@ -101,13 +103,25 @@ void GroupOrganizer::addLimiter()
     //Add to list of limiters
 }
 
-void GroupOrganizer::runAlgorithm()
+void GroupOrganizer::printGroups()
 {
-    assert(groups.empty())
-    createGroups();
+    for (auto it = groups.begin(); it != groups.end(); ++it)
+    {
+        std::cout << "Group " << (*it)->getLeader()->getName() << "\n";
+        for (auto it2 = (*it)->getMembers().begin(); it2 != (*it)->getMembers().end(); ++it2)
+        {
+            std::cout << (*it2)->getName() << "\n";
+        }
+        std::cout << "\n";
+    }
+}
+
+
+void GroupOrganizer::partA()
+{
     //Assuming all data has been read in, runs the algorithm
     //Compute all the differences between people
-    for (auto it = people.begin(); it != people.end; ++it)
+    for (auto it = people.begin(); it != people.end(); ++it)
     {
         auto nextIt = it;
         for (++nextIt; nextIt != people.end(); ++nextIt)
@@ -115,9 +129,12 @@ void GroupOrganizer::runAlgorithm()
             Individual::computeDiffs(*it, *nextIt);
         } 
     }
+}
 
+void GroupOrganizer::partB()
+{
     //Assign all the people to a group
-    std::shuffle(people.begin(), people.end()); 
+    shuffle(people.begin(), people.end(), std::default_random_engine(rand())); 
     for (auto it = people.begin(); it != people.end(); ++it)
     {
         bool found = false;
@@ -138,19 +155,32 @@ void GroupOrganizer::runAlgorithm()
                 found = groups[rand() % groups.size()]->addIndividual(*it, true);
             }
         }
-    }
 
-    //Swap people between groups until the groups converge
-    
+
+    }
 }
 
-double* toArray(const py::object &iterable)
+void GroupOrganizer::partC()
 {
-    std::vector<double> t = std::vector<double>(py::stl_input_iterator<double>(iterable), py::stl_input_iterator<double>());
-    double *arr = new double[t.size()];
-    for (size_t i = 0; i < t.size(); ++i)
+    //Does nothing atm
+    //Swap people between groups until the groups converge
+}
+
+void GroupOrganizer::runAlgorithm()
+{
+    assert(groups.empty());
+    createGroups();
+    partA();
+    partB();
+    partC();
+}
+
+double* toArray(const py::list &list)
+{
+    double *arr = new double[len(list)];
+    for (int i = 0; i < len(list); ++i)
     {
-        arr[i] = t[i];
+        arr[i] = py::extract<double>(list[i]);
     }
     return arr;
 }

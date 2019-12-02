@@ -11,11 +11,11 @@ TEST_CASE( "Basic functionality testcase", "[basic]" ) {
     ConstraintManager &m = ConstraintManager::getInstance();
     std::string name = "schedule";
     m.addConstraint(new TimeConstraint(), name);
-    std::vector<Individual> peoples;
-    peoples.emplace_back(new double(4.00000006));
-    peoples.emplace_back(new double(1.00000004));
-    peoples.emplace_back(new double(2.00000008));
-    peoples.emplace_back(new double(3.00000007));
+    std::vector<Individual*> peoples;
+    peoples.push_back(new Individual(new double(4.00000006), "Maple"));
+    peoples.push_back(new Individual(new double(1.00000004), "Wesley"));
+    peoples.push_back(new Individual(new double(2.00000008), "Frank"));
+    peoples.push_back(new Individual(new double(3.00000007), "Jeff"));
     
     for (auto it = peoples.begin(); it != peoples.end(); ++it) {
         auto nextIt = it;
@@ -26,7 +26,7 @@ TEST_CASE( "Basic functionality testcase", "[basic]" ) {
     std::vector<Limiter *> v(1, new WeightLimiter());
     
     
-    Group g(v, &peoples[0]);
+    Group g(v, peoples[0]);
     
     bool one = g.addIndividual(peoples[1], false);
     bool two = g.addIndividual(peoples[2], false);
@@ -36,6 +36,18 @@ TEST_CASE( "Basic functionality testcase", "[basic]" ) {
     REQUIRE( two );
     REQUIRE( three );
     
+    //Delete constraint
     delete &m.getConstraint(name);
-}
 
+    //Delete people
+    for (auto person: peoples)
+    {
+        delete person;
+    }
+
+    //Delete limiter
+    for (auto l: v)
+    {
+        delete l;
+    }
+}

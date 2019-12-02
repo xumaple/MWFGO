@@ -51,13 +51,22 @@ public:
     void addPerson(std::string name, py::list &traits);
 
     //Add traits
-    void addTrait(std::string name, int formType, int numChoices);
+    void addTrait(std::string name, int formType, int numChoices = 0);
 
     //Add limiters
     void addLimiter(/*Not quite sure how to instantiate these*/);
 
+    //Print all the groups (Used for testing)
+    void printGroups();
+
+    //Parts of the algorithm
+    void partA();
+    void partB();
+    void partC();
+
     //Runs algorithm
     void runAlgorithm();
+
 };
 
 #endif /* GroupOrganizer_h */
