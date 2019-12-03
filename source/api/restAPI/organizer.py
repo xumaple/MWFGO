@@ -16,7 +16,7 @@ def get_events(username):
     method = flask.request.method
     if method == 'GET':
         events = db.session.query(events_tb.id).filter_by(organizer_username=username).all()
-        return flask.jsonify({'events': events})
+        return flask.jsonify({'events': [e[0] for e in events]})
     elif method == 'POST':
         new_event = events_tb(name='', organizer_username=username)
         db.session.add(new_event)
@@ -29,10 +29,13 @@ def get_events(username):
         return flask.redirect(flask.url_for('show_organizer_event', username=username, event_id=event_id))
     elif method == 'DELETE':
         event_id = flask.request.get_json().get('id')
+        print(flask.request.get_json())
+        print(event_id)
         if event_id is not None:
-            event = db.session.query(event_tb).filter_by(id=event_id).one()
+            event = db.session.query(events_tb).filter_by(id=event_id).one()
             db.session.delete(event)
             db.session.commit()
+        return flask.jsonify('')
 
 @app.route('/api/v1/organizer/<username>/events/<event_id>/', methods = ['GET', 'PATCH'])
 def get_event(username, event_id):
@@ -53,7 +56,7 @@ def get_event(username, event_id):
         return ''
 
 @app.route('/api/v1/organizer/<username>/events/<event_id>/submit/', methods = ['GET'])
-def create_member_table(event_id):
+def create_member_table(username, event_id):
     valid, username = check_username(username)
     if not valid:
         return username

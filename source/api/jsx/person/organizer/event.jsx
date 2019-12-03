@@ -73,7 +73,6 @@ class Event extends React.Component {
     }
 
     render(){
-        console.log(this.state.name)
         if (this.props.preview !== undefined) {
             // Preview view of this event
             return (
@@ -82,8 +81,11 @@ class Event extends React.Component {
                         {this.getName()}
                     </div>
                     <div style={{float: 'right', padding: '30px'}}>
-                        <Button onClick={() => {window.location.href = this.props.source;}}>
+                        <Button style={{display: 'inline-block'}} onClick={() => {window.location.href = this.props.source;}}>
                             Edit
+                        </Button>
+                        <Button style={{display: 'inline-block'}} onClick={(event) => {this.props.preview.onDelete(this.props.preview.id)}}>
+                            Delete
                         </Button>
                     </div>
                 </div>
@@ -139,6 +141,7 @@ Event.propTypes = {
     url: PropTypes.string.isRequired,
     source: PropTypes.string,
     preview: PropTypes.shape({
+        id: PropTypes.number.isRequired,
         onDelete: PropTypes.func.isRequired,
     }),
 };

@@ -12,7 +12,6 @@ class Index extends React.Component {
 
         this.state = { 
             events: [],
-            redirect: null,
             errorAlert: false
         };
 
@@ -28,10 +27,8 @@ class Index extends React.Component {
                 return response.json();
             })
             .then((data) => {
-                console.log(data.events);
                 this.setState({
                     events: data.events,
-                    redirect: data.redirect,
                 });
             })
             .catch(error => console.log(error));
@@ -50,18 +47,42 @@ class Index extends React.Component {
                 console.log(response);
                 window.location.href = response.url;
             })
-            .catch(error => console.log(error));
+            .catch((error) => {
+                console.log(error);
+                this.setState({ errorAlert: true });
+            })
     }
 
     handleDelete(id) {
-
+        console.log(id);
+        fetch(this.props.url, {
+            method: 'delete',
+            credentials: 'same-origin', 
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                'id': id,
+            }),
+        })
+            .then((response) => {
+                if (!response.ok) throw Error(response.statusText);
+                return;
+            })
+            .then(() => {
+                let newEvents = this.state.events.slice(0);
+                newEvents.splice(newEvents.indexOf(id), 1);
+                this.setState({ events: newEvents, errorAlert: false })
+            })
+            .catch((error) => {
+                console.log(error);
+                this.setState({ errorAlert: true });
+            })
     }
 
     eventUrl(url, id) {
         return url.concat('events/', id, '/');
     }
 
-    render(){
+    render() {
         return(
             <div>
                 <Alert color="primary" isOpen={this.state.errorAlert} toggle={() => {this.setState({ errorAlert: false, })}} >
@@ -74,6 +95,7 @@ class Index extends React.Component {
                             source={this.eventUrl(this.props.source, id)}
                             preview = {
                                 {
+                                    id: id,
                                     onDelete: this.handleDelete,
                                 }
                             }
@@ -81,10 +103,11 @@ class Index extends React.Component {
                         />
                     </div>
                 ))}
-                <div className="trait">
-                    <div className ="trait-in"><Button onClick={(e) => {this.newEvent()}}>
+                {this.state.events.length === 0 ? <div style={{textAlign: 'center', padding: '10px'}}>You have no saved events.</div> : ''}
+                <div className="submit-button">
+                    <Button onClick={(e) => {this.newEvent()}}>
                         New Event
-                    </Button></div>
+                    </Button>
                 </div>
             </div>
         );

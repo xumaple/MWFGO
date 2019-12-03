@@ -7,10 +7,7 @@ from api.views.accounts import check_username
 #from model import db, Traits
 #from model import tables
 
-event_id = '0'
-organizer_id = '0'
-
-def get_trait_helper(trait_id):
+def get_trait_helper(event_id, trait_id):
     """Helper to get traits."""
     # Make a query for Traits where id = trait_id
     query_result = db.session.query(tables['traits_{}'.format(event_id)]).filter_by(id=trait_id).one().__dict__
@@ -55,7 +52,7 @@ def get_trait(username, event_id, trait_id):
     method = flask.request.method
     if method == 'GET':
         # GET request response.
-        return flask.jsonify(**get_trait_helper(trait_id))
+        return flask.jsonify(**get_trait_helper(event_id, trait_id))
         
     elif method == 'PATCH':
         # PATCH request response.
