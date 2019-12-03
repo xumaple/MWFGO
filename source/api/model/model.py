@@ -50,17 +50,15 @@ class Organizers(db.Model):
         return f"organizers('{self.id}', '{self.username}', '{self.password}', '{self.full_name}')"
 tables["organizers"] = Organizers
 
-#not actually gonna be here once restAPI is done
-class Choices(db.Model):
-    __tablename__ = 'choices_' + event_id
-
-    id = db.Column(db.Integer, primary_key=True, nullable=False)
-    name = db.Column(db.String(256), nullable=False)
-    trait_id = db.Column(db.Integer, db.ForeignKey('traits_{}.id'.format(event_id)), nullable=False)
-
-    def __repr__(self):
-        return f"choices('{self.id}', '{self.name}', '{self.trait_id}')"
-tables["choices_" + event_id] = Choices
+def add_choices_table(event_id):
+    attributes = {
+        '__tablename__': 'choices_{}'.format(event_id),
+        'id': db.Column(db.Integer, primary_key=True, nullable=False),
+        'name': db.Column(db.String(256), nullable=False),
+        'trait_id': db.Column(db.Integer, db.ForeignKey('traits_{}.id'.format(event_id)), nullable=False),
+        '__repre__': lambda self: f"choices('{self.id}', '{self.name}', '{self.trait_id}')",
+    }
+    _add_table_helper(attributes)
 
 # class Nonconstraints(db.Model):
 #     __tablename__ = 'nonconstraints_' + event_id
@@ -75,17 +73,25 @@ tables["choices_" + event_id] = Choices
 #         return f"nonconstraints('{self.name}', '{self.trait_id}', '{self.member_id}', '{self.leader_id}')"
 # tables["nonconstraints_0"] = Nonconstraints
 
-#not actually gonna be here once restAPI is done
-# class Members(db.Model):
-#     __tablename__ = 'members_' + event_id
-
-#     id = db.Column(db.String(16), primary_key=True, nullable=False)
-#     name = db.Column(db.String(256), nullable=False)
-#     non_constraints = db.relationship(Nonconstraints, backref='members', lazy=True, cascade="all, delete-orphan")
-
-#     def __repr__(self):
-#         return f"members('{self.id}', '{self.name}', '{self.trait_}')"
-# tables["members_" + event_id] = Members
+def add_members_table(event_id):
+        #create dictionary to input into table creator
+    attributes = {
+        '__tablename__': 'members_{}'.format(event_id), 
+        'id': db.Column(db.String(256), primary_key=True, nullable=False), 
+        'name': db.Column(db.String(256), nullable=False), 
+        # "non_constraints": db.relationship(tables['nonconstraints_{}'.format(event_id)], backref='members', lazy=True, cascade="all, delete-orphan"), 
+        '__repr__': lambda self: self.id + self.name,
+    }
+    #for every trait find the formType and add the trait as a column to the dictionary
+    for trait in db.session.query(tables['traits_{}'.format(event_id)]).all():
+        column = db.Column(db.Integer)
+        if trait.form_type == 2:
+            column = db.Column(db.Float)
+        if trait.form_type == 3:
+            column = db.Column(db.String(256))
+        attributes["trait_{}".format(str(trait.id))] = column
+    #input the dictionary to table creator
+    _add_table_helper(attributes)
 
 # #not actually gonna be here once restAPI is done
 # class Leaders(db.Model):
@@ -100,22 +106,39 @@ tables["choices_" + event_id] = Choices
 # tables["leaders_" + event_id] = Leaders
 
 #not actually gonna be here once restAPI is done
-class Traits(db.Model):
-    __tablename__ = 'traits_' + event_id
 
-    id = db.Column(db.Integer, primary_key=True, nullable=False)
-    name = db.Column(db.String(256))
-    question = db.Column(db.String(256))
-    is_constraint = db.Column(db.Boolean)
-    form_type = db.Column(db.Integer)
-    context = db.Column(db.Float)
-    choices = db.relationship(Choices, backref='traits_{}.id'.format(event_id), lazy=True, cascade="all, delete-orphan")
-    # nonConstraints = db.relationship(Nonconstraints, backref='traits_{}.id'.format(event_id), lazy=True, cascade="all, delete-orphan")
+def add_traits_table(event_id):
+    attributes = {
+        '__tablename__': 'traits_{}'.format(event_id),
+        'id': db.Column(db.Integer, primary_key=True, nullable=False),
+        'name': db.Column(db.String(256)),
+        'question': db.Column(db.String(256)),
+        'is_constraint': db.Column(db.Boolean),
+        'form_type': db.Column(db.Integer),
+        'context': db.Column(db.Float),
+        'choices': db.relationship(tables['choices_{}'.format(event_id)], backref='traits_{}.id'.format(event_id), lazy=True, cascade="all, delete-orphan"),
+        '__repre__': lambda self: f"traits('{self.id}', '{self.name}', '{self.question}', '{self.is_constraint}', '{self.form_type}', '{self.context}')",
+    }
+    _add_table_helper(attributes)
 
-    def __repr__(self):
-        return f"traits('{self.id}', '{self.name}', '{self.question}', '{self.is_constraint}', '{self.form_type}', '{self.context}')"
-tables["traits_" + event_id] = Traits
+def create_all():
+    db.create_all()
+    db.session.commit()
 
-db.create_all()
-db.session.commit()
+create_all()
 db.metadata.bind = db.get_engine()
+
+def drop_table_if_exists(tb_name):
+    dropped = tables.pop(tb_name, None)
+    if dropped is not None:
+        dropped.__table__.drop(db.get_engine())
+        data = db.metadata
+        data.tables = data.tables.copy()
+        data.tables.pop(tb_name)
+        db.session.commit()
+
+def _add_table_helper(attributes):
+    tb_name = attributes['__tablename__']
+    drop_table_if_exists(tb_name)
+    table = type(tb_name, (db.Model,), attributes)
+    tables[tb_name] = table

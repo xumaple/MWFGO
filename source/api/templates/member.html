@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 
 {% block variables %}
-    <div id="hash" style="display:none;">{{ hash }}</div>
+    {{super()}}
+
+    {{ declare("hash", hash) }}
 {% endblock %}
