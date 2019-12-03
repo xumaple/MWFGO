@@ -1,9 +1,9 @@
 from api import app
 import flask
-from api.model.utils import generate_salted_hash, login_check
+from api.model.utils import generate_salted_hash, get_hashed_text
 from api.model import db, tables
 
-def check_username():
+def check_username(given_user=None):
     """
     Checks that given session is valid.
 
@@ -11,16 +11,30 @@ def check_username():
     Else, returns False and flask redirect.
     """
     username = flask.session.get('username')
+    if given_user is not None and username != given_user:
+        flask.session['username'] = None
+        username = None
     if username is None:
         return False, flask.redirect(flask.url_for('show_login'))
     return True, username
+
+def login_check(username, password):
+    """Checks that login username and password are correct."""
+    user_pw = db.session.query(tables['organizers'].password).filter_by(username=username)
+    if user_pw.scalar() is None:
+        return False
+    split_list = user_pw.one().password.split('$')
+    salt = split_list[1]
+    password_hashed = split_list[2]
+    return get_hashed_text(salt, password) == password_hashed
 
 @app.route('/accounts/login/', methods=['GET', 'POST'])
 def show_login():
     """index.py show function docstring."""
     request = flask.request
-    if 'username' in flask.session:
-        return flask.redirect('/')
+    username = flask.session.get('username')
+    if username is not None:
+        return flask.redirect(flask.url_for('show_organizer_home', username=username))
 
     password_incorrect = False
     if request.method == 'POST':
@@ -28,7 +42,7 @@ def show_login():
         password = request.form.get('password')
         if login_check(username, password):
             flask.session['username'] = username
-            return flask.redirect('/')
+            return flask.redirect(flask.url_for('show_organizer_home', username=username))
         password_incorrect = True
     context = { 'signup': flask.url_for('show_signup'), 'incorrect': password_incorrect }
     return flask.render_template("login.html", **context)
@@ -36,8 +50,9 @@ def show_login():
 @app.route("/accounts/signup/", methods=['GET', 'POST'])
 def show_signup():
     request = flask.request
-    if 'username' in flask.session:
-        return flask.redirect('/')
+    username = flask.session.get('username')
+    if username is not None:
+        return flask.redirect(flask.url_for('show_organizer_home', username=username))
     if request.method == 'POST':
 
         username = request.form.get('email')
@@ -47,7 +62,7 @@ def show_signup():
         db.session.commit()
         # flask.session['username'] = username
 
-        return flask.redirect('/')
+        return flask.redirect(flask.url_for('show_organizer_home', username=username))
 
     context = { 'login': flask.url_for('show_login') }
     return flask.render_template("signup.html", **context)

@@ -1,4 +1,4 @@
-from api.model import db, Organizers, Event, Traits, Choices, Members, Leaders, tables
+from api.model import db, Organizers, events, tables
 
 # un = 'wow' # username
 # myobject = Organizers(username=un, password='wee', full_name='yipee')
@@ -36,14 +36,14 @@ event_id = '0'
 # tmp = type("Members_" + event_id, 
 #               (db.Model,), # db.Model
 #               temp)
-
+Members = tables['members_' + event_id]
 member=Members(name="hi maple teehee XD", trait_=1.1)
 db.session.add(member)
 member=Members(name="hi frank teehee XD", trait_=2.2)
 db.session.add(member)
 
 # Adding Events
-event=Events(name="maple's party", organizer_username="xumapo@umich.edu")
+event=tables['events'](name="maple's party", organizer_username="xumapo@umich.edu")
 db.session.add(event)
 db.session.commit()
 

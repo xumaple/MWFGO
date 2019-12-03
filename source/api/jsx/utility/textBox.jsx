@@ -44,7 +44,7 @@ class TextBox extends React.Component {
                 <form onSubmit={this.handleSubmit}>
                     <input
                         type="text"
-                        placeHolder={this.props.defaultValue}
+                        placeholder={this.props.defaultValue}
                         className="text-box" 
                         onChange={this.handleChange}
                         style={this.props.style}

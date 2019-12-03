@@ -2,14 +2,10 @@ import flask
 import api
 import os, sys
 from api.model import db, tables
-from api.model.utils import update_row, generate_salted_hash
+from api.model.utils import HASH_LENGTH, update_row, generate_salted_hash
 
-HASH_LENGTH = 16
-
-event_id = '0'
-
-@api.app.route('/api/v1/member/', methods = ['GET'])
-def get_member_form():
+@api.app.route('/api/v1/member/<event_id>/', methods = ['GET'])
+def get_member_form(event_id):
     # Set member_id (fix with correct data later) TODO
     hash = flask.request.args.get('hash')
     print(hash)
@@ -30,24 +26,23 @@ def get_member_form():
     pprint.pprint(result)
     return flask.jsonify(**result)
 
-@api.app.route('/api/v1/member/', methods = ['POST'])
-def post_member_form():
+@api.app.route('/api/v1/member/<event_id>/', methods = ['POST'])
+def post_member_form(event_id):
     # Create an entry in the members table for this member with all the data
     req_data = flask.request.get_json()
-
     members_tb = tables['members_{}'.format(event_id)]
     # Add a new member 
     name = req_data['name']
-    hashed_name = generate_salted_hash(name, include_salt=False)[0:HASHLENGTH]
+    hashed_name = generate_salted_hash(name, include_salt=False)[0:HASH_LENGTH]
     new_mem = members_tb(id=hashed_name, name=name)
     db.session.add(new_mem)
     db.session.commit()
     # Redirect to new member's url
     
-    return flask.redirect('/member/' + hashed_name + '/')
+    return flask.redirect(flask.url_for('show_member_survey', event_id=event_id, member_id=hashed_name))
 
-@api.app.route('/api/v1/member/', methods = ['PATCH'])
-def patch_member_form():
+@api.app.route('/api/v1/member/<event_id>/', methods = ['PATCH'])
+def patch_member_form(event_id):
     # Find current entry and update it
     req_data = flask.request.get_json()
     # Get the member id
@@ -59,6 +54,6 @@ def patch_member_form():
     update_row(member, col_names, req_data['answers'])
     db.session.commit()
 
-    result = { 'url': flask.url_for('show_member')}
+    result = { 'url': flask.url_for('show_member', event_id=event_id)}
     return flask.jsonify(**result)
     # return flask.redirect(flask.url_for('show_thankyou'))

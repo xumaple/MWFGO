@@ -2,14 +2,12 @@ import flask
 import api
 import os, sys
 from api.model import db, tables, Organizers, Event
+from api.views.accounts import check_username
 #sys.path.insert(0, "/api/model.py")
 #from model import db, Traits
 #from model import tables
 
-event_id = '0'
-organizer_id = '0'
-
-def get_trait_helper(trait_id):
+def get_trait_helper(event_id, trait_id):
     """Helper to get traits."""
     # Make a query for Traits where id = trait_id
     query_result = db.session.query(tables['traits_{}'.format(event_id)]).filter_by(id=trait_id).one().__dict__
@@ -34,7 +32,7 @@ def get_trait_helper(trait_id):
         }
 
     # Set id, name, isConstraint, formType, and context object
-    res = {
+    return {
         'id': query_result['id'],
         'name': query_result['name'],
         'question': query_result['question'],
@@ -42,87 +40,80 @@ def get_trait_helper(trait_id):
         'formType': query_result['form_type'],
         'context': context # TODO
     }
-    
-    return res
 
-@api.app.route('/api/v1/organizer/traits/<int:trait_id>/',
-                    methods=['GET'])
-def get_trait(trait_id):
-    """Get Traits."""
-    # GET request response.
-    res = get_trait_helper(trait_id)
+@api.app.route('/api/v1/organizer/<username>/events/<event_id>/traits/<int:trait_id>/',
+                    methods=['GET', 'PATCH', 'POST', 'DELETE'])
+def get_trait(username, event_id, trait_id):
+    """Work with traits."""
 
-    return flask.jsonify(**res)
-
-@api.app.route('/api/v1/organizer/traits/<int:trait_id>/',
-                    methods=['DELETE'])
-def delete_trait(trait_id):
-    """Delete Traits."""
-    # DELETE request response.
-    tb = tables['traits_{}'.format(event_id)]
-    trait = db.session.query(tb).filter(tb.id==trait_id).first()
-    db.session.delete(trait)
-    db.session.commit()
-
-    return flask.jsonify("", 204)
-
-
-@api.app.route('/api/v1/organizer/traits/<int:trait_id>/',
-                    methods=['PATCH'])
-def patch_trait(trait_id):
-    """Patch Traits."""
-    # PATCH request response.
-    trait = tables['traits_{}'.format(event_id)].query.filter_by(id=trait_id).first()
-    # Make a query to Traits to update the appropriate information
-    form = flask.request.get_json()
-    trait.name = form["name"]
-    trait.question = form["question"]
-    trait.is_constraint = form["isConstraint"]
-    trait.form_type = form["formType"]
-    # If formType == 1, update Choices table
-    if form["formType"] == 1:
-        choices = db.session.query(tables['choices_{}'.format(event_id)]).filter(tables['choices_{}'.format(event_id)].trait_id==trait_id).all()
+    valid, username = check_username(username)
+    if not valid:
+        return username
+    method = flask.request.method
+    if method == 'GET':
+        # GET request response.
+        return flask.jsonify(**get_trait_helper(event_id, trait_id))
         
-        # react choices more than or equal to database choices
-        if len(form["context"]) >= len(choices):
-            for i in range(0, len(choices)):
-                choices[i].name = form["context"][i]
-            for i in range(len(choices), len(form["context"])):
-                choice = tables['choices_{}'.format(event_id)](name=form["context"][i], trait_id=trait_id)
-                db.session.add(choice)
+    elif method == 'PATCH':
+        # PATCH request response.
+        trait = tables['traits_{}'.format(event_id)].query.filter_by(id=trait_id).first()
+        # Make a query to Traits to update the appropriate information
+        form = flask.request.get_json()
+        trait.name = form["name"]
+        trait.question = form["question"]
+        trait.is_constraint = form["isConstraint"]
+        trait.form_type = form["formType"]
+        # If formType == 1, update Choices table
+        if form["formType"] == 1:
+            choices = db.session.query(tables['choices_{}'.format(event_id)]).filter(tables['choices_{}'.format(event_id)].trait_id==trait_id).all()
+            
+            # react choices more than or equal to database choices
+            if len(form["context"]) >= len(choices):
+                for i in range(0, len(choices)):
+                    choices[i].name = form["context"][i]
+                for i in range(len(choices), len(form["context"])):
+                    choice = tables['choices_{}'.format(event_id)](name=form["context"][i], trait_id=trait_id)
+                    db.session.add(choice)
 
-        # react choices less than database choices
-        else:
-            for i in range(0, len(form["context"])):
-                choices[i].name = form["context"][i] 
-            for i in range(len(form["context"]), len(choices)):
-                choice = choices[i]
-                db.session.delete(choice)
-    db.session.commit()
-    # If formType == 2, update MasterTimeRange table
+            # react choices less than database choices
+            else:
+                for i in range(0, len(form["context"])):
+                    choices[i].name = form["context"][i] 
+                for i in range(len(form["context"]), len(choices)):
+                    choice = choices[i]
+                    db.session.delete(choice)
+        db.session.commit()
+        # If formType == 2, update MasterTimeRange table
 
-    return flask.jsonify("", 200)
+        return flask.jsonify("", 200)
 
+    elif method == 'DELETE':
+        tb = tables['traits_{}'.format(event_id)]
+        trait = db.session.query(tb).filter(tb.id==trait_id).first()
+        db.session.delete(trait)
+        db.session.commit()
 
-@api.app.route('/api/v1/organizer/traits/',
-                    methods=['POST'])
-def post_trait():
-    """Post Traits."""
-    # POST request response.
-    trait = tables['traits_{}'.format(event_id)]()
-    db.session.add(trait)
-    db.session.commit()
-
-    res = {
-        'id': trait.id
-    }
-
-    return flask.jsonify(**res)
+        return flask.jsonify("", 204)
 
 
-@api.app.route('/api/v1/member/traits/<int:trait_id>/',
+@api.app.route('/api/v1/organizer/<username>/events/<event_id>/traits/', methods=['GET', 'POST'])
+def get_traits(username, event_id):
+    valid, username = check_username(username)
+    if not valid:
+        return username
+    method = flask.request.method
+    if method == 'GET':
+        return get_trait_id(event_id)
+    elif method == 'POST':
+        trait = tables['traits_{}'.format(event_id)]()
+        db.session.add(trait)
+        db.session.commit()
+        return flask.jsonify(**{'id': trait.id})
+
+
+@api.app.route('/api/v1/member/<event_id>/traits/<int:trait_id>/',
                     methods=['GET'])
-def member_get_trait(trait_id):
+def member_get_trait(event_id, trait_id):
     """Get Traits."""
     res = get_trait_helper(trait_id)
     del res['isConstraint']
@@ -130,10 +121,10 @@ def member_get_trait(trait_id):
     return flask.jsonify(**res)
 
 
-@api.app.route('/api/v1/organizer/traits/', methods=['GET'])
-@api.app.route('/api/v1/member/traits/', methods=['GET'])
-@api.app.route('/api/v1/traits/', methods=['GET'])
-def get_trait_id():
+@api.app.route('/api/v1/organizer/<event_id>/traits/', methods=['GET'])
+@api.app.route('/api/v1/member/<event_id>/traits/', methods=['GET'])
+@api.app.route('/api/v1/<event_id>/traits/', methods=['GET'])
+def get_trait_id(event_id):
     """Get Trait ids."""
     # Make a query to get all the traits
     query_res = db.session.query(tables['traits_{}'.format(event_id)].id).all()

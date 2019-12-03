@@ -30,7 +30,7 @@ class SubmitModal extends React.Component {
 
                 </ModalBody>
                 <ModalFooter>
-                    <Button onClick={this.props.cancel}>
+                    <Button onClick={() => {this.setState({ copied: false }); this.props.cancel()}}>
                         Cancel
                     </Button>
                     <Button color="primary" onClick={this.props.submit}>

@@ -82,6 +82,7 @@ class Traits extends React.Component {
                 body: JSON.stringify({}),
             })
                 .then((response) => {
+                    console.log(response);
                     if (!response.ok) throw Error(response.statusText);
                     return response.json()
                 })

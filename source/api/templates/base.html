@@ -1,13 +1,18 @@
+{% from "macros.html" import declare with context %}
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>{% block title %}{% endblock %} MWFGO</title>
+        <title>{{ title }}{% block title %}{% endblock %} MWFGO</title>
         <link rel="stylesheet" type="text/css" href="/static/style/style.css">
     </head>
     <body class="background">
         {% include "heading.html" %}
 
-        {% block variables %}{% endblock %}
+        {% block variables %}
+            {{ declare("event_id", event_id) }}
+            {{ declare("username", username) }}
+        {% endblock %}
 
         <div id="reactEntry"></div>
         <script 
@@ -16,7 +21,7 @@
         </script>
 
         {% block content %}{% endblock %}
-        
+
         <div class="footer"></div>
     </body>
 </html>
