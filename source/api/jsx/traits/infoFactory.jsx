@@ -8,6 +8,9 @@ function InfoFactory(props) {
         // return (<div>hi</div>);
         return (<TextInfo props={props} />);
     }
+    if (props.formType - 2 === 0) {
+        return (<TimeInfo props={props} />);
+    }
     if (props.formType - 1 === 0) {
         return (<ChoiceInfo props={props} />);
     }

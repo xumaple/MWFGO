@@ -4,7 +4,7 @@ import { Button } from 'reactstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Choice from './choice';
 
-class TextInfo extends React.Component {
+class ChoiceInfo extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -126,7 +126,7 @@ class TextInfo extends React.Component {
     }
 }
 
-TextInfo.propTypes = {
+ChoiceInfo.propTypes = {
     props: PropTypes.shape({
         role: PropTypes.string.isRequired,
         setContext: PropTypes.func.isRequired,
@@ -136,4 +136,4 @@ TextInfo.propTypes = {
     }).isRequired,
 };
 
-export default TextInfo;
+export default ChoiceInfo;
