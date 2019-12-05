@@ -1,7 +1,7 @@
 import flask
 import api
 import os, sys
-from api.model import db, tables, Organizers, Event
+from api.model import db, tables
 from api.views.accounts import check_username
 #sys.path.insert(0, "/api/model.py")
 #from model import db, Traits
@@ -41,8 +41,8 @@ def get_trait_helper(event_id, trait_id):
         'context': context # TODO
     }
 
-@api.app.route('/api/v1/organizer/<username>/events/<event_id>/traits/<int:trait_id>/',
-                    methods=['GET', 'PATCH', 'POST', 'DELETE'])
+@api.app.route('/api/v1/organizer/<username>/events/<event_id>/configure/traits/<trait_id>/',
+                    methods=['GET', 'PATCH', 'DELETE'])
 def get_trait(username, event_id, trait_id):
     """Work with traits."""
 
@@ -96,14 +96,14 @@ def get_trait(username, event_id, trait_id):
         return flask.jsonify("", 204)
 
 
-@api.app.route('/api/v1/organizer/<username>/events/<event_id>/traits/', methods=['GET', 'POST'])
+@api.app.route('/api/v1/organizer/<username>/events/<event_id>/configure/traits/', methods=['GET', 'POST'])
 def get_traits(username, event_id):
     valid, username = check_username(username)
     if not valid:
         return username
     method = flask.request.method
     if method == 'GET':
-        return get_trait_id(event_id)
+        return get_trait_ids(event_id)
     elif method == 'POST':
         trait = tables['traits_{}'.format(event_id)]()
         db.session.add(trait)
@@ -111,26 +111,26 @@ def get_traits(username, event_id):
         return flask.jsonify(**{'id': trait.id})
 
 
-@api.app.route('/api/v1/member/<event_id>/traits/<int:trait_id>/',
+@api.app.route('/api/v1/member/<event_id>/<member_id>/traits/<trait_id>/',
                     methods=['GET'])
-def member_get_trait(event_id, trait_id):
+def member_get_trait(event_id, member_id, trait_id):
     """Get Traits."""
-    res = get_trait_helper(trait_id)
+    res = get_trait_helper(event_id, trait_id)
     del res['isConstraint']
 
     return flask.jsonify(**res)
 
 
-@api.app.route('/api/v1/organizer/<event_id>/traits/', methods=['GET'])
-@api.app.route('/api/v1/member/<event_id>/traits/', methods=['GET'])
-@api.app.route('/api/v1/<event_id>/traits/', methods=['GET'])
-def get_trait_id(event_id):
+# @api.app.route('/api/v1/organizer/<event_id>/configure/traits/', methods=['GET'])
+@api.app.route('/api/v1/member/<event_id>/<member_id>/traits/', methods=['GET'])
+# @api.app.route('/api/v1/<event_id>/traits/', methods=['GET'])
+def get_trait_ids(event_id, member_id=None):
     """Get Trait ids."""
     # Make a query to get all the traits
-    query_res = db.session.query(tables['traits_{}'.format(event_id)].id).all()
+    query_res = db.session.query(tables['traits_{}'.format(event_id)].id).one()
     trait_ids = []
     for trait in query_res:
-        trait_ids.append(trait[0])
+        trait_ids.append(trait)
     trait_ids.sort()
 
     res = {

@@ -4,31 +4,13 @@ import os, sys
 from api.model import db, tables
 from api.model.utils import HASH_LENGTH, update_row, generate_salted_hash
 
-@api.app.route('/api/v1/member/<event_id>/', methods = ['GET'])
-def get_member_form(event_id):
-    # Set member_id (fix with correct data later) TODO
-    hash = flask.request.args.get('hash')
-    print(hash)
-    import pprint
-    pprint.pprint(tables)
-    if hash is None:
-        result = { 'open': True }
-    else:
-        # Hit the members table for the list of traits
-        person =  db.session.query(tables["members_{}".format(event_id)]).filter_by(id=hash).one().__dict__
-        name = person['name']
-        columns = [column.name for column in tables['members_{}'.format(event_id)].__table__.columns][2:]
-        context = { 'name': name,
-                    'answers': [person[column] for column in columns] }
-        return flask.jsonify(**context)
-
-    # Return the answers for each trait
-    pprint.pprint(result)
-    return flask.jsonify(**result)
-
-@api.app.route('/api/v1/member/<event_id>/', methods = ['POST'])
+@api.app.route('/api/v1/member/<event_id>/', methods = ['GET', 'POST'])
 def post_member_form(event_id):
     # Create an entry in the members table for this member with all the data
+    if flask.request.method == 'GET':
+        return flask.jsonify(**{
+            'open': tables.get('members_{}'.format(event_id)) is not None
+        })
     req_data = flask.request.get_json()
     members_tb = tables['members_{}'.format(event_id)]
     # Add a new member 
@@ -41,19 +23,31 @@ def post_member_form(event_id):
     
     return flask.redirect(flask.url_for('show_member_survey', event_id=event_id, member_id=hashed_name))
 
-@api.app.route('/api/v1/member/<event_id>/', methods = ['PATCH'])
-def patch_member_form(event_id):
-    # Find current entry and update it
-    req_data = flask.request.get_json()
-    # Get the member id
-    member_id = req_data['hash']
-    member = db.session.query(tables["members_{}".format(event_id)]).filter_by(id=member_id).one()
+@api.app.route('/api/v1/member/<event_id>/<member_id>/', methods = ['GET', 'PATCH'])
+def get_member_form(event_id, member_id):
+    if flask.request.method == 'GET':
+        # Hit the members table for the list of traits
+        person =  db.session.query(tables["members_{}".format(event_id)]).filter_by(id=member_id).one().__dict__
+        name = person['name']
+        columns = [column.name for column in tables['members_{}'.format(event_id)].__table__.columns][2:]
+        context = { 
+            'name': name,
+            'answers': [person[column] for column in columns] 
+        }
+    else:
+        # PATCH
+        # Find current entry and update it
+        req_data = flask.request.get_json()
+        # Get the member id
+        member = db.session.query(tables["members_{}".format(event_id)]).filter_by(id=member_id).one()
 
-    col_names = tables["members_{}".format(event_id)].__table__.columns._data.keys()
-    # Using data from req_data, update the values of member
-    update_row(member, col_names, req_data['answers'])
-    db.session.commit()
+        col_names = tables["members_{}".format(event_id)].__table__.columns._data.keys()
+        # Using data from req_data, update the values of member
+        update_row(member, col_names, req_data['answers'])
+        db.session.commit()
 
-    result = { 'url': flask.url_for('show_member', event_id=event_id)}
-    return flask.jsonify(**result)
-    # return flask.redirect(flask.url_for('show_thankyou'))
+        context = { 'url': flask.url_for('show_member', event_id=event_id)}
+
+    # Return the answers for each trait
+    return flask.jsonify(**context)
+

@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import { Button } from 'reactstrap';
 import SubmitModal from '../utility/submitModal'
@@ -20,7 +21,7 @@ class Member extends React.Component {
     }
 
     componentDidMount() {
-        fetch(this.props.url.concat('?hash=', this.props.hash), {
+        fetch(this.props.url, {
         })
             .then((response) => {
                 if (!response.ok) throw Error(response.statusText);
@@ -50,7 +51,7 @@ class Member extends React.Component {
             method: 'patch',
             credentials: 'same-origin',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ hash: this.props.hash, answers: this.state.answers }),
+            body: JSON.stringify({ answers: this.state.answers }),
         })
             .then((response) => {
                 if (!response.ok) throw Error(response.statusText);
@@ -71,8 +72,7 @@ class Member extends React.Component {
             // .catch(error => console.log(error));
     }
 
-    render() {
-        const link='localhost:8000/member/'.concat(this.props.hash, '/') // TODO how to get rid of hardcode?
+    render() { // TODO how to get rid of hardcode?
         return(
             <div>
                 <div className='title'>
@@ -82,7 +82,6 @@ class Member extends React.Component {
                 </div>
                 <Traits 
                     role='member'
-                    hash={this.props.hash}
                     url={this.props.url.concat('traits/')}
                     setAnswer={this.setAnswer}
                     getAnswer={this.getAnswer}
@@ -96,7 +95,7 @@ class Member extends React.Component {
                     show={this.state.showModal}
                     cancel={() => { this.setState({ showModal: false })}}
                     submit={this.submit}
-                    link={link}
+                    link={'localhost:8000'.concat(this.props.source)}
                 />
             </div>
         );
@@ -105,7 +104,21 @@ class Member extends React.Component {
 
 Member.propTypes = {
     url: PropTypes.string.isRequired,
-    hash: PropTypes.string.isRequired,
+    source: PropTypes.string.isRequired,
 };
 
 export default Member;
+
+const member = '/member/'.concat(
+    document.getElementById('event_id').textContent, 
+    '/',
+    document.getElementById('hash').textContent,
+    '/',
+)
+ReactDOM.render(
+    <Member
+        url={'/api/v1'.concat(member)}
+        source={member}
+    />, document.getElementById('reactEntry')
+);
+
