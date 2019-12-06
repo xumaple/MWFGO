@@ -127,7 +127,7 @@ def member_get_trait(event_id, member_id, trait_id):
 def get_trait_ids(event_id, member_id=None):
     """Get Trait ids."""
     # Make a query to get all the traits
-    query_res = db.session.query(tables['traits_{}'.format(event_id)].id).one()
+    query_res = db.session.query(tables['traits_{}'.format(event_id)].id).all()
     trait_ids = []
     for trait in query_res:
         trait_ids.append(trait)
