@@ -3,6 +3,8 @@ import api
 import os, sys
 from api.model import db, tables
 from api.views.accounts import check_username
+from datetime import datetime
+
 #sys.path.insert(0, "/api/model.py")
 #from model import db, Traits
 #from model import tables
@@ -22,14 +24,46 @@ def get_trait_helper(event_id, trait_id):
             context.append(choice.name)
     # Form is Time Range TODO
     elif form_type == 2:
+        context = {}
         # Make a query for MasterTimeRange with trait_id
-        p, q = repr(query_result["context"]).split('.')
-        begin = int(p)
-        end = int(q)
-        context = {
-            'begin': begin,
-            'end': end
+        # trait = db.session.query(tables['traits_{}'.format(event_id)]).filter_by(trait_id=trait_id).first()
+        # if trait.context >= 0:
+        #     time_range = str(trait.context).split('.')
+        #     begin_date_time = int(time_range[0])
+        #     end_date_time = int(time_range[1])
+        #     begin_dt = datetime.fromtimestamp(begin_date_time*60)
+        #     end_dt = datetime.fromtimestamp(end_date_time*60)
+
+        #     begin = {}
+        #     begin["year"] = begin_dt.year
+        #     begin["month"] = begin_dt.month
+        #     begin["day"] = begin_dt.day
+        #     begin["hour"] = begin_dt.hour
+        #     begin["minute"] = begin_dt.minute
+
+        #     end = {}
+        #     end["year"] = end_dt.year
+        #     end["month"] = end_dt.month
+        #     end["day"] = end_dt.day
+        #     end["hour"] = end_dt.hour
+        #     end["minute"] = end_dt.minute
+
+        #     context["begin"] = begin
+        #     context["end"] = end
+        context["begin"] = {
+            "year": 2019,
+            "month": 11,
+            "day": 20,
+            "hour": 12,
+            "minute": 23
         }
+        context["end"] = {
+            "year": 2020,
+            "month": 11,
+            "day": 20,
+            "hour": 12,
+            "minute": 23
+        }       
 
     # Set id, name, isConstraint, formType, and context object
     return {

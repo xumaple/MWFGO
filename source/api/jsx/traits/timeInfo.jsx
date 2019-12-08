@@ -1,199 +1,291 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import TextBox from '../utility/textBox';
+// import React from 'react';
+// import PropTypes from 'prop-types';
+// import DatePicker from "react-datepicker";
+// import "react-datepicker/dist/react-datepicker.css";
 
-class TimeInfo extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            role: props.props.role,
-            setContext: props.props.setContext, // Calls setContext everytime context is updated
-            getContext: props.props.getContext, // Calls getContext in componentDidMount
-            time: {"begin": new Date(), "end": new Date()},
-            answer: {"begin": new Date(), "end": new Date()},
-        }
+// class TimeInfo extends React.Component {
+//     constructor(props) {
+//         super(props);
+//         this.state = {
+//             role: props.props.role,
+//             setContext: props.props.setContext, // Calls setContext everytime context is updated
+//             getContext: props.props.getContext, // Calls getContext in componentDidMount
+//             time: {"begin": null, "end": null},
+//             answer: {"begin": null, "end": null},
+//             date: null, // TODO: for testing
+//         }
 
-        this.editAnswer = this.editAnswer.bind(this);
+//         this.convert_dict_to_dt = this.convert_dict_to_dt.bind(this);
+//         this.convert_context_to_time = this.convert_context_to_time.bind(this);
+//         this.convert_dt_to_dict = this.convert_dt_to_dict.bind(this);
+//         this.convert_time_to_context = this.convert_time_to_context.bind(this);
 
-        this.renderMember = this.renderMember.bind(this);
-        this.renderLeader = this.renderLeader.bind(this);
-        this.renderOrganizer = this.renderOrganizer.bind(this);
-    }
+//         this.setContextHelper = this.setContextHelper.bind(this);
 
-    componentDidMount() {
-        if (this.state.role === 'member' || this.state.role === 'leader') {
-            this.setState({answer: this.state.getAnswer()});
-        }
-    }
+//         this.editBegin = this.editBegin.bind(this);
+//         this.editEnd = this.editEnd.bind(this);
 
-    setContextHelper(newTime) {
-        this.setState({ time: newTime, });
-        this.state.setContext(newTime);
-    }
+//         this.setAnswer = this.setAnswer.bind(this);
+//         this.editBeginAnswer = this.editBeginAnswer.bind(this);
+//         this.editEndAnswer = this.editEndAnswer.bind(this);
 
-    editBegin(date) {
-        newTime = {};
-        newTime["end"] = this.state.time["end"];
-        newTime["begin"] = date;
-        this.setContextHelper(newTime);
-    }
+//         this.renderMember = this.renderMember.bind(this);
+//         this.renderLeader = this.renderLeader.bind(this);
+//         this.renderOrganizer = this.renderOrganizer.bind(this);
 
-    editEnd(date) {
-        newTime = {};
-        newTime["end"] = date;
-        newTime["begin"] = this.state.time["begin"];
-        this.setContextHelper(newTime);
-    }
+//         this.setStartDate = this.setStartDate.bind(this);
+//     }
 
-    setAnswer(newAnswer) {
-        this.setState({ answer: newAnswer });
-        this.props.props.setAnswer(newAnswer);
-    }
+//     convert_dict_to_dt(dict) {
+//         let date = new Date();
+//         date.setFullYear(dict["year"]);
+//         date.setMonth(dict["month"]);
+//         date.setDate(dict["day"]);
+//         date.setHours(dict["hour"]);
+//         date.setMinutes(dict["minute"]);
+        
+//         return date;
+//     }
 
-    editBeginAnswer(date) {
-        newAnswer = {};
-        newAnswer["end"] = this.state.answer["end"];
-        newAnswer["begin"] = date;
-        this.setContextHelper(newAnswer);
-    }
+//     convert_context_to_time(context) {
+//         let begin = null;
+//         let end = null;
+//         if("begin" in context && "end" in context){
+//             begin = convert_dict_to_dt(context["begin"]);
+//             end = convert_dict_to_dt(context["end"]);
+//         }
+        
+//         return {
+//             "begin": begin,
+//             "end": end
+//         };
+//     }
 
-    editEndAnswer(date) {
-        newAnswer = {};
-        newAnswer["end"] = date;
-        newAnswer["begin"] = this.state.answer["begin"];
-        this.setContextHelper(newAnswer);
-    }
+//     convert_dt_to_dict(dt) {
+//         return {
+//             "year": dt.getFullYear(),
+//             "month": dt.getMonth(),
+//             "day": dt.getDate(),
+//             "hour": dt.getHours(),
+//             "minute": dt.getMinutes()
+//         };
+//     }
 
-    editAnswer(newAnswer) {
-        this.setState({ answer: newAnswer });
-        this.state.setAnswer(newAnswer);
-    }
+//     convert_time_to_context(time) {
+//         let begin = null;
+//         let end = null;
+//         if(time["begin"] !== null && time["end"] !== null){
+//             begin = this.convert_dt_to_dict(time["begin"]);
+//             end = this.convert_dt_to_dict(time["end"]);
+//         }
+//         return {
+//             "begin": begin,
+//             "end": end
+//         };
 
-    renderMember() {
-        if (this.state.role === 'member') {
+//     }
 
-            begin = this.state.time["begin"];
-            minDate = new Date();
-            minDate.setFullYear(begin.getFullYear())
-            minDate.setMonth(begin.getMonth());
-            minDate.setDate(begin.getDate());
-            minTime = new Date();
-            minTime.setHours(begin.getHours());
-            minTime.setMinutes(begin.getMinutes());
+//     componentDidMount() {
+//         let context = this.state.getContext(); 
+//         if (this.props.props.getAnswer) {
+//             let answer = this.convert_context_to_time(this.props.props.getAnswer());
+//             this.setState({ answer: answer });
+//         }
+//         if (context !== undefined && context !== null) {
+//             let time = this.convert_context_to_time(this.state.getContext());
+//             this.setState({ time: time, });
+//         }
+//     }
 
-            end = this.state.time["end"];
-            maxDate = new Date();
-            maxDate.setFullYear(end.getFullYear())
-            maxDate.setMonth(end.getMonth());
-            maxDate.setDate(end.getDate());
-            maxTime = new Date();
-            maxTime.setHours(end.getHours());
-            maxTime.setMinutes(end.getMinutes());
-            return (
-                <div>
-                    Minimum Date/Time: 
-                    <DatePicker
-                        selected={this.state.answer["begin"]}
-                        onChange={date => this.editBeginAnswer(date)}
-                        showTimeSelect
-                        minDate={minDate}
-                        minTime={minTime}
-                        dateFormat="MMMM d, yyyy h:mm aa"
-                        showDisabledMonthNavigation
-                    />
-                    Maximum Date/Time: 
-                    <DatePicker
-                        selected={this.state.answer["end"]}
-                        onChange={date => this.editEndAnswer(date)}
-                        showTimeSelect
-                        maxDate={maxDate}
-                        maxTime={maxTime}
-                        dateFormat="MMMM d, yyyy h:mm aa"
-                        showDisabledMonthNavigation
-                    />
-                </div>
-            );
-        }
-        else return '';
-    }
+//     setContextHelper(newTime) {
+//         this.setState({ time: newTime, });
+//         let context = convert_time_to_context(newTime);
 
-    renderLeader() {
-        return '';
-    }
+//         this.state.setContext(context);
+//     }
 
-    renderOrganizer() {
-        if (this.state.role === 'organizer') {
-            return (
-                <div>
-                    Minimum Date/Time: 
-                    <DatePicker
-                        selected={this.state.time["begin"]}
-                        onChange={date => this.editBegin(date)}
-                        showTimeSelect
-                        timeFormat="HH:mm"
-                        timeIntervals={15}
-                        timeCaption="Time"
-                        dateFormat="MMMM d, yyyy h:mm aa"
-                        showDisabledMonthNavigation
-                    />
-                    Maximum Date/Time: 
-                    <DatePicker
-                        selected={this.state.time["end"]}
-                        onChange={date => this.editEnd(date)}
-                        showTimeSelect
-                        timeFormat="HH:mm"
-                        timeIntervals={15}
-                        timeCaption="Time"
-                        dateFormat="MMMM d, yyyy h:mm aa"
-                        showDisabledMonthNavigation
-                    />
-                </div>
-            );
-        }
-        else return '';
-    }
+//     editBegin(date) {
+//         let newTime = {};
+//         newTime["end"] = this.state.time["end"];
+//         newTime["begin"] = date;
+//         this.setContextHelper(newTime);
+//     }
+
+//     editEnd(date) {
+//         let newTime = {};
+//         newTime["end"] = date;
+//         newTime["begin"] = this.state.time["begin"];
+//         this.setContextHelper(newTime);
+//     }
+
+//     setAnswer(newAnswer) {
+//         this.setState({ answer: newAnswer, });
+//         let answer = convert_time_to_context(newAnswer);
+
+//         this.props.props.setAnswer(answer);
+//     }
+
+//     editBeginAnswer(date) {
+//         let newAnswer = {};
+//         newAnswer["end"] = this.state.answer["end"];
+//         newAnswer["begin"] = date;
+//         this.setAnswer(newAnswer);
+//     }
+
+//     editEndAnswer(date) {
+//         let newAnswer = {};
+//         newAnswer["end"] = date;
+//         newAnswer["begin"] = this.state.answer["begin"];
+//         this.setAnswer(newAnswer);
+//     }
+
+//     renderMember() {
+//         if (this.state.role === 'member') {
+
+//             let begin = this.state.time["begin"];
+//             let minDate = new Date();
+//             minDate.setFullYear(begin.getFullYear());
+//             minDate.setMonth(begin.getMonth());
+//             minDate.setDate(begin.getDate());
+//             let minTime = new Date();
+//             minTime.setHours(begin.getHours());
+//             minTime.setMinutes(begin.getMinutes());
+
+//             let end = this.state.time["end"];
+//             let maxDate = new Date();
+//             maxDate.setFullYear(end.getFullYear());
+//             maxDate.setMonth(end.getMonth());
+//             maxDate.setDate(end.getDate());
+//             let maxTime = new Date();
+//             maxTime.setHours(end.getHours());
+//             maxTime.setMinutes(end.getMinutes());
+
+//             return (
+//                 <div>
+//                     Minimum Date/Time: 
+//                     <DatePicker
+//                         selected={this.state.answer["begin"]}
+//                         onChange={date => this.editBeginAnswer(date)}
+//                         showTimeSelect
+//                         minDate={minDate}
+//                         minTime={minTime}
+//                         dateFormat="MMMM d, yyyy h:mm aa"
+//                         showDisabledMonthNavigation
+//                     />
+//                     Maximum Date/Time: 
+//                     <DatePicker
+//                         selected={this.state.answer["end"]}
+//                         onChange={date => this.editEndAnswer(date)}
+//                         showTimeSelect
+//                         maxDate={maxDate}
+//                         maxTime={maxTime}
+//                         dateFormat="MMMM d, yyyy h:mm aa"
+//                         showDisabledMonthNavigation
+//                     />
+//                 </div>
+//             );
+//         }
+//         else return '';
+//     }
+
+//     renderLeader() {
+//         return '';
+//     }
+
+//     renderOrganizer() {
+//         if (this.state.role === 'organizer') {
+//             return (
+//                 <div>
+//                     Minimum Date/Time: 
+//                     <DatePicker
+//                         selected={this.state.time["begin"]}
+//                         onChange={date => this.editBegin(date)}
+//                         showTimeSelect
+//                         timeFormat="HH:mm"
+//                         timeIntervals={15}
+//                         timeCaption="Time"
+//                         dateFormat="MMMM d, yyyy h:mm aa"
+//                         showDisabledMonthNavigation
+//                     />
+//                     Maximum Date/Time: 
+//                     <DatePicker
+//                         selected={this.state.time["end"]}
+//                         onChange={date => this.editEnd(date)}
+//                         showTimeSelect
+//                         timeFormat="HH:mm"
+//                         timeIntervals={15}
+//                         timeCaption="Time"
+//                         dateFormat="MMMM d, yyyy h:mm aa"
+//                         showDisabledMonthNavigation
+//                     />
+//                 </div>
+//             );
+//         }
+//         else return '';
+//     }
     
-    render() {
-        return (
-            <div>
-                {this.renderOrganizer()}
-                {this.renderMember()}
-                {this.renderLeader()}
-            </div>
-        );
-    }
-}
+//     // just for testing
+//     setStartDate(date) {
+//         this.setState({
+//             date: date,
+//         });
+//     }
 
-TimeInfo.propTypes = {
-    props: PropTypes.shape({
-        role: PropTypes.string.isRequired,
-        getAnswer: PropTypes.func,
-        setAnswer: PropTypes.func,
-    }).isRequired,
-};
+//     render() {
+//         console.log(React.version)
+//         return (
+//             <div>
+//                 {/* {this.renderOrganizer()}
+//                 {this.renderMember()}
+//                 {this.renderLeader()} */}
+//                 <DatePicker selected={this.state.date} onChange={date => setStartDate(date)} />
+//             </div>
+//         );
+//     }
+// }
 
-export default TimeInfo;
+// TimeInfo.propTypes = {
+//     props: PropTypes.shape({
+//         role: PropTypes.string.isRequired,
+//         getAnswer: PropTypes.func,
+//         setAnswer: PropTypes.func,
+//     }).isRequired,
+// };
 
+// export default TimeInfo;
 
+import React from "react";
+import DatePicker from "react-datepicker";
+ 
+import "react-datepicker/dist/react-datepicker.css";
+ 
+// CSS Modules, react-datepicker-cssmodules.css
+// import 'react-datepicker/dist/react-datepicker-cssmodules.css';
+ 
+class TimeInfo extends React.Component {
 
-
-
-
-() => {
-    const [startDate, setStartDate] = useState(
-      setHours(setMinutes(new Date(), 30), 17)
-    );
+  constructor(props) {
+      super(props);
+      this.state = {
+        startDate: new Date()
+      };
+      this.handleChange = this.handleChange.bind(this);
+  }
+ 
+  handleChange(date) {
+    this.setState({
+      startDate: date
+    });
+  };
+ 
+  render() {
     return (
       <DatePicker
-        selected={startDate}
-        onChange={date => setStartDate(date)}
-        showTimeSelect
-        minTime={setHours(setMinutes(new Date(), 0), 17)}
-        maxTime={setHours(setMinutes(new Date(), 30), 20)}
-        minDate={new Date()}
-        maxDate={addDays(new Date(), 5)}
-        dateFormat="MMMM d, yyyy h:mm aa"
-        showDisabledMonthNavigation
+        selected={this.state.startDate}
+        onChange={date => this.handleChange(date)}
       />
     );
-  };
+  }
+}
+
+export default TimeInfo;

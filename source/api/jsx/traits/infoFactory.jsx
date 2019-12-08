@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import TextInfo from './textInfo'
 import ChoiceInfo from './choiceInfo'
+import TimeInfo from './timeInfo'
 
 function InfoFactory(props) {
     if (props.formType - 3 === 0) {
