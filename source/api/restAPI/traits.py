@@ -26,44 +26,50 @@ def get_trait_helper(event_id, trait_id):
     elif form_type == 2:
         context = {}
         # Make a query for MasterTimeRange with trait_id
-        # trait = db.session.query(tables['traits_{}'.format(event_id)]).filter_by(trait_id=trait_id).first()
-        # if trait.context >= 0:
-        #     time_range = str(trait.context).split('.')
-        #     begin_date_time = int(time_range[0])
-        #     end_date_time = int(time_range[1])
-        #     begin_dt = datetime.fromtimestamp(begin_date_time*60)
-        #     end_dt = datetime.fromtimestamp(end_date_time*60)
+        trait = db.session.query(tables['traits_{}'.format(event_id)]).filter_by(id=trait_id).first()
+        if trait.context != None and trait.context >= 0:
+            time_range = str(trait.context).split('.')
+            begin_date_time = int(time_range[0])
 
-        #     begin = {}
-        #     begin["year"] = begin_dt.year
-        #     begin["month"] = begin_dt.month
-        #     begin["day"] = begin_dt.day
-        #     begin["hour"] = begin_dt.hour
-        #     begin["minute"] = begin_dt.minute
+            tmp_str = time_range[1]
+            if len(tmp_str) < 8:
+                for i in range(0, 8 - len(tmp_str)):
+                    tmp_str = tmp_str + "0"
 
-        #     end = {}
-        #     end["year"] = end_dt.year
-        #     end["month"] = end_dt.month
-        #     end["day"] = end_dt.day
-        #     end["hour"] = end_dt.hour
-        #     end["minute"] = end_dt.minute
+            end_date_time = int(tmp_str)
+            begin_dt = datetime.fromtimestamp(begin_date_time*60)
+            end_dt = datetime.fromtimestamp(end_date_time*60)
 
-        #     context["begin"] = begin
-        #     context["end"] = end
-        context["begin"] = {
-            "year": 2019,
-            "month": 11,
-            "day": 20,
-            "hour": 12,
-            "minute": 23
-        }
-        context["end"] = {
-            "year": 2020,
-            "month": 11,
-            "day": 20,
-            "hour": 12,
-            "minute": 23
-        }       
+            begin = {}
+            begin["year"] = begin_dt.year
+            begin["month"] = begin_dt.month
+            begin["day"] = begin_dt.day
+            begin["hour"] = begin_dt.hour
+            begin["minute"] = begin_dt.minute
+
+            end = {}
+            end["year"] = end_dt.year
+            end["month"] = end_dt.month
+            end["day"] = end_dt.day
+            end["hour"] = end_dt.hour
+            end["minute"] = end_dt.minute
+
+            context["begin"] = begin
+            context["end"] = end
+        # context["begin"] = {
+        #     "year": 2019,
+        #     "month": 11,
+        #     "day": 20,
+        #     "hour": 12,
+        #     "minute": 23
+        # }
+        # context["end"] = {
+        #     "year": 2020,
+        #     "month": 11,
+        #     "day": 20,
+        #     "hour": 12,
+        #     "minute": 23
+        # }       
 
     # Set id, name, isConstraint, formType, and context object
     return {
@@ -116,8 +122,21 @@ def get_trait(username, event_id, trait_id):
                 for i in range(len(form["context"]), len(choices)):
                     choice = choices[i]
                     db.session.delete(choice)
-        db.session.commit()
+
         # If formType == 2, update MasterTimeRange table
+        if form["formType"] == 2:
+            epoch = datetime.utcfromtimestamp(0)
+
+            begin_date = form["context"]["begin"]
+            bdt = datetime(begin_date["year"], begin_date["month"], begin_date["day"], begin_date["hour"], begin_date["minute"])
+            begin_minutes = int((bdt - epoch).total_seconds()/60)
+
+            end_date = form["context"]["end"]
+            edt = datetime(end_date["year"], end_date["month"], end_date["day"], end_date["hour"], end_date["minute"])
+            end_minutes = int((edt - epoch).total_seconds()/60)
+            context = float(str(begin_minutes) + "." + str(end_minutes))
+            trait.context = context
+        db.session.commit()
 
         return flask.jsonify("", 200)
 
