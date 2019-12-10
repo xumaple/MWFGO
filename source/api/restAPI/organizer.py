@@ -6,6 +6,7 @@ from api.views.accounts import check_username
 # Connect c++ modules to python
 # from algorithm import GroupOrganizer
 
+
 @app.route('/api/v1/organizer/<username>/', methods= ['GET', 'POST', 'DELETE'])
 def get_events(username):
     valid, username = check_username(username)
@@ -68,3 +69,18 @@ def create_member_table(username, event_id):
     create_all()
 
     return flask.redirect('/thanks:)/')
+
+
+@app.route('/api/v1/organizer/<username>/events/<event_id>/review/submit/', methods=['GET'])
+def get_groups(username, event_id):
+    go = GroupOrganizer()
+    # Get all the traits and add them
+    trait_res = db.session.query(tables['traits_{}'.format(event_id)]).all()
+    trait_res[0]
+    # Get all the leaders and add them
+
+    # Get all the members and add them
+
+    # run the algorithm
+
+    # return all of the groups
