@@ -11,7 +11,6 @@ def show_organizer_home(username):
         'jsfile': 'organizer_bundle.js',
         'title': 'Organizer',
         'username': username,
-        'stage': 'configure',
     }
     return flask.render_template("organizer_index.html", **context)
 
@@ -22,8 +21,9 @@ def show_organizer_home(username):
 
 @app.route("/organizer/<username>/events/<event_id>/<stage>/")
 def show_organizer_event(username, event_id, stage):
+    print('hiiii', stage)
     VALID_STAGES = [
-        'configure', 'results',
+        'configure', 'review',
     ]
     valid, username = check_username(username)
     if not valid:

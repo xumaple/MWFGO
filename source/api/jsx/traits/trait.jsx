@@ -16,7 +16,6 @@ class Trait extends React.Component {
         this.state = {
             name: '',
             question: '',
-            id: props.id,
             isConstraint: false,
             formType: 0,
             showConstraintAlert: false,
@@ -115,7 +114,7 @@ class Trait extends React.Component {
             })
             .then(() => {
                 this.setState({ unsavedChanges: false, prevState: this.savePrevState() });
-                this.props.onSave(this.state.id);
+                this.props.onSave(this.props.id);
             })
             .catch(() => { this.setState({ showSaveErrorAlert: this.state.showSaveErrorAlert + 1, unsavedChanges: true }); });
     }
@@ -133,7 +132,7 @@ class Trait extends React.Component {
             })
             .catch(error => console.log(error));
 
-        this.props.onDelete(this.state.id); 
+        this.props.onDelete(this.props.id); 
     }
 
     savePrevState() {
@@ -181,8 +180,8 @@ class Trait extends React.Component {
                     <InfoFactory
                         formType={this.state.formType}
                         role={this.props.role}
-                        getAnswer={() => {return this.props.getAnswer(this.state.id);}}
-                        setAnswer={(answer) => {this.props.setAnswer(this.state.id, answer);}}
+                        getAnswer={() => {return this.props.getAnswer(this.props.id);}}
+                        setAnswer={(answer) => {this.props.setAnswer(this.props.id, answer);}}
                         getContext={this.getContext} 
                         setContext={this.setContext} 
                     />
@@ -202,11 +201,10 @@ class Trait extends React.Component {
                 if (this.state.unsavedChanges) {
                     this.update();
                 }
-                console.log(this.state.name);
                 return (
                     <div className='trait-summary'>
                         {this.state.name === '' ? <i>no name</i> : this.state.name} <b>{this.state.isConstraint ? 'Constraint' : ''}</b> <Button style={{float: 'right'}} onClick={(event) => {
-                            this.props.onEdit(this.state.id); 
+                            this.props.onEdit(this.props.id); 
                         }}>
                             Edit details
                         </Button>
@@ -270,7 +268,7 @@ class Trait extends React.Component {
                     </Button>
                     <Button onClick={(event) => { 
                         this.retrievePrevState();
-                        this.props.onSave(this.state.id);
+                        this.props.onSave(this.props.id);
                     }}>
                         Cancel
                     </Button>
