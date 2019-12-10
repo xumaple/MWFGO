@@ -5,9 +5,9 @@ import PropTypes from 'prop-types';
 import { Button } from 'reactstrap';
 import SubmitModal from '../../utility/submitModal'
 import EventName from './eventName'
+import { URL_RESULTS } from './event_review'
 
-
-// import Limiters from '../limiters/limiters';
+const URL_CONFIGURE = 'configure/'
 
 class Event extends React.Component {
     constructor(props) {
@@ -56,7 +56,7 @@ class Event extends React.Component {
                     show={this.state.showModal}
                     cancel={() => { this.setState({ showModal: false })}}
                     submit={this.openForms}
-                    link={'localhost:8000'.concat(this.props.source)}
+                    link={'localhost:8000'.concat(this.props.source, URL_CONFIGURE)}
                 />
             </div>
         );
@@ -74,11 +74,11 @@ const organizer = '/organizer/'.concat(
     document.getElementById('username').textContent,
     '/events/',
     document.getElementById('event_id').textContent, 
-    '/configure/',)
+    '/',)
 
 ReactDOM.render(
     <Event 
-        url={'/api/v1'.concat(organizer)}
+        url={'/api/v1'.concat(organizer, URL_CONFIGURE)}
         source={organizer}
     />, document.getElementById('reactEntry')
 );

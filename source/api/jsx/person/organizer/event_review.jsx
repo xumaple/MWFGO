@@ -6,7 +6,7 @@ import { Button } from 'reactstrap';
 import SubmitModal from '../../utility/submitModal'
 import EventName from './eventName'
 
-
+const URL_RESULTS = 'review/'
 // import Limiters from '../limiters/limiters';
 
 class Event extends React.Component {
@@ -52,7 +52,7 @@ class Event extends React.Component {
                     show={this.state.showModal}
                     cancel={() => { this.setState({ showModal: false })}}
                     submit={this.openForms}
-                    link={'localhost:8000'.concat(this.props.source)}
+                    link={'localhost:8000'.concat(this.props.source, URL_RESULTS)}
                 />
             </div>
         );
@@ -75,6 +75,6 @@ const organizer = '/organizer/'.concat(
 ReactDOM.render(
     <Event 
         url={'/api/v1'.concat(organizer)}
-        source={organizer.concat('configure/')}
+        source={organizer}
     />, document.getElementById('reactEntry')
 );

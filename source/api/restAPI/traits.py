@@ -3,6 +3,8 @@ import api
 import os, sys
 from api.model import db, tables
 from api.views.accounts import check_username
+from datetime import datetime
+
 #sys.path.insert(0, "/api/model.py")
 #from model import db, Traits
 #from model import tables
@@ -22,15 +24,41 @@ def get_trait_helper(event_id, trait_id):
             context.append(choice.name)
     # Form is Time Range TODO
     elif form_type == 2:
+        context = {}
         # Make a query for MasterTimeRange with trait_id
-        p, q = repr(query_result["context"]).split('.')
-        begin = int(p)
-        end = int(q)
-        context = {
-            'begin': begin,
-            'end': end
-        }
+        trait = db.session.query(tables['traits_{}'.format(event_id)]).filter_by(id=trait_id).first()
+        if trait.context != None and trait.context > 0:
+            time_range = str(trait.context).split('.')
+            begin_date_time = int(time_range[0])
 
+            tmp_str = time_range[1]
+            if len(tmp_str) < 8:
+                for i in range(0, 8 - len(tmp_str)):
+                    tmp_str = tmp_str + "0"
+
+            end_date_time = int(tmp_str)
+            begin_dt = datetime.fromtimestamp(begin_date_time*60)
+            end_dt = datetime.fromtimestamp(end_date_time*60)
+
+            begin = {}
+            begin["year"] = begin_dt.year
+            begin["month"] = begin_dt.month
+            begin["day"] = begin_dt.day
+            begin["hour"] = begin_dt.hour
+            begin["minute"] = begin_dt.minute
+
+            end = {}
+            end["year"] = end_dt.year
+            end["month"] = end_dt.month
+            end["day"] = end_dt.day
+            end["hour"] = end_dt.hour
+            end["minute"] = end_dt.minute
+
+            context["begin"] = begin
+            context["end"] = end
+        elif trait.context == 0:
+            context = None
+        
     # Set id, name, isConstraint, formType, and context object
     return {
         'id': query_result['id'],
@@ -82,8 +110,24 @@ def get_trait(username, event_id, trait_id):
                 for i in range(len(form["context"]), len(choices)):
                     choice = choices[i]
                     db.session.delete(choice)
-        db.session.commit()
+
         # If formType == 2, update MasterTimeRange table
+        if form["formType"] == 2:
+            epoch = datetime.utcfromtimestamp(0)
+            if not form["context"]:
+                trait.context = 0
+            else:
+                begin_date = form["context"]["begin"]
+                bdt = datetime(begin_date["year"], begin_date["month"], begin_date["day"], begin_date["hour"], begin_date["minute"])
+                begin_minutes = int((bdt - epoch).total_seconds()/60)
+
+                end_date = form["context"]["end"]
+                edt = datetime(end_date["year"], end_date["month"], end_date["day"], end_date["hour"], end_date["minute"])
+                end_minutes = int((edt - epoch).total_seconds()/60)
+                context = float(str(begin_minutes) + "." + str(end_minutes))
+                trait.context = context
+            
+        db.session.commit()
 
         return flask.jsonify("", 200)
 
@@ -128,9 +172,7 @@ def get_trait_ids(event_id, member_id=None):
     """Get Trait ids."""
     # Make a query to get all the traits
     query_res = db.session.query(tables['traits_{}'.format(event_id)].id).all()
-    trait_ids = []
-    for trait in query_res:
-        trait_ids.append(trait)
+    trait_ids = [trait[0] for trait in query_res]
     trait_ids.sort()
 
     res = {

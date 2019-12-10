@@ -88,8 +88,8 @@ class Index extends React.Component {
                         <EventPreview
                             id={id}
                             onDelete={this.handleDelete}
-                            url={this.props.url.concat('events/', id, '/configure/')}
-                            source={this.props.source.concat('events/', id, '/', this.props.stage, '/')}
+                            url={this.props.url.concat('events/', id, '/')}
+                            source={this.props.source.concat('events/', id, '/')}
                             key={id}
                         />
                     </div>
@@ -108,7 +108,6 @@ class Index extends React.Component {
 Index.propTypes = {
     url: PropTypes.string.isRequired,
     source: PropTypes.string.isRequired,
-    stage: PropTypes.string.isRequired,
 };
 
 export default Index;
@@ -119,6 +118,5 @@ ReactDOM.render(
     <Index 
         url={'/api/v1'.concat(organizer)}
         source={organizer}
-        stage={document.getElementById('stage').textContent}
     />, document.getElementById('reactEntry')
 );

@@ -1,4 +1,4 @@
-FROM mapoxu/mwfgobase:1.1.1
+FROM mapoxu/mwfgobase:1.1.1a
 
 COPY . /baseimg
 WORKDIR /baseimg
@@ -15,7 +15,7 @@ EXPOSE 8000
 #RUN cat api/js/member_bundle.js 
 
 CMD npm run dev
-#CMD export LC_ALL=C.UTF-8; \
+# CMD export LC_ALL=C.UTF-8; \
 #  export LANG=C.UTF-8; \
 #  export FLASK_DEBUG=True; \
 #  export FLASK_APP=api; \
