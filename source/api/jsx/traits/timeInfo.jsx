@@ -144,22 +144,26 @@ class TimeInfo extends React.Component {
 
             let begin = this.state.time["begin"];
             let minDate = new Date();
-            minDate.setFullYear(begin.getFullYear());
-            minDate.setMonth(begin.getMonth());
-            minDate.setDate(begin.getDate());
             let minTime = new Date();
-            minTime.setHours(begin.getHours());
-            minTime.setMinutes(begin.getMinutes());
+            if(this.state.time["begin"] !== null){
+                minDate.setFullYear(begin.getFullYear());
+                minDate.setMonth(begin.getMonth());
+                minDate.setDate(begin.getDate());
+                minTime.setHours(begin.getHours());
+                minTime.setMinutes(begin.getMinutes());
+            }
 
             let end = this.state.time["end"];
             let maxDate = new Date();
-            maxDate.setFullYear(end.getFullYear());
-            maxDate.setMonth(end.getMonth());
-            maxDate.setDate(end.getDate());
             let maxTime = new Date();
-            maxTime.setHours(end.getHours());
-            maxTime.setMinutes(end.getMinutes());
-
+            if(this.state.time["end"] !== null) {
+                maxDate.setFullYear(end.getFullYear());
+                maxDate.setMonth(end.getMonth());
+                maxDate.setDate(end.getDate());
+                maxTime.setHours(end.getHours());
+                maxTime.setMinutes(end.getMinutes());
+            }
+            
             return (
                 <div>
                     Minimum Date/Time: 
