@@ -225,8 +225,6 @@ void GroupOrganizer::genPerms()
             }
             
             // Check if we can add the person to the group
-            std::cout << groups[groupIndex]->getLeader()->getName() << std::endl;
-            std::cout << person->getName() << std::endl;
             if (!groups[groupIndex]->addIndividual(person, false))
             {
                 clearGroups();
@@ -247,13 +245,10 @@ void GroupOrganizer::genPerms()
 void GroupOrganizer::runAlgorithm()
 {
     assert(groups.empty());
-    std::cout << "Creating groups\n";
     createGroups();
-    std::cout << "PartA\n";
     partA();
     //partB();
     //partC();
-    std::cout << "GenPerms\n";
     genPerms();
 }
 

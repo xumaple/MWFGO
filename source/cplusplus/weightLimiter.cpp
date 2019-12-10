@@ -13,9 +13,7 @@ void WeightLimiter::cancelAdd() {
 bool WeightLimiter::canAddIndividual(Individual *ind) {
     calculateLastWeight(ind);
     // Removed currIndividuals().empty()
-    std::cout << "totalWeight: " << totalWeight << std::endl;
-    std::cout << "lastWeight: " << lastWeight << std::endl;
-    return (totalWeight + lastWeight) > WEIGHT_THRESHOLD;
+    return (totalWeight + lastWeight) / currIndividuals().size() > WEIGHT_THRESHOLD;
 }
 
 void WeightLimiter::addHelper(Individual *ind) {
@@ -29,7 +27,6 @@ void WeightLimiter::addHelper(Individual *ind) {
 void WeightLimiter::calculateLastWeight(Individual *ind) {
     lastWeight = 0;
     lastIndividual = ind;
-    std::cout << "currIndividuals size: " << currIndividuals().size() << std::endl;
     for (Individual *i: currIndividuals()) {
         lastWeight += ind->getDiff(i)->getWeight();
     }

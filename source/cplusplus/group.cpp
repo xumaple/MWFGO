@@ -23,7 +23,6 @@ Group::~Group()
 
 bool Group::addIndividual(Individual *ind, bool force) {
     for (auto limit = limiters.begin(); limit != limiters.end(); ++limit) {
-        std::cout << "Adding to limiter\n";
         //If we want to force add individual to group
         if (force) {
             (*limit)->forceAdd(ind);

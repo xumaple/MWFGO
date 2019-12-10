@@ -4,7 +4,6 @@
 #include <iostream>
 
 bool Limiter::addIndividual(Individual *ind) {
-    std::cout << "Checking if we can add " << ind->getName() << std::endl;
     if (!canAddIndividual(ind)) return false;
     
     addHelper(ind);
@@ -16,7 +15,6 @@ void Limiter::cancelAdd() {
 }
 
 void Limiter::forceAdd(Individual *ind) {
-    std::cout << "Force added: " << ind->getName() << std::endl;
     ++forceAdded;
     addHelper(ind);
 }
