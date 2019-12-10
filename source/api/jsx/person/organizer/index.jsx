@@ -1,10 +1,12 @@
 import React from 'react';
-import Event from './event';
+import ReactDOM from 'react-dom';
+import EventPreview from './eventPreview';
 import PropTypes from 'prop-types';
 import { Button, Alert } from 'reactstrap';
 import SubmitModal from '../../utility/submitModal'
 
 // import Limiters from '../limiters/limiters';
+
 
 class Index extends React.Component {
     constructor(props) {
@@ -12,12 +14,11 @@ class Index extends React.Component {
 
         this.state = { 
             events: [],
-            errorAlert: false
+            errorAlert: false,
         };
 
         this.newEvent = this.newEvent.bind(this);
         this.handleDelete = this.handleDelete.bind(this);
-        this.eventUrl = this.eventUrl.bind(this);
     }
 
     componentDidMount() {
@@ -44,7 +45,6 @@ class Index extends React.Component {
                 if (!response.redirected) {
                     throw Error("Did not redirect on submission");
                 }
-                console.log(response);
                 window.location.href = response.url;
             })
             .catch((error) => {
@@ -54,7 +54,6 @@ class Index extends React.Component {
     }
 
     handleDelete(id) {
-        console.log(id);
         fetch(this.props.url, {
             method: 'delete',
             credentials: 'same-origin', 
@@ -78,10 +77,6 @@ class Index extends React.Component {
             })
     }
 
-    eventUrl(url, id) {
-        return url.concat('events/', id, '/');
-    }
-
     render() {
         return(
             <div>
@@ -90,15 +85,11 @@ class Index extends React.Component {
                 </Alert>
                 {this.state.events.map((id) => (
                     <div>
-                        <Event
-                            url={this.eventUrl(this.props.url, id)}
-                            source={this.eventUrl(this.props.source, id)}
-                            preview = {
-                                {
-                                    id: id,
-                                    onDelete: this.handleDelete,
-                                }
-                            }
+                        <EventPreview
+                            id={id}
+                            onDelete={this.handleDelete}
+                            url={this.props.url.concat('events/', id, '/')}
+                            source={this.props.source.concat('events/', id, '/')}
                             key={id}
                         />
                     </div>
@@ -116,6 +107,16 @@ class Index extends React.Component {
 
 Index.propTypes = {
     url: PropTypes.string.isRequired,
+    source: PropTypes.string.isRequired,
 };
 
 export default Index;
+
+const organizer = '/organizer/'.concat(
+    document.getElementById('username').textContent, '/')
+ReactDOM.render(
+    <Index 
+        url={'/api/v1'.concat(organizer)}
+        source={organizer}
+    />, document.getElementById('reactEntry')
+);

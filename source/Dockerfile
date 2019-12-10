@@ -1,4 +1,4 @@
-FROM mapoxu/mwfgobase:1.1.1
+FROM mapoxu/mwfgobase:1.1.1a
 
 COPY . /baseimg
 WORKDIR /baseimg
@@ -6,9 +6,8 @@ WORKDIR /baseimg
 EXPOSE 8000
 
 #RUN make clean
-RUN export CPLUS_INCLUDE_PATH="$CPLUS_INCLUDE_PATH:/usr/include/python3.6m/"
-#; make test
-#RUN make
+#RUN export CPLUS_INCLUDE_PATH="$CPLUS_INCLUDE_PATH:/usr/include/python3.6m/"; make test
+#RUN export CPLUS_INCLUDE_PATH="$CPLUS_INCLUDE_PATH:/usr/include/python3.6m/"; make
 #RUN python3 hello.py
 
 #RUN npm run build
@@ -16,7 +15,7 @@ RUN export CPLUS_INCLUDE_PATH="$CPLUS_INCLUDE_PATH:/usr/include/python3.6m/"
 #RUN cat api/js/member_bundle.js 
 
 CMD npm run dev
-#CMD export LC_ALL=C.UTF-8; \
+# CMD export LC_ALL=C.UTF-8; \
 #  export LANG=C.UTF-8; \
 #  export FLASK_DEBUG=True; \
 #  export FLASK_APP=api; \

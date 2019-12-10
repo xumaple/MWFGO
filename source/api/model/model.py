@@ -4,6 +4,7 @@ from api import app, db_uri
 from flask_sqlalchemy import SQLAlchemy
 from flask_sqlalchemy.model import BindMetaMixin, Model
 from sqlalchemy.ext.declarative import DeclarativeMeta, declarative_base
+from enum import Enum
 
 class NoNameMeta(BindMetaMixin, DeclarativeMeta):
     pass
@@ -26,15 +27,20 @@ tables = {}
 #             self.__table__.drop(db.get_engine())
 #             self.deleted = True
 
+class EventPhase(Enum):
+    configure = 1
+    review = 2
+
 class Event(db.Model):
     __tablename__ = 'events'
 
     id = db.Column(db.Integer, primary_key=True, nullable=False)
     name = db.Column(db.String(256), nullable=False)
+    phase = db.Column(db.Enum(EventPhase), nullable=False)
     organizer_username = db.Column(db.String(256), db.ForeignKey('organizers.username'), nullable=False) # TODO: foreign key here
 
     def __repr__(self):
-        return f"event('{self.id}', '{self.name}', '{self.organizer_id}')"
+        return f"event('{self.id}', '{self.name}', '{self.organizer_username}')"
 tables["events"] = Event
 
 class Organizers(db.Model):

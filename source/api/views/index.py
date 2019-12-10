@@ -12,24 +12,29 @@ def show_organizer_home(username):
         'title': 'Organizer',
         'username': username,
     }
-    print('hi')
-    return flask.render_template("base.html", **context)
+    return flask.render_template("organizer_index.html", **context)
 
 # @app.route("/leader/")
 # def show_driver():
 #     context = {'greeting': 'hello'}
 #     return flask.render_template("leader.html", **context)
 
-@app.route("/organizer/<username>/events/<event_id>/")
-def show_organizer_event(username, event_id):
+@app.route("/organizer/<username>/events/<event_id>/<stage>/")
+def show_organizer_event(username, event_id, stage):
+    print('hiiii', stage)
+    VALID_STAGES = [
+        'configure', 'review',
+    ]
     valid, username = check_username(username)
     if not valid:
         return username
+    if stage not in VALID_STAGES:
+        return flask.abort(404)
     context = {
-        'jsfile': 'event_bundle.js',
+        'jsfile': 'event_{}_bundle.js'.format(stage),
         'title': 'Organizer',
         'event_id': event_id,
-        'username': username,
+        'username': username
     }
     return flask.render_template("base.html", **context)
     
@@ -44,6 +49,5 @@ def show_member_survey(event_id, member_id):
     return flask.render_template("member.html", **context)
 
 @app.route("/thanks:)/")
-def show_thankyou():
-    context = {}
-    return flask.render_template("thanks.html", **context)
+def show_thank_you():
+    return flask.render_template("thanks.html")

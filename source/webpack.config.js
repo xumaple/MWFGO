@@ -2,12 +2,13 @@ const path = require('path');
 
 module.exports = {
   entry: {
-    member: './api/jsx/entry/member.jsx',
+    member: './api/jsx/person/member.jsx',
     member_intro: './api/jsx/entry/member_intro.jsx',
     // leader: './api/jsx/entry/leader.jsx',
     // leader_intro: './api/jsx/entry/leader_intro.jsx',
-    organizer: './api/jsx/entry/organizer.jsx',
-    event: './api/jsx/entry/event.jsx',
+    organizer: './api/jsx/person/organizer/index.jsx',
+    event_configure: './api/jsx/person/organizer/event_configure.jsx',
+    event_review: './api/jsx/person/organizer/event_review.jsx',
   },
   output: {
     path: path.join(__dirname, '/api/static/js/'),
