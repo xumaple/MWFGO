@@ -57,3 +57,8 @@ Individual* Group::getLeader()
 {
     return leader;
 }
+
+size_t Group::getSize()
+{
+    return sizeLimit;
+}
