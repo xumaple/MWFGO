@@ -1,27 +1,17 @@
 #include <string>
 #include <iostream>
-#include "group.h"
-#include "individual.h"
-#include "timeConstraint.h"
-#include "constraintManager.h"
-#include "weightLimiter.h"
+#include "GroupOrganizer.h"
 #include <boost/python.hpp>
 
-char const* greet();
-
-int main() {
-    std::cout << greet() << "Yay\n";
-}
-
-char const* greet()
-{
-    return "Hello world!\n";
-}
-
+using namespace boost::python;
 
 BOOST_PYTHON_MODULE(algorithm)
 {
-    using namespace boost::python;
-    def("greet", greet);
-//    def("printGreeting", main);
+    class_< GroupOrganizer >("GroupOrganizer")
+      .def("addLeader", &GroupOrganizer::addLeader)
+      .def("addPerson", &GroupOrganizer::addPerson)
+      .def("addTrait", &GroupOrganizer::addTrait)
+      .def("runAlgorithm", &GroupOrganizer::runAlgorithm)
+      .def("printDebug", &GroupOrganizer::printDebug)
+      .def("printGroups", &GroupOrganizer::printGroups);
 }

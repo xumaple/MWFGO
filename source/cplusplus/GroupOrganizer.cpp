@@ -16,20 +16,34 @@ void GroupOrganizer::createGroups()
 {
     for (auto l: leaders)
     {
+        //List of limiters
+        std::vector<Limiter*> limiters;
+        limiters.push_back(new WeightLimiter());
+
         groups.push_back(new Group(limiters, l));
+        groupSizes.push_back(5);
+    }
+}
+
+
+void GroupOrganizer::clearGroups()
+{
+    for (auto g: groups)
+    {
+        g->clearMembers();
     }
 }
 
 GroupOrganizer::GroupOrganizer()
 {
+    //Set double precision
+    std::cout.precision(9);
+
     //Initialize random seed
     srand(time(NULL));
 
     //Creates a constraint manager
     cm = &ConstraintManager::getInstance();
-
-    //As of now adds a weight limiter
-    limiters.push_back(new WeightLimiter());
 }
 
 GroupOrganizer::~GroupOrganizer()
@@ -53,12 +67,7 @@ GroupOrganizer::~GroupOrganizer()
     for (auto g: groups)
     {
         delete g;
-    } 
-    //Delete limiters
-    for (auto l: limiters)
-    {
-        delete l;
-    } 
+    }
 }
 
 void GroupOrganizer::addLeader(std::string name, py::list &traits)
@@ -77,12 +86,12 @@ void GroupOrganizer::addPerson(std::string name, py::list &traits)
     people.push_back(new Individual(arr, name));
 }
 
-void GroupOrganizer::addTrait(std::string name, int formType, int numChoices)
+void GroupOrganizer::addTrait(std::string name, int formType)
 {
     //Multiple Choice
     if (formType == 1)
     {
-
+        cm->addConstraint(new MultipleChoiceConstraint(), name);
     }
     //Time Frame
     else if(formType == 2)
@@ -116,7 +125,6 @@ void GroupOrganizer::printGroups()
     }
 }
 
-
 void GroupOrganizer::partA()
 {
     //Assuming all data has been read in, runs the algorithm
@@ -128,6 +136,14 @@ void GroupOrganizer::partA()
         {
             Individual::computeDiffs(*it, *nextIt);
         } 
+    }
+
+    for (auto it = leaders.begin(); it != leaders.end(); ++it)
+    {
+        for (auto it2 = people.begin(); it2 != people.end(); ++it2)
+        {
+            Individual::computeDiffs(*it, *it2);
+        }
     }
 }
 
@@ -166,13 +182,92 @@ void GroupOrganizer::partC()
     //Swap people between groups until the groups converge
 }
 
+void GroupOrganizer::genPerms()
+{
+    std::vector<int> peoplePositions;
+
+    // Change total size to match group sizes
+    size_t totalSize = 5 * groups.size();
+    while (people.size() < totalSize)
+    {
+        //Represents skip
+        people.push_back(nullptr);
+    }
+
+    for (size_t i = 0; i < people.size(); ++i)
+    {
+        peoplePositions.push_back(i);
+    }
+
+    // Don't need to sort since already sorted
+    //std::sort(peoplePositions.begin(), peoplePositions.end());
+    do
+    {
+        // Check if this permutation satisfies the grouping
+        size_t i = 0;
+        size_t groupIndex = 0;
+        for (; i < peoplePositions.size(); ++i)
+        {
+            Individual* person = people[peoplePositions[i]];
+            // Run into a skip value (nullptr)
+            if (!person)
+            {
+                groupIndex = (groupIndex + 1) % groups.size();
+                continue;
+            }
+
+            // Check if group is full
+            if (groupSizes[groupIndex] == groups[groupIndex]->getMembers().size())
+            {
+                --i;
+                groupIndex = (groupIndex + 1) % groups.size();
+                continue;
+            }
+            
+            // Check if we can add the person to the group
+            if (!groups[groupIndex]->addIndividual(person, false))
+            {
+                clearGroups();
+                break;
+            }
+
+            groupIndex = (groupIndex + 1) % groups.size();
+        }
+
+        //Check if permutation worked
+        if (i == peoplePositions.size())
+        {
+            break;
+        }
+    } while (std::next_permutation(peoplePositions.begin(), peoplePositions.end()));
+}
+
 void GroupOrganizer::runAlgorithm()
 {
     assert(groups.empty());
     createGroups();
     partA();
-    partB();
-    partC();
+    //partB();
+    //partC();
+    genPerms();
+}
+
+void GroupOrganizer::printDebug()
+{
+    std::vector<int> indices;
+    indices.push_back(0);
+    std::cout << "Leaders size:" << leaders.size() << std::endl;
+    if (!leaders.empty())
+    {
+        std::cout << "Leader name: " << leaders[0]->getName() << std::endl;
+        std::cout << "Leader values: " << leaders[0]->getValues(indices)[0] << std::endl;
+    }
+    std::cout << "People size:" << people.size() << std::endl;
+    if (!people.empty())
+    {
+        std::cout << "Person name: " << people[0]->getName() << std::endl;
+        std::cout << "Person values: " << people[0]->getValues(indices)[0] << std::endl;
+    }
 }
 
 double* toArray(const py::list &list)

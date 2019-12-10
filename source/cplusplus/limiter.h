@@ -14,6 +14,7 @@ public:
     virtual void cancelAdd();
     void forceAdd(Individual *ind);
     double getCost() const { return currCost; }
+    void clearLimiter();
     
 protected:
     virtual bool canAddIndividual(Individual *ind) = 0;

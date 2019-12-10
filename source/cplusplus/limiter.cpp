@@ -1,6 +1,7 @@
 #include "limiter.h"
 #include "individual.h"
 #include "constraintDiff.h"
+#include <iostream>
 
 bool Limiter::addIndividual(Individual *ind) {
     if (!canAddIndividual(ind)) return false;
@@ -25,3 +26,8 @@ void Limiter::addHelper(Individual *ind) {
     individuals.push_back(ind);
 }
 
+void Limiter::clearLimiter() {
+    while (currIndividuals().size() > 1) {
+        currIndividuals().pop_back();
+    }
+}
