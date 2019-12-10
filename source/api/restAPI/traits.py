@@ -27,7 +27,7 @@ def get_trait_helper(event_id, trait_id):
         context = {}
         # Make a query for MasterTimeRange with trait_id
         trait = db.session.query(tables['traits_{}'.format(event_id)]).filter_by(id=trait_id).first()
-        if trait.context != None and trait.context >= 0:
+        if trait.context != None and trait.context > 0:
             time_range = str(trait.context).split('.')
             begin_date_time = int(time_range[0])
 
@@ -56,21 +56,9 @@ def get_trait_helper(event_id, trait_id):
 
             context["begin"] = begin
             context["end"] = end
-        # context["begin"] = {
-        #     "year": 2019,
-        #     "month": 11,
-        #     "day": 20,
-        #     "hour": 12,
-        #     "minute": 23
-        # }
-        # context["end"] = {
-        #     "year": 2020,
-        #     "month": 11,
-        #     "day": 20,
-        #     "hour": 12,
-        #     "minute": 23
-        # }       
-
+        elif trait.context == 0:
+            context = None
+        
     # Set id, name, isConstraint, formType, and context object
     return {
         'id': query_result['id'],
@@ -126,16 +114,19 @@ def get_trait(username, event_id, trait_id):
         # If formType == 2, update MasterTimeRange table
         if form["formType"] == 2:
             epoch = datetime.utcfromtimestamp(0)
+            if not form["context"]:
+                trait.context = 0
+            else:
+                begin_date = form["context"]["begin"]
+                bdt = datetime(begin_date["year"], begin_date["month"], begin_date["day"], begin_date["hour"], begin_date["minute"])
+                begin_minutes = int((bdt - epoch).total_seconds()/60)
 
-            begin_date = form["context"]["begin"]
-            bdt = datetime(begin_date["year"], begin_date["month"], begin_date["day"], begin_date["hour"], begin_date["minute"])
-            begin_minutes = int((bdt - epoch).total_seconds()/60)
-
-            end_date = form["context"]["end"]
-            edt = datetime(end_date["year"], end_date["month"], end_date["day"], end_date["hour"], end_date["minute"])
-            end_minutes = int((edt - epoch).total_seconds()/60)
-            context = float(str(begin_minutes) + "." + str(end_minutes))
-            trait.context = context
+                end_date = form["context"]["end"]
+                edt = datetime(end_date["year"], end_date["month"], end_date["day"], end_date["hour"], end_date["minute"])
+                end_minutes = int((edt - epoch).total_seconds()/60)
+                context = float(str(begin_minutes) + "." + str(end_minutes))
+                trait.context = context
+            
         db.session.commit()
 
         return flask.jsonify("", 200)

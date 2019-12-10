@@ -67,4 +67,4 @@ def create_member_table(username, event_id):
     add_members_table(event_id)
     create_all()
 
-    return flask.redirect('/thanks:)/')
+    return flask.redirect('/organizer/'+username+'/')

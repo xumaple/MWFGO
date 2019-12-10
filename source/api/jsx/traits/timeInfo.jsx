@@ -49,8 +49,8 @@ class TimeInfo extends React.Component {
 
     convert_context_to_time(context) {
         let begin = null;
-        let end = null;
-        if("begin" in context && "end" in context){
+        let end = null;      
+        if(context !== null){
             begin = this.convert_dict_to_dt(context["begin"]);
             end = this.convert_dict_to_dt(context["end"]);
         }
@@ -74,9 +74,15 @@ class TimeInfo extends React.Component {
     convert_time_to_context(time) {
         let begin = null;
         let end = null;
-        if(time["begin"] !== null && time["end"] !== null){
+        if(time !== null && time["begin"] !== null && time["end"] !== null){
             begin = this.convert_dt_to_dict(time["begin"]);
             end = this.convert_dt_to_dict(time["end"]);
+        }
+        else if(time !== null && time["begin"] !== null) {
+            end = this.convert_dt_to_dict(time["end"]);
+        }
+        else if(time !== null && time["end"] !== null) {
+            begin = this.convert_dt_to_dict(time["begin"]);
         }
         return {
             "begin": begin,
