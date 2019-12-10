@@ -8,7 +8,7 @@ module.exports = {
     // leader_intro: './api/jsx/entry/leader_intro.jsx',
     organizer: './api/jsx/person/organizer/index.jsx',
     event_configure: './api/jsx/person/organizer/event_configure.jsx',
-    event_results: './api/jsx/person/organizer/event_results.jsx',
+    event_review: './api/jsx/person/organizer/event_review.jsx',
   },
   output: {
     path: path.join(__dirname, '/api/static/js/'),

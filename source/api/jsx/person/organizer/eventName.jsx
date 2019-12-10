@@ -16,6 +16,7 @@ class EventName extends React.Component {
         fetch(this.props.url, { credentials: 'same-origin' })
             .then((response) => {
                 if (!response.ok) throw Error(response.statusText);
+                console.log(this.props.url);
                 return response.json()
             })
             .then((data) => {
