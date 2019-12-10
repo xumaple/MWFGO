@@ -1,6 +1,7 @@
 #include "limiter.h"
 #include "individual.h"
 #include "constraintDiff.h"
+#include <iostream>
 
 bool Limiter::addIndividual(Individual *ind) {
     if (!canAddIndividual(ind)) return false;
@@ -14,6 +15,7 @@ void Limiter::cancelAdd() {
 }
 
 void Limiter::forceAdd(Individual *ind) {
+    std::cout << "Force added: " << ind->getName() << std::endl;
     ++forceAdded;
     addHelper(ind);
 }

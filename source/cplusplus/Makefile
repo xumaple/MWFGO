@@ -1,7 +1,7 @@
 CC := g++
 FLAGS := -std=c++14 -pedantic -Wall -Wctor-dtor-privacy -Wmissing-declarations -Wmissing-include-dirs
 LFLAGS = $(FLAGS) -c -fPIC
-MAIN_SOURCES := pylib.cpp
+MAIN_SOURCES := main.cpp
 SOURCES := $(filter-out test_%.cpp $(MAIN_SOURCES), $(shell echo *.cpp))
 # PACKAGES := constraints
 OBJECTS = $(SOURCES:.cpp=.o)
@@ -33,7 +33,7 @@ $(EXE): $(OBJECTS) $(MAIN_OBJECTS)
 	$(CC) $^ $(FLAGS) $(CLinkFlags) -o $@
 
 $(TEST_EXE): $(TEST_OBJECTS) $(filter-out main.o, $(OBJECTS))
-	$(CC) $(FLAGS) $^ -o $@
+	$(CC) $(FLAGS) $^ $(CLinkFlags) -o $@
 
 main.o: main.cpp
 	$(CC) $(LFLAGS) $(CInc) $< -o $@

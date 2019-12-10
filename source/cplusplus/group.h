@@ -9,9 +9,14 @@ class Limiter;
 class Group {
 public:
     /*
-     
+     Constructor
      */
     Group(std::vector<Limiter *> &limitersIn, Individual *leaderIn);
+
+    /*
+     Destructor
+     */
+    ~Group();
     
     /*
      Checks if individual can be added, and if so adds the individual.
@@ -24,6 +29,11 @@ public:
      Returns the summed cost of each of its limiters
      */
     double getCost() const;
+
+    /*
+     Clears the list of individuals
+     */
+    void clearMembers();
 
     /*
      Returns the list of individuals
@@ -39,7 +49,6 @@ private:
     Individual *leader;
     std::vector<Individual *> members;
     std::vector<Limiter *> limiters;
-    size_t sizeLimit; //TODO: set sizelimit for group (Should I make this a limiter?)
 };
 
 

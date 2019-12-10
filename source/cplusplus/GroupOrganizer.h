@@ -11,6 +11,7 @@
 #include "group.h"
 #include "individual.h"
 #include "timeConstraint.h"
+#include "multipleChoiceConstraint.h"
 #include "constraintManager.h"
 #include "weightLimiter.h"
 
@@ -31,11 +32,14 @@ private:
     //List of Groups
     std::vector<Group*> groups;
 
-    //List of limiters
-    std::vector<Limiter*> limiters;
+    //List of Group Sizes
+    std::vector<size_t> groupSizes;
 
     //Create groups
     void createGroups();
+
+    //Clear groups
+    void clearGroups();
 
 public:
     //Constructor
@@ -51,7 +55,7 @@ public:
     void addPerson(std::string name, py::list &traits);
 
     //Add traits
-    void addTrait(std::string name, int formType, int numChoices = 0);
+    void addTrait(std::string name, int formType);
 
     //Add limiters
     void addLimiter(/*Not quite sure how to instantiate these*/);
@@ -63,9 +67,13 @@ public:
     void partA();
     void partB();
     void partC();
+    void genPerms();
 
     //Runs algorithm
     void runAlgorithm();
+
+    //Used for debugging in Python
+    void printDebug();
 
 };
 

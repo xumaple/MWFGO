@@ -6,7 +6,8 @@ WORKDIR /baseimg
 EXPOSE 8000
 
 #RUN make clean
-#RUN make test
+RUN export CPLUS_INCLUDE_PATH="$CPLUS_INCLUDE_PATH:/usr/include/python3.6m/"
+#; make test
 #RUN make
 #RUN python3 hello.py
 

@@ -8,11 +8,11 @@
 //#include "GroupOrganizer.h"
 #include "catch.hpp"
 
-TEST_CASE(" Adding members to Algorithm test case ", "[basic]")
+/*TEST_CASE(" Adding members to Algorithm test case ", "[basic]")
 {
-    /*GroupOrganizer* go = new GroupOrganizer();
+    GroupOrganizer* go = new GroupOrganizer();
 
     go->addTrait("location", 2, 0);
 
-    delete go;*/
-}
+    delete go;
+}*/
