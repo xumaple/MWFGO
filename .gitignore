@@ -11,4 +11,5 @@ build
 boost
 source/api/__pycache__
 .vscode
-
+algorithm.so
+testAlg.py
