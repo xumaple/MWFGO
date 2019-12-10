@@ -4,6 +4,7 @@
 #include <iostream>
 
 bool Limiter::addIndividual(Individual *ind) {
+    std::cout << "Checking if we can add " << ind->getName() << std::endl;
     if (!canAddIndividual(ind)) return false;
     
     addHelper(ind);
@@ -27,3 +28,8 @@ void Limiter::addHelper(Individual *ind) {
     individuals.push_back(ind);
 }
 
+void Limiter::clearLimiter() {
+    while (currIndividuals().size() > 1) {
+        currIndividuals().pop_back();
+    }
+}

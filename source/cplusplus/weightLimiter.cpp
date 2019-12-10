@@ -29,6 +29,7 @@ void WeightLimiter::addHelper(Individual *ind) {
 void WeightLimiter::calculateLastWeight(Individual *ind) {
     lastWeight = 0;
     lastIndividual = ind;
+    std::cout << "currIndividuals size: " << currIndividuals().size() << std::endl;
     for (Individual *i: currIndividuals()) {
         lastWeight += ind->getDiff(i)->getWeight();
     }

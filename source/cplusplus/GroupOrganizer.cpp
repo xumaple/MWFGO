@@ -34,14 +34,6 @@ void GroupOrganizer::clearGroups()
     }
 }
 
-void GroupOrganizer::clearGroups()
-{
-    for (auto g: groups)
-    {
-        g->clearMembers();
-    }
-}
-
 GroupOrganizer::GroupOrganizer()
 {
     //Set double precision

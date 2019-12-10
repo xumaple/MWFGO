@@ -17,6 +17,7 @@ void Individual::computeDiffs(Individual *ind1, Individual *ind2) {
 }
 
 std::shared_ptr<ConstraintDiff> Individual::getDiff(Individual *other) const{
+    std::cout << other << std::endl;
     return differences.at(other);
 }
 

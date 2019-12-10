@@ -37,11 +37,6 @@ public:
     void clearMembers();
 
     /*
-     Clears the list of individuals
-     */
-    void clearMembers();
-
-    /*
      Returns the list of individuals
      */
     std::vector<Individual*>& getMembers();
@@ -50,11 +45,6 @@ public:
      Returns the leader
      */
     Individual* getLeader(); 
-
-    /*
-     Returns the max capacity
-     */
-    size_t getSize();
     
 private:
     Individual *leader;
