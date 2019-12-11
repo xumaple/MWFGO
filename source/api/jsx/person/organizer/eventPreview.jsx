@@ -36,8 +36,8 @@ class EventPreview extends React.Component {
                     <h1>
                         <EventName url={this.props.url} showEditButton={false} />
                     </h1>
+                    {this.state.stage}
                 </div>
-                {this.state.stage}
                 <div style={{float: 'right', paddingBottom: '30px', paddingRight: '30px'}}>
                     <Button style={{display: 'inline-block'}} onClick={(e) => {e.stopPropagation(); this.props.onDelete(this.props.id);}}>
                         Delete

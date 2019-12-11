@@ -12,7 +12,7 @@ class TimeInfo extends React.Component {
             getContext: props.props.getContext, // Calls getContext in componentDidMount
             time: {"begin": null, "end": null},
             answer: {"begin": null, "end": null},
-            // date: null, // TODO: for testing
+            minBegin: null,
         }
 
         this.convert_dict_to_dt = this.convert_dict_to_dt.bind(this);
@@ -50,8 +50,10 @@ class TimeInfo extends React.Component {
     convert_context_to_time(context) {
         let begin = null;
         let end = null;      
-        if(context !== null){
+        if(context !== null && context["begin"] !== null){
             begin = this.convert_dict_to_dt(context["begin"]);
+        }
+        if(context !== null && context["end"] !== null) {
             end = this.convert_dict_to_dt(context["end"]);
         }
         
@@ -79,10 +81,10 @@ class TimeInfo extends React.Component {
             end = this.convert_dt_to_dict(time["end"]);
         }
         else if(time !== null && time["begin"] !== null) {
-            end = this.convert_dt_to_dict(time["end"]);
+            begin = this.convert_dt_to_dict(time["begin"]);
         }
         else if(time !== null && time["end"] !== null) {
-            begin = this.convert_dt_to_dict(time["begin"]);
+            end = this.convert_dt_to_dict(time["end"]);
         }
         return {
             "begin": begin,
@@ -115,6 +117,9 @@ class TimeInfo extends React.Component {
         newTime["end"] = this.state.time["end"];
         newTime["begin"] = date;
         this.setContextHelper(newTime);
+        this.setState({
+            minBegin: date
+        });
     }
 
     editEnd(date) {
@@ -172,26 +177,32 @@ class TimeInfo extends React.Component {
             
             return (
                 <div>
-                    Minimum Date/Time: 
-                    <DatePicker
-                        selected={this.state.answer["begin"]}
-                        onChange={date => this.editBeginAnswer(date)}
-                        showTimeSelect
-                        minDate={minDate}
-                        minTime={minTime}
-                        dateFormat="MMMM d, yyyy h:mm aa"
-                        showDisabledMonthNavigation
-                    />
-                    Maximum Date/Time: 
-                    <DatePicker
-                        selected={this.state.answer["end"]}
-                        onChange={date => this.editEndAnswer(date)}
-                        showTimeSelect
-                        maxDate={maxDate}
-                        maxTime={maxTime}
-                        dateFormat="MMMM d, yyyy h:mm aa"
-                        showDisabledMonthNavigation
-                    />
+                    <div style={{width: '100%'}} >
+                        Minimum Date/Time: 
+                        <DatePicker
+                            className="date-picker"
+                            selected={this.state.answer["begin"]}
+                            onChange={date => this.editBeginAnswer(date)}
+                            showTimeSelect
+                            minDate={minDate}
+                            minTime={minTime}
+                            dateFormat="MMMM d, yyyy h:mm aa"
+                            showDisabledMonthNavigation
+                        />
+                    </div>
+                    <div style={{width: '100%'}} >
+                        Maximum Date/Time:
+                        <DatePicker
+                            className="date-picker"
+                            selected={this.state.answer["end"]}
+                            onChange={date => this.editEndAnswer(date)}
+                            showTimeSelect
+                            maxDate={maxDate}
+                            maxTime={maxTime}
+                            dateFormat="MMMM d, yyyy h:mm aa"
+                            showDisabledMonthNavigation
+                        />
+                    </div>
                 </div>
             );
         }
@@ -206,28 +217,35 @@ class TimeInfo extends React.Component {
         if (this.state.role === 'organizer') {
             return (
                 <div>
-                    Minimum Date/Time: 
-                    <DatePicker
-                        selected={this.state.time["begin"]}
-                        onChange={date => this.editBegin(date)}
-                        showTimeSelect
-                        timeFormat="HH:mm"
-                        timeIntervals={15}
-                        timeCaption="Time"
-                        dateFormat="MMMM d, yyyy h:mm aa"
-                        showDisabledMonthNavigation
-                    />
-                    Maximum Date/Time: 
-                    <DatePicker
-                        selected={this.state.time["end"]}
-                        onChange={date => this.editEnd(date)}
-                        showTimeSelect
-                        timeFormat="HH:mm"
-                        timeIntervals={15}
-                        timeCaption="Time"
-                        dateFormat="MMMM d, yyyy h:mm aa"
-                        showDisabledMonthNavigation
-                    />
+                    Begin time: 
+                    <div style={{width: '100%'}} >
+                        <DatePicker 
+                            className="date-picker"
+                            selected={this.state.time["begin"]}
+                            onChange={date => this.editBegin(date)}
+                            showTimeSelect
+                            timeFormat="HH:mm"
+                            timeIntervals={15}
+                            timeCaption="Time"
+                            dateFormat="MMMM d, yyyy h:mm aa"
+                            showDisabledMonthNavigation
+                        />
+                    </div>
+                    End time:
+                    <div style={{width: '100%'}} >
+                        <DatePicker
+                            className="date-picker"
+                            selected={this.state.time["end"]}
+                            onChange={date => this.editEnd(date)}
+                            showTimeSelect
+                            minDate={this.state.minBegin}
+                            timeFormat="HH:mm"
+                            timeIntervals={15}
+                            timeCaption="Time"
+                            dateFormat="MMMM d, yyyy h:mm aa"
+                            showDisabledMonthNavigation
+                        />
+                    </div>
                 </div>
             );
         }

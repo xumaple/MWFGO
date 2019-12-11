@@ -37,22 +37,26 @@ def get_trait_helper(event_id, trait_id):
                     tmp_str = tmp_str + "0"
 
             end_date_time = int(tmp_str)
-            begin_dt = datetime.fromtimestamp(begin_date_time*60)
-            end_dt = datetime.fromtimestamp(end_date_time*60)
+            begin = None
+            if begin_date_time != 0:
+                begin = {}
+                begin_dt = datetime.fromtimestamp(begin_date_time*60)
+                begin["year"] = begin_dt.year
+                begin["month"] = begin_dt.month
+                begin["day"] = begin_dt.day
+                begin["hour"] = begin_dt.hour
+                begin["minute"] = begin_dt.minute
 
-            begin = {}
-            begin["year"] = begin_dt.year
-            begin["month"] = begin_dt.month
-            begin["day"] = begin_dt.day
-            begin["hour"] = begin_dt.hour
-            begin["minute"] = begin_dt.minute
-
-            end = {}
-            end["year"] = end_dt.year
-            end["month"] = end_dt.month
-            end["day"] = end_dt.day
-            end["hour"] = end_dt.hour
-            end["minute"] = end_dt.minute
+            end = None
+            if end_date_time != 0:
+                end = {}
+                end_dt = datetime.fromtimestamp(end_date_time*60)
+                end["year"] = end_dt.year
+                end["month"] = end_dt.month
+                end["day"] = end_dt.day
+                end["hour"] = end_dt.hour
+                end["minute"] = end_dt.minute
+            
 
             context["begin"] = begin
             context["end"] = end
@@ -118,12 +122,17 @@ def get_trait(username, event_id, trait_id):
                 trait.context = 0
             else:
                 begin_date = form["context"]["begin"]
-                bdt = datetime(begin_date["year"], begin_date["month"], begin_date["day"], begin_date["hour"], begin_date["minute"])
-                begin_minutes = int((bdt - epoch).total_seconds()/60)
+                begin_minutes = 0
+                if begin_date:
+                    bdt = datetime(begin_date["year"], begin_date["month"], begin_date["day"], begin_date["hour"], begin_date["minute"])
+                    begin_minutes = int((bdt - epoch).total_seconds()/60)
 
                 end_date = form["context"]["end"]
-                edt = datetime(end_date["year"], end_date["month"], end_date["day"], end_date["hour"], end_date["minute"])
-                end_minutes = int((edt - epoch).total_seconds()/60)
+                end_minutes = 0
+                if end_date:                    
+                    edt = datetime(end_date["year"], end_date["month"], end_date["day"], end_date["hour"], end_date["minute"])
+                    end_minutes = int((edt - epoch).total_seconds()/60)
+
                 context = float(str(begin_minutes) + "." + str(end_minutes))
                 trait.context = context
             

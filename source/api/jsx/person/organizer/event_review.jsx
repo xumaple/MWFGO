@@ -1,33 +1,55 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Traits from '../../traits/traits';
 import PropTypes from 'prop-types';
 import { Button } from 'reactstrap';
 import SubmitModal from '../../utility/submitModal'
 import EventName from './eventName'
+import Results from './results'
 
 const URL_RESULTS = 'review/'
 // import Limiters from '../limiters/limiters';
+
+function Groups(props) {
+    return (<div></div>);
+}
 
 class Event extends React.Component {
     constructor(props) {
         super(props);
 
-        this.state = { showModal: false };
-        this.openForms = this.openForms.bind(this);
+        this.state = { 
+            showModal: false,
+            groups: null, 
+        };
+
+        this.getGroups = this.getGroups.bind(this);
+        this.generateGroups = this.generateGroups.bind(this);
     }
 
-    componentDidMount() {}
+    componentDidMount() {
+        this.getGroups();
+    }
 
-    openForms() {
-        console.log('submitting', this.props.url);
+    getGroups() {
+        fetch(this.props.url, { credentials: 'same-origin' })
+            .then((response) => {
+                if (!response.ok) throw Error(response.statusText);
+                return response.json();
+            })
+            .then((data) => {
+                // this.setState({ groups: data.groups });
+            })
+            .catch(error => console.log(error));
+    }
+
+    generateGroups() {
         fetch(this.props.url.concat('submit/'), { credentials: 'same-origin' })
             .then((response) => {
                 if (!response.ok) throw Error(response.statusText);
-                if (!response.redirected) {
-                    throw Error("Did not redirect on submission");
-                }
-                window.location.href = response.url;
+                return;
+            })
+            .then(() => {
+                this.getGroups();
             })
             .catch(error => console.log(error));
     }
@@ -40,10 +62,19 @@ class Event extends React.Component {
                 </div>
                 <hr/>
                 hi
+                <Results url={this.props.url.concat('results/')} />
                 <div className='submit-button'>
                     <Button color='primary' onClick={() => { this.setState({ showModal: true })}}>
                         Generate groups!
                     </Button>
+                </div>
+
+                <div>
+                    {this.state.groups === null ? '' : 
+                        <Groups
+
+                        />
+                    }
                 </div>
                 <Button onClick={() => {window.location.href = this.props.source.substring(0, this.props.source.search('/events/'))}} >
                     Back
@@ -51,7 +82,7 @@ class Event extends React.Component {
                 <SubmitModal
                     show={this.state.showModal}
                     cancel={() => { this.setState({ showModal: false })}}
-                    submit={this.openForms}
+                    submit={this.generateGroups}
                     link={'localhost:8000'.concat(this.props.source, URL_RESULTS)}
                 />
             </div>
@@ -74,7 +105,7 @@ const organizer = '/organizer/'.concat(
 
 ReactDOM.render(
     <Event 
-        url={'/api/v1'.concat(organizer)}
+        url={'/api/v1'.concat(organizer, URL_RESULTS)}
         source={organizer}
     />, document.getElementById('reactEntry')
 );

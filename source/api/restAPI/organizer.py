@@ -39,6 +39,7 @@ def get_events(username):
             db.session.commit()
             drop_table_if_exists('choices_{}'.format(event_id))
             drop_table_if_exists('traits_{}'.format(event_id))
+            drop_table_if_exists('groups_{}'.format(event_id))
         return flask.jsonify('')
 
 @app.route('/api/v1/organizer/<username>/events/<event_id>/', methods = ['GET', 'PATCH'])
@@ -76,7 +77,6 @@ def editEventName(event):
 
 @app.route('/api/v1/organizer/<username>/events/<event_id>/configure/submit/', methods = ['GET'])
 def create_member_table(username, event_id):
-    print('submittingggggg')
     valid, username = check_username(username)
     if not valid:
         return username
@@ -86,11 +86,24 @@ def create_member_table(username, event_id):
 
     add_members_table(event_id)
     create_all()    
-    return flask.redirect('/organizer/'+username+'/')
+    return flask.redirect(flask.url_for('show_organizer_event', username=username, event_id=event_id, stage='review'))
 
 @app.route('/api/v1/organizer/<username>/events/<event_id>/review/', methods = ['GET'])
 def get_event_review(username, event_id):
-    print('asdfffff')
+    valid, username = check_username(username)
+    if not valid:
+        return username
+
+    method = flask.request.method
+    event = db.session.query(tables['events']).filter_by(id=event_id).one()
+    if method == 'GET':
+        return flask.jsonify(**{'name': event.name})
+    elif method == 'PATCH':
+        return editEventName(event)
+
+@app.route('/api/v1/organizer/<username>/events/<event_id>/review/results/', methods = ['GET'])
+def get_event_results(username, event_id):
+    print('hello there')
     valid, username = check_username(username)
     if not valid:
         return username
