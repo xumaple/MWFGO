@@ -79,6 +79,22 @@ def add_choices_table(event_id):
 #         return f"nonconstraints('{self.name}', '{self.trait_id}', '{self.member_id}', '{self.leader_id}')"
 # tables["nonconstraints_0"] = Nonconstraints
 
+def add_groups_table(event_id, list_of_groups):
+    # Create dictionary for groups table
+    attributes = {
+        '__tablename__': 'groups_{}'.format(event_id),
+        'id': db.Column(db.Integer, primary_key=True),
+    }
+
+    # Add columns for the number of groups
+    for i in range(len(list_of_groups)):
+        column = db.Column(db.String(256))
+        attributes['group_{}'.format(str(i))] = column
+    
+    # Convert the dictionary to a table
+    _add_table_helper(attributes)
+
+
 def add_members_table(event_id):
         #create dictionary to input into table creator
     attributes = {

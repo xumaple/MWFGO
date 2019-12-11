@@ -14,11 +14,12 @@ public:
     virtual void cancelAdd();
     void forceAdd(Individual *ind);
     double getCost() const { return currCost; }
-    void clearLimiter();
+    void clearTime() { clearLimiter(); }
     
 protected:
     virtual bool canAddIndividual(Individual *ind) = 0;
     virtual void addHelper(Individual *ind);
+    virtual void clearLimiter();
     
     int numForceAdded() const { return forceAdded; }
     std::vector<Individual *> &currIndividuals() { return individuals; }

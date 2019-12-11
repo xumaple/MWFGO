@@ -48,7 +48,7 @@ void Group::clearMembers()
     members.clear();
     for (auto l: limiters)
     {
-        l->clearLimiter();
+        l->clearTime();
     }
 }
 
