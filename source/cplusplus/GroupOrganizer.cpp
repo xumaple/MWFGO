@@ -112,17 +112,22 @@ void GroupOrganizer::addLimiter()
     //Add to list of limiters
 }
 
-void GroupOrganizer::printGroups()
+std::string GroupOrganizer::printGroups()
 {
+    std::string result = "";
     for (auto it = groups.begin(); it != groups.end(); ++it)
     {
         std::cout << "Group " << (*it)->getLeader()->getName() << "\n";
+        result += (*it)->getLeader()->getName() + "\n";
         for (auto it2 = (*it)->getMembers().begin(); it2 != (*it)->getMembers().end(); ++it2)
         {
+            result += (*it2)->getName() + "\n";
             std::cout << (*it2)->getName() << "\n";
         }
+        result += "\n";
         std::cout << "\n";
     }
+    return result;
 }
 
 void GroupOrganizer::partA()
@@ -257,16 +262,16 @@ void GroupOrganizer::printDebug()
     std::vector<int> indices;
     indices.push_back(0);
     std::cout << "Leaders size:" << leaders.size() << std::endl;
-    if (!leaders.empty())
+    for (auto l: leaders)
     {
-        std::cout << "Leader name: " << leaders[0]->getName() << std::endl;
-        std::cout << "Leader values: " << leaders[0]->getValues(indices)[0] << std::endl;
+        std::cout << "Leader name: " << l->getName() << std::endl;
+        std::cout << "Leader values: " << l->getValues(indices)[0] << std::endl;
     }
     std::cout << "People size:" << people.size() << std::endl;
-    if (!people.empty())
+    for (auto p: people)
     {
-        std::cout << "Person name: " << people[0]->getName() << std::endl;
-        std::cout << "Person values: " << people[0]->getValues(indices)[0] << std::endl;
+        std::cout << "Person name: " << p->getName() << std::endl;
+        std::cout << "Person values: " << p->getValues(indices)[0] << std::endl;
     }
 }
 

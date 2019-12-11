@@ -1,6 +1,6 @@
 EXE := algorithm
 FOLDER := cplusplus
-NEW_FOLDER := restAPI
+NEW_FOLDER := ./
 FOLDER_EXE := $(FOLDER)/$(EXE)
 EXESO = $(NEW_FOLDER)/$(EXE).so
 

@@ -1,10 +1,10 @@
 import flask
 from api import app
-from api.model import db, tables, EventPhase, create_all, add_members_table, add_choices_table, add_traits_table, drop_table_if_exists
+from api.model import db, tables, EventPhase, create_all, add_groups_table, add_members_table, add_choices_table, add_traits_table, drop_table_if_exists
 from api.views.accounts import check_username
 
 # Connect c++ modules to python
-# from algorithm import GroupOrganizer
+from algorithm import GroupOrganizer
 
 
 @app.route('/api/v1/organizer/<username>/', methods= ['GET', 'POST', 'DELETE'])
@@ -119,12 +119,64 @@ def get_event_results(username, event_id):
 def get_groups(username, event_id):
     go = GroupOrganizer()
     # Get all the traits and add them
-    trait_res = db.session.query(tables['traits_{}'.format(event_id)]).all()
-    trait_res[0]
-    # Get all the leaders and add them
+    trait_list = db.session.query(tables['traits_{}'.format(event_id)]).all()
+    trait_ids = []
+    for trait in trait_list:
+        if trait.form_type == 3:
+            continue
+        trait_ids.append(trait.id)
+        go.addTrait(trait.name, trait.form_type)
 
+    # Get all the leaders and add them
+    # currently no leader table - might need to hardcode leaders
+    
     # Get all the members and add them
+    member_list = db.session.query(tables['members_{}'.format(event_id)]).all()
+    for member in member_list:
+        # Construct list of responses
+        responses = []
+        for id in trait_ids:
+            # member.trait_2
+            responses.append(getattr(member, 'trait_{}'.format(id)))
+        go.addPerson(member.name, responses)
+
+    # Currently hardcoding leaders LOL
+    go.addLeader("Leader1", [0])
+    go.addLeader("Leader2", [1])
+    go.printDebug()
 
     # run the algorithm
+    go.runAlgorithm()
 
     # return all of the groups
+    result = go.printGroups()
+
+    # Split the string to return a list of groups
+    # First element in each group is the leader
+    result = result.split('\n\n')
+    dictionary = {}
+    list_of_groups = []
+    for r in result:
+        secondary_dict = {}
+        r = r.split('\n')
+        leader = r.pop(0)
+        if leader == '':
+            continue
+
+        secondary_dict['leader'] = leader
+        secondary_dict['members'] = r
+        list_of_groups.append(secondary_dict)
+    dictionary['groups'] = list_of_groups
+
+
+    # Edit database to drop existing groups table
+    # drop_table_if_exists('groups_{}'.format(event_id))
+    # add_groups_table(event_id, result)
+    # create_all()
+
+    # Add the result to the table
+    # groups_table = tables['groups_{}'.event_id]()
+
+    # dictionary maps each leader's name to a list of members
+    print(dictionary)
+    return flask.jsonify(**dictionary)
