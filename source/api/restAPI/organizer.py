@@ -130,4 +130,4 @@ def get_groups(username, event_id):
     go.runAlgorithm()
 
     # return all of the groups
-    go.printResults()
+    print(go.printResults())
