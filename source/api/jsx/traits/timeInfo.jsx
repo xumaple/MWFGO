@@ -12,7 +12,10 @@ class TimeInfo extends React.Component {
             getContext: props.props.getContext, // Calls getContext in componentDidMount
             time: {"begin": null, "end": null},
             answer: {"begin": null, "end": null},
-            minBegin: null,
+            minEnd: null,
+            maxBegin: null,
+            minEndAnswer: null,
+            maxBeginAnswer: null,
         }
 
         this.convert_dict_to_dt = this.convert_dict_to_dt.bind(this);
@@ -95,14 +98,31 @@ class TimeInfo extends React.Component {
 
     componentDidMount() {
         let context = this.state.getContext(); 
-        if (this.props.props.getAnswer) {
-            let answer = this.convert_context_to_time(this.props.props.getAnswer());
-            this.setState({ answer: answer });
-        }
         if (context !== undefined && context !== null) {
             let time = this.convert_context_to_time(this.state.getContext());
-            this.setState({ time: time, });
+            this.setState({
+                time: time,
+                minEndAnswer: time["begin"],
+                maxBeginAnswer: time["end"],
+            });
         }
+        if (this.props.props.getAnswer) {
+            let answer = this.convert_context_to_time(this.props.props.getAnswer());
+            this.setState({
+                answer: answer,
+            });
+            if(answer !== null && answer["begin"] !== null){
+                this.setState({
+                    minEndAnswer: answer["begin"]
+                });
+            }
+            if(answer !== null && answer["end"] !== null){
+                this.setState({
+                    maxBeginAnswer: answer["end"]
+                });
+            }
+        }
+        
     }
 
     setContextHelper(newTime) {
@@ -118,7 +138,7 @@ class TimeInfo extends React.Component {
         newTime["begin"] = date;
         this.setContextHelper(newTime);
         this.setState({
-            minBegin: date
+            minEnd: date
         });
     }
 
@@ -127,6 +147,9 @@ class TimeInfo extends React.Component {
         newTime["end"] = date;
         newTime["begin"] = this.state.time["begin"];
         this.setContextHelper(newTime);
+        this.setState({
+            maxBegin: date
+        });
     }
 
     setAnswer(newAnswer) {
@@ -141,6 +164,11 @@ class TimeInfo extends React.Component {
         newAnswer["end"] = this.state.answer["end"];
         newAnswer["begin"] = date;
         this.setAnswer(newAnswer);
+        if (date){
+            this.setState({
+                minEndAnswer: date
+            });
+        }   
     }
 
     editEndAnswer(date) {
@@ -148,6 +176,11 @@ class TimeInfo extends React.Component {
         newAnswer["end"] = date;
         newAnswer["begin"] = this.state.answer["begin"];
         this.setAnswer(newAnswer);
+        if(date){
+            this.setState({
+                maxBeginAnswer: date
+            });
+        }  
     }
 
     renderMember() {
@@ -155,24 +188,24 @@ class TimeInfo extends React.Component {
 
             let begin = this.state.time["begin"];
             let minDate = new Date();
-            let minTime = new Date();
+            // let minTime = new Date();
             if(this.state.time["begin"] !== null){
                 minDate.setFullYear(begin.getFullYear());
                 minDate.setMonth(begin.getMonth());
                 minDate.setDate(begin.getDate());
-                minTime.setHours(begin.getHours());
-                minTime.setMinutes(begin.getMinutes());
+                // minTime.setHours(begin.getHours());
+                // minTime.setMinutes(begin.getMinutes());
             }
 
             let end = this.state.time["end"];
             let maxDate = new Date();
-            let maxTime = new Date();
+            // let maxTime = new Date();
             if(this.state.time["end"] !== null) {
                 maxDate.setFullYear(end.getFullYear());
                 maxDate.setMonth(end.getMonth());
                 maxDate.setDate(end.getDate());
-                maxTime.setHours(end.getHours());
-                maxTime.setMinutes(end.getMinutes());
+                // maxTime.setHours(end.getHours());
+                // maxTime.setMinutes(end.getMinutes());
             }
             
             return (
@@ -185,7 +218,8 @@ class TimeInfo extends React.Component {
                             onChange={date => this.editBeginAnswer(date)}
                             showTimeSelect
                             minDate={minDate}
-                            minTime={minTime}
+                            // minTime={minTime}
+                            maxDate={this.state.maxBeginAnswer}
                             dateFormat="MMMM d, yyyy h:mm aa"
                             showDisabledMonthNavigation
                         />
@@ -198,7 +232,8 @@ class TimeInfo extends React.Component {
                             onChange={date => this.editEndAnswer(date)}
                             showTimeSelect
                             maxDate={maxDate}
-                            maxTime={maxTime}
+                            // maxTime={maxTime}
+                            minDate={this.state.minEndAnswer}
                             dateFormat="MMMM d, yyyy h:mm aa"
                             showDisabledMonthNavigation
                         />
@@ -224,6 +259,7 @@ class TimeInfo extends React.Component {
                             selected={this.state.time["begin"]}
                             onChange={date => this.editBegin(date)}
                             showTimeSelect
+                            maxDate={this.state.maxBegin}
                             timeFormat="HH:mm"
                             timeIntervals={15}
                             timeCaption="Time"
@@ -238,7 +274,7 @@ class TimeInfo extends React.Component {
                             selected={this.state.time["end"]}
                             onChange={date => this.editEnd(date)}
                             showTimeSelect
-                            minDate={this.state.minBegin}
+                            minDate={this.state.minEnd}
                             timeFormat="HH:mm"
                             timeIntervals={15}
                             timeCaption="Time"
