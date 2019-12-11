@@ -68,13 +68,13 @@ def get_member_form(event_id, member_id):
                     begin_date = answer["begin"]
                     begin_minutes = 0
                     if begin_date:
-                        bdt = datetime(begin_date["year"], begin_date["month"], begin_date["day"], begin_date["hour"], begin_date["minute"])
+                        bdt = datetime(begin_date["year"] + 1, begin_date["month"] + 1, begin_date["day"], begin_date["hour"], begin_date["minute"])
                         begin_minutes = int((bdt - epoch).total_seconds()/60)
 
                     end_date = answer["end"]
                     end_minutes = 0
                     if end_date:                    
-                        edt = datetime(end_date["year"], end_date["month"], end_date["day"], end_date["hour"], end_date["minute"])
+                        edt = datetime(end_date["year"] + 1, end_date["month"] + 1, end_date["day"], end_date["hour"], end_date["minute"])
                         end_minutes = int((edt - epoch).total_seconds()/60)
 
                     context = float(str(begin_minutes) + "." + str(end_minutes))

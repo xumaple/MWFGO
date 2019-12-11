@@ -25,8 +25,8 @@ def time_frame_helper(context):
         if begin_date_time != 0:
             begin = {}
             begin_dt = datetime.fromtimestamp(begin_date_time*60)
-            begin["year"] = begin_dt.year
-            begin["month"] = begin_dt.month
+            begin["year"] = begin_dt.year - 1
+            begin["month"] = begin_dt.month - 1
             begin["day"] = begin_dt.day
             begin["hour"] = begin_dt.hour
             begin["minute"] = begin_dt.minute
@@ -35,8 +35,8 @@ def time_frame_helper(context):
         if end_date_time != 0:
             end = {}
             end_dt = datetime.fromtimestamp(end_date_time*60)
-            end["year"] = end_dt.year
-            end["month"] = end_dt.month
+            end["year"] = end_dt.year - 1
+            end["month"] = end_dt.month - 1
             end["day"] = end_dt.day
             end["hour"] = end_dt.hour
             end["minute"] = end_dt.minute
@@ -129,13 +129,15 @@ def get_trait(username, event_id, trait_id):
                 begin_date = form["context"]["begin"]
                 begin_minutes = 0
                 if begin_date:
-                    bdt = datetime(begin_date["year"], begin_date["month"], begin_date["day"], begin_date["hour"], begin_date["minute"])
+                    print(begin_date["month"])
+                    bdt = datetime(begin_date["year"] + 1, begin_date["month"] + 1, begin_date["day"], begin_date["hour"], begin_date["minute"])
                     begin_minutes = int((bdt - epoch).total_seconds()/60)
 
                 end_date = form["context"]["end"]
                 end_minutes = 0
-                if end_date:                    
-                    edt = datetime(end_date["year"], end_date["month"], end_date["day"], end_date["hour"], end_date["minute"])
+                if end_date:  
+                    print(end_date["month"])                  
+                    edt = datetime(end_date["year"] + 1, end_date["month"] + 1, end_date["day"], end_date["hour"], end_date["minute"])
                     end_minutes = int((edt - epoch).total_seconds()/60)
 
                 context = float(str(begin_minutes) + "." + str(end_minutes))
