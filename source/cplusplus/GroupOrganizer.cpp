@@ -262,16 +262,16 @@ void GroupOrganizer::printDebug()
     std::vector<int> indices;
     indices.push_back(0);
     std::cout << "Leaders size:" << leaders.size() << std::endl;
-    if (!leaders.empty())
+    for (auto l: leaders)
     {
-        std::cout << "Leader name: " << leaders[0]->getName() << std::endl;
-        std::cout << "Leader values: " << leaders[0]->getValues(indices)[0] << std::endl;
+        std::cout << "Leader name: " << l->getName() << std::endl;
+        std::cout << "Leader values: " << l->getValues(indices)[0] << std::endl;
     }
     std::cout << "People size:" << people.size() << std::endl;
-    if (!people.empty())
+    for (auto p: people)
     {
-        std::cout << "Person name: " << people[0]->getName() << std::endl;
-        std::cout << "Person values: " << people[0]->getValues(indices)[0] << std::endl;
+        std::cout << "Person name: " << p->getName() << std::endl;
+        std::cout << "Person values: " << p->getValues(indices)[0] << std::endl;
     }
 }
 

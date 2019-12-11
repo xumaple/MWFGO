@@ -122,11 +122,11 @@ def get_groups(username, event_id):
     trait_list = db.session.query(tables['traits_{}'.format(event_id)]).all()
     trait_ids = []
     for trait in trait_list:
-        if trait['form_type'] == 3:
+        if trait.form_type == 3:
             continue
-        trait_ids.append(trait['id'])
-        go.addTrait(trait['name'], trait['form_type'])
-    
+        trait_ids.append(trait.id)
+        go.addTrait(trait.name, trait.form_type)
+
     # Get all the leaders and add them
     # currently no leader table - might need to hardcode leaders
     
@@ -136,11 +136,16 @@ def get_groups(username, event_id):
         # Construct list of responses
         responses = []
         for id in trait_ids:
-            responses.append(member['trait_{}'.format(id)])
-        go.addPerson(member['name'], responses)
+            # member.trait_2
+            responses.append(getattr(member, 'trait_{}'.format(id)))
+        go.addPerson(member.name, responses)
 
+    # Currently hardcoding leaders LOL
+    go.addLeader("Leader1", [0])
+    go.addLeader("Leader2", [1])
+    
     # run the algorithm
     go.runAlgorithm()
 
     # return all of the groups
-    print(go.printResults())
+    return go.printGroups()
