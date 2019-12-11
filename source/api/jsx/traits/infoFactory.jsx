@@ -6,7 +6,6 @@ import TimeInfo from './timeInfo'
 
 function InfoFactory(props) {
     if (props.formType - 3 === 0) {
-        // return (<div>hi</div>);
         return (<TextInfo props={props} />);
     }
     if (props.formType - 2 === 0) {

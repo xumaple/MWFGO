@@ -180,7 +180,6 @@ def member_get_trait(event_id, member_id, trait_id):
 
     return flask.jsonify(**res)
 
-
 # @api.app.route('/api/v1/organizer/<event_id>/configure/traits/', methods=['GET'])
 @api.app.route('/api/v1/member/<event_id>/<member_id>/traits/', methods=['GET'])
 # @api.app.route('/api/v1/<event_id>/traits/', methods=['GET'])

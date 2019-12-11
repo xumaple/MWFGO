@@ -20,9 +20,13 @@ class TextInfo extends React.Component {
     }
 
     componentDidMount() {
-        if (this.state.role === 'member' || this.state.role === 'leader') {
-            this.setState({answer: this.state.getAnswer()});
+        if (this.props.props.getAnswer) {
+            setTimeout(() => {this.setState({answer: this.props.props.getAnswer()});}, 100);
         }
+    }
+
+    componentDidUpdate() {
+        // this.componentDidMount();
     }
 
     editAnswer(newAnswer) {
@@ -56,6 +60,13 @@ class TextInfo extends React.Component {
     }
     
     render() {
+        if (this.state.role === 'result') {
+            // if (this.state.answer === undefined) {
+            //     this.setState({answer: this.props.props.getAnswer()});
+
+            // }
+            return (<td>{this.state.answer}</td>);
+        }
         return (
             <div>
                 {this.renderOrganizer()}

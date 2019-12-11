@@ -49,7 +49,8 @@ def get_member_form(event_id, member_id):
                 answers.append(person[column])
         context = { 
             'name': name,
-            'answers': answers 
+            'answers': answers,
+            'link': flask.url_for('show_member_survey', event_id=event_id, member_id=member_id),
         }
     else:
         # PATCH

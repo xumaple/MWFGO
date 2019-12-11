@@ -18,6 +18,7 @@ class Event extends React.Component {
         super(props);
 
         this.state = { 
+            link: null,
             showModal: false,
             groups: null, 
         };
@@ -37,31 +38,37 @@ class Event extends React.Component {
                 return response.json();
             })
             .then((data) => {
-                // this.setState({ groups: data.groups });
+            console.log(data);
+                this.setState({ link: 'localhost:8000'.concat(data.link) });
             })
             .catch(error => console.log(error));
+
     }
 
     generateGroups() {
         fetch(this.props.url.concat('submit/'), { credentials: 'same-origin' })
             .then((response) => {
+                console.log(response);
                 if (!response.ok) throw Error(response.statusText);
-                return;
+                return response.json();
             })
-            .then(() => {
-                this.getGroups();
+            .then((data) => {
+                // this.getGroups();
+                this.setState({groups: data.groups, showModal: false})
             })
             .catch(error => console.log(error));
     }
 
     render(){
+        console.log(this.state.link);
         return(
             <div>
                 <div className='title'>
                     <EventName url={this.props.url} showEditButton={true} />
                 </div>
                 <hr/>
-                hi
+                Please send this link to members for responses: <a href={this.state.link}>{this.state.link}</a>
+                <h3>Responses:</h3>
                 <Results url={this.props.url.concat('results/')} />
                 <div className='submit-button'>
                     <Button color='primary' onClick={() => { this.setState({ showModal: true })}}>
@@ -71,11 +78,11 @@ class Event extends React.Component {
 
                 <div>
                     {this.state.groups === null ? '' : 
-                        <Groups
-
-                        />
+                        JSON.stringify(this.state.groups)
                     }
                 </div>
+
+
                 <Button onClick={() => {window.location.href = this.props.source.substring(0, this.props.source.search('/events/'))}} >
                     Back
                 </Button>

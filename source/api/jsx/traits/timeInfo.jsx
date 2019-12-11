@@ -35,7 +35,6 @@ class TimeInfo extends React.Component {
         this.renderMember = this.renderMember.bind(this);
         this.renderLeader = this.renderLeader.bind(this);
         this.renderOrganizer = this.renderOrganizer.bind(this);
-
         //this.setStartDate = this.setStartDate.bind(this);
     }
 
@@ -97,7 +96,7 @@ class TimeInfo extends React.Component {
     }
 
     componentDidMount() {
-        let context = this.state.getContext(); 
+        let context = this.state.getContext();
         if (context !== undefined && context !== null) {
             let time = this.convert_context_to_time(this.state.getContext());
             this.setState({
@@ -107,20 +106,22 @@ class TimeInfo extends React.Component {
             });
         }
         if (this.props.props.getAnswer) {
-            let answer = this.convert_context_to_time(this.props.props.getAnswer());
-            this.setState({
-                answer: answer,
-            });
-            if(answer !== null && answer["begin"] !== null){
+            setTimeout(() => {
+                let answer = this.convert_context_to_time(this.props.props.getAnswer());
                 this.setState({
-                    minEndAnswer: answer["begin"]
+                    answer: answer,
                 });
-            }
-            if(answer !== null && answer["end"] !== null){
-                this.setState({
-                    maxBeginAnswer: answer["end"]
-                });
-            }
+                if(answer !== null && answer["begin"] !== null){
+                    this.setState({
+                        minEndAnswer: answer["begin"]
+                    });
+                }
+                if(answer !== null && answer["end"] !== null){
+                    this.setState({
+                        maxBeginAnswer: answer["end"]
+                    });
+                }
+            }, 100);
         }
         
     }
@@ -302,9 +303,23 @@ class TimeInfo extends React.Component {
     //         date: date,
     //     });
     // }
-
+    
     render() {
-        console.log(React.version)
+        if (this.state.role === 'result') {
+            const { answer } = this.state;
+            let begin = answer["begin"];
+            let end = answer["end"];
+            if (begin !== null) {
+                begin = begin.toString();
+            } else begin = '';
+            if (end !== null) {
+                end = end.toString();
+            } else end = '';
+            console.log(answer);
+            return (<td>
+                {begin} to {end}
+            </td>);
+        }
         return (
             <div>
                 {this.renderOrganizer()}

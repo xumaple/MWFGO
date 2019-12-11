@@ -85,6 +85,7 @@ def create_member_table(username, event_id):
     event.phase = EventPhase.review
 
     add_members_table(event_id)
+    # TODO add constraints table
     create_all()    
     return flask.redirect(flask.url_for('show_organizer_event', username=username, event_id=event_id, stage='review'))
 
@@ -97,7 +98,10 @@ def get_event_review(username, event_id):
     method = flask.request.method
     event = db.session.query(tables['events']).filter_by(id=event_id).one()
     if method == 'GET':
-        return flask.jsonify(**{'name': event.name})
+        return flask.jsonify(**{
+            'name': event.name,
+            'link': flask.url_for('show_member', event_id=event_id),
+        })
     elif method == 'PATCH':
         return editEventName(event)
 

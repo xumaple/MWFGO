@@ -29,7 +29,9 @@ class ChoiceInfo extends React.Component {
     componentDidMount() {
         let choices = this.state.getContext();
         if (this.props.props.getAnswer) {
-            this.setState({ answer: this.props.props.getAnswer() });
+            // this.setState({ answer: this.props.props.getAnswer() });
+            setTimeout(() => {this.setState({answer: this.props.props.getAnswer()});}, 100);
+
         }
         if (choices !== undefined && choices !== null) {
             this.setState({ choices: choices, });
@@ -116,6 +118,13 @@ class ChoiceInfo extends React.Component {
     }
     
     render() {
+        if (this.state.role === 'result') {
+            const { answer, choices } = this.state;
+            if (answer >= 0 && answer < choices.length) {
+                return (<td>{choices[answer]}</td>);
+            }
+            else return (<i>no answer</i>);
+        }
         return (
             <div>
                 {this.renderOrganizer()}

@@ -26,8 +26,11 @@ class Trait extends React.Component {
         };
 
         this.handleIsConstraint = this.handleIsConstraint.bind(this);
+        this.handleType = this.handleType.bind(this);
         this.getContext = this.getContext.bind(this);
         this.setContext = this.setContext.bind(this);
+        this.getAnswer = this.getAnswer.bind(this);
+        this.setAnswer = this.setAnswer.bind(this);
         this.update = this.update.bind(this);
         this.save = this.save.bind(this);
         this.deleteSelf = this.deleteSelf.bind(this);
@@ -87,12 +90,28 @@ class Trait extends React.Component {
         this.updateState(newState);
     }
 
+    handleType(event) {
+        let context = this.state.context;
+        if (+event.target.value - this.state.formType !== 0) {
+            context = null;
+        }
+        this.updateState({ formType: +event.target.value, showConstraintAlert: false, context });
+    }
+
     getContext() {
         return this.state.context;
     }
 
     setContext(context) {
         this.updateState({ context: context });
+    }
+
+    getAnswer() {
+        return this.props.getAnswer(this.props.id);
+    }
+
+    setAnswer(answer) {
+        this.props.setAnswer(this.props.id, answer);
     }
 
     save() {
@@ -180,8 +199,8 @@ class Trait extends React.Component {
                     <InfoFactory
                         formType={this.state.formType}
                         role={this.props.role}
-                        getAnswer={() => {return this.props.getAnswer(this.props.id);}}
-                        setAnswer={(answer) => {this.props.setAnswer(this.props.id, answer);}}
+                        getAnswer={this.getAnswer}
+                        setAnswer={this.setAnswer}
                         getContext={this.getContext} 
                         setContext={this.setContext} 
                     />
@@ -249,7 +268,7 @@ class Trait extends React.Component {
                     <div>
                         <FormType
                             type={this.state.formType}
-                            handleType={(event) => { this.updateState({ formType: +event.target.value, showConstraintAlert: false }); }}
+                            handleType={this.handleType}
                             showOption={!isConstraint}
                         />
                     </div>
@@ -282,6 +301,15 @@ class Trait extends React.Component {
     }
     
     render() {
+        if (this.props.role === 'result') {
+            return (<InfoFactory
+                formType={this.state.formType}
+                role={this.props.role}
+                getContext={this.getContext}
+                setContext={(context) => {console.log('Error: setting context in review role: ', context)}}
+                getAnswer={this.getAnswer}
+            />);
+        }
         return (
             <div className="trait-in">
                 {this.renderOrganizer()}

@@ -21,7 +21,6 @@ def show_organizer_home(username):
 
 @app.route("/organizer/<username>/events/<event_id>/<stage>/")
 def show_organizer_event(username, event_id, stage):
-    print('hiiii', stage)
     VALID_STAGES = [
         'configure', 'review',
     ]

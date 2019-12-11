@@ -24,9 +24,9 @@ class Traits extends React.Component {
     }
 
     componentDidMount() {
-        console.log(this.props.url);
         fetch(this.props.url, { credentials: 'same-origin' })
             .then((response) => {
+            console.log(this.props.url);
                 if (!response.ok) throw Error(response.statusText);
                 return response.json();
             })
@@ -165,7 +165,7 @@ class Traits extends React.Component {
         }
         else return '';
     }
-    
+
     render() {
         return (
             <div>
