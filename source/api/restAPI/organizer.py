@@ -122,7 +122,7 @@ def get_groups(username, event_id):
     trait_list = db.session.query(tables['traits_{}'.format(event_id)]).all()
     trait_ids = []
     for trait in trait_list:
-        if trait.form_type == 3:
+        if not trait.is_constraint:
             continue
         trait_ids.append(trait.id)
         go.addTrait(trait.name, trait.form_type)
