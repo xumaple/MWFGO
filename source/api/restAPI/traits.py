@@ -9,6 +9,45 @@ from datetime import datetime
 #from model import db, Traits
 #from model import tables
 
+def time_frame_helper(context):
+    final_context = {}
+    if context != None and context > 0:
+        time_range = str(context).split('.')
+        begin_date_time = int(time_range[0])
+
+        tmp_str = time_range[1]
+        if len(tmp_str) < 8:
+            for i in range(0, 8 - len(tmp_str)):
+                tmp_str = tmp_str + "0"
+
+        end_date_time = int(tmp_str)
+        begin = None
+        if begin_date_time != 0:
+            begin = {}
+            begin_dt = datetime.fromtimestamp(begin_date_time*60)
+            begin["year"] = begin_dt.year
+            begin["month"] = begin_dt.month
+            begin["day"] = begin_dt.day
+            begin["hour"] = begin_dt.hour
+            begin["minute"] = begin_dt.minute
+
+        end = None
+        if end_date_time != 0:
+            end = {}
+            end_dt = datetime.fromtimestamp(end_date_time*60)
+            end["year"] = end_dt.year
+            end["month"] = end_dt.month
+            end["day"] = end_dt.day
+            end["hour"] = end_dt.hour
+            end["minute"] = end_dt.minute
+        
+
+        final_context["begin"] = begin
+        final_context["end"] = end
+    elif context == 0:
+        final_context = None
+    return final_context
+
 def get_trait_helper(event_id, trait_id):
     """Helper to get traits."""
     # Make a query for Traits where id = trait_id
@@ -24,44 +63,10 @@ def get_trait_helper(event_id, trait_id):
             context.append(choice.name)
     # Form is Time Range TODO
     elif form_type == 2:
-        context = {}
         # Make a query for MasterTimeRange with trait_id
         trait = db.session.query(tables['traits_{}'.format(event_id)]).filter_by(id=trait_id).first()
-        if trait.context != None and trait.context > 0:
-            time_range = str(trait.context).split('.')
-            begin_date_time = int(time_range[0])
-
-            tmp_str = time_range[1]
-            if len(tmp_str) < 8:
-                for i in range(0, 8 - len(tmp_str)):
-                    tmp_str = tmp_str + "0"
-
-            end_date_time = int(tmp_str)
-            begin = None
-            if begin_date_time != 0:
-                begin = {}
-                begin_dt = datetime.fromtimestamp(begin_date_time*60)
-                begin["year"] = begin_dt.year
-                begin["month"] = begin_dt.month
-                begin["day"] = begin_dt.day
-                begin["hour"] = begin_dt.hour
-                begin["minute"] = begin_dt.minute
-
-            end = None
-            if end_date_time != 0:
-                end = {}
-                end_dt = datetime.fromtimestamp(end_date_time*60)
-                end["year"] = end_dt.year
-                end["month"] = end_dt.month
-                end["day"] = end_dt.day
-                end["hour"] = end_dt.hour
-                end["minute"] = end_dt.minute
-            
-
-            context["begin"] = begin
-            context["end"] = end
-        elif trait.context == 0:
-            context = None
+        context = time_frame_helper(trait.context)
+        
         
     # Set id, name, isConstraint, formType, and context object
     return {
