@@ -132,17 +132,20 @@ def get_groups(username, event_id):
     
     # Get all the members and add them
     member_list = db.session.query(tables['members_{}'.format(event_id)]).all()
+    counter = 0
     for member in member_list:
         # Construct list of responses
         responses = []
         for id in trait_ids:
             # member.trait_2
             responses.append(getattr(member, 'trait_{}'.format(id)))
-        go.addPerson(member.name, responses)
+        if counter < 3:
+            go.addLeader(member.name, responses)
+            counter += 1
+        else:
+            go.addPerson(member.name, responses)
 
     # Currently hardcoding leaders LOL
-    go.addLeader("Leader1", [0])
-    go.addLeader("Leader2", [1])
     go.printDebug()
 
     # run the algorithm

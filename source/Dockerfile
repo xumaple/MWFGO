@@ -7,7 +7,7 @@ EXPOSE 8000
 
 #RUN make clean
 #RUN export CPLUS_INCLUDE_PATH="$CPLUS_INCLUDE_PATH:/usr/include/python3.6m/"; make test
-#RUN export CPLUS_INCLUDE_PATH="$CPLUS_INCLUDE_PATH:/usr/include/python3.6m/"; make
+RUN export CPLUS_INCLUDE_PATH="$CPLUS_INCLUDE_PATH:/usr/include/python3.6m/"; make
 #RUN python3 hello.py
 
 #RUN npm run build
