@@ -207,6 +207,14 @@ class TimeInfo extends React.Component {
                 // maxTime.setHours(end.getHours());
                 // maxTime.setMinutes(end.getMinutes());
             }
+            if(this.state.answer["begin"] === null && this.state.answer["end"] === null) {
+                this.setState({
+                    answer: {
+                        "begin": begin,
+                        "end": end
+                    }
+                });
+            }
             
             return (
                 <div>
