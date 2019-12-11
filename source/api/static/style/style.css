@@ -62,3 +62,9 @@
 .event-preview-in {
     padding: 35px;
 }
+
+.date-picker {
+    width: 100%;
+    margin: auto;
+    /*padding-right: 50px;*/
+}

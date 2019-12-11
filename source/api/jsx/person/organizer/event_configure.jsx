@@ -5,7 +5,6 @@ import PropTypes from 'prop-types';
 import { Button } from 'reactstrap';
 import SubmitModal from '../../utility/submitModal'
 import EventName from './eventName'
-import { URL_RESULTS } from './event_review'
 
 const URL_CONFIGURE = 'configure/'
 
@@ -32,7 +31,7 @@ class Event extends React.Component {
             .catch(error => console.log(error));
     }
 
-    render(){
+    render() {
         return(
             <div>
                 <div className='title'>
@@ -42,8 +41,6 @@ class Event extends React.Component {
                 <h4 style={{textAlign: 'center'}}>Traits</h4>
                 <div><Traits url={this.props.url.concat('traits/')} role='organizer' /></div>
                 <h4 style={{textAlign: 'center'}}>Limiters</h4>
-                {/*<p><b>Limiters</b></p>
-                <div><Limiters url={`${this.props.url}limiters/`} /></div>*/}
                 <div className='submit-button'>
                     <Button color='primary' onClick={() => { this.setState({ showModal: true })}}>
                         Open up forms!
@@ -77,7 +74,7 @@ const organizer = '/organizer/'.concat(
     '/',)
 
 ReactDOM.render(
-    <Event 
+    <Event
         url={'/api/v1'.concat(organizer, URL_CONFIGURE)}
         source={organizer}
     />, document.getElementById('reactEntry')
