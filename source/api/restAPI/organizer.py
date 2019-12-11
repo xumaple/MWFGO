@@ -4,7 +4,7 @@ from api.model import db, tables, EventPhase, create_all, add_members_table, add
 from api.views.accounts import check_username
 
 # Connect c++ modules to python
-# from algorithm import GroupOrganizer
+from algorithm import GroupOrganizer
 
 
 @app.route('/api/v1/organizer/<username>/', methods= ['GET', 'POST', 'DELETE'])
@@ -106,12 +106,28 @@ def get_event_review(username, event_id):
 def get_groups(username, event_id):
     go = GroupOrganizer()
     # Get all the traits and add them
-    trait_res = db.session.query(tables['traits_{}'.format(event_id)]).all()
-    trait_res[0]
+    trait_list = db.session.query(tables['traits_{}'.format(event_id)]).all()
+    trait_ids = []
+    for trait in trait_list:
+        if trait['form_type'] == 3:
+            continue
+        trait_ids.append(trait['id'])
+        go.addTrait(trait['name'], trait['form_type'])
+    
     # Get all the leaders and add them
-
+    # currently no leader table - might need to hardcode leaders
+    
     # Get all the members and add them
+    member_list = db.session.query(tables['members_{}'.format(event_id)]).all()
+    for member in member_list:
+        # Construct list of responses
+        responses = []
+        for id in trait_ids:
+            responses.append(member['trait_{}'.format(id)])
+        go.addPerson(member['name'], responses)
 
     # run the algorithm
+    go.runAlgorithm()
 
     # return all of the groups
+    go.printResults()

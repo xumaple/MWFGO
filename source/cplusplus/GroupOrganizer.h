@@ -61,7 +61,7 @@ public:
     void addLimiter(/*Not quite sure how to instantiate these*/);
 
     //Print all the groups (Used for testing)
-    void printGroups();
+    std::string printGroups();
 
     //Parts of the algorithm
     void partA();

@@ -112,17 +112,22 @@ void GroupOrganizer::addLimiter()
     //Add to list of limiters
 }
 
-void GroupOrganizer::printGroups()
+std::string GroupOrganizer::printGroups()
 {
+    std::string result = "";
     for (auto it = groups.begin(); it != groups.end(); ++it)
     {
         std::cout << "Group " << (*it)->getLeader()->getName() << "\n";
+        result += "Group " + (*it)->getLeader()->getName() + "\n";
         for (auto it2 = (*it)->getMembers().begin(); it2 != (*it)->getMembers().end(); ++it2)
         {
+            result += (*it2)->getName() + "\n";
             std::cout << (*it2)->getName() << "\n";
         }
+        result += "\n";
         std::cout << "\n";
     }
+    return result;
 }
 
 void GroupOrganizer::partA()
